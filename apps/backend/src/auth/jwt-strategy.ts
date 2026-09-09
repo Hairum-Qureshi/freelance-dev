@@ -1,12 +1,16 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
+import { neon } from '@neondatabase/serverless';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private configService: ConfigService) {
+  constructor(
+    @Inject('NeonDBProvider') private sql: ReturnType<typeof neon>,
+    private configService: ConfigService,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (req: Request) => req?.cookies?.['auth-session'],
@@ -15,12 +19,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: { _id: string; sub: string }) {
-    const { _id } = payload;
-    // const user = await this.userModel.findById(_id).exec();
-    // if (!user) {
-    //   throw new UnauthorizedException('Please log in first');
-    // }
-    // return user;
+  async validate(payload: { id: string; sub: string }) {
+    const { id } = payload;
+    const user = await this.sql`SELECT * FROM users WHERE id = ${id}`.then(
+      (res) => res[0],
+    );
+    if (!user) {
+      throw new UnauthorizedException('Please log in first');
+    }
+    return user;
   }
 }
