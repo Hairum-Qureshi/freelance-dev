@@ -1,9 +1,9 @@
 type UserPayload = {
-  _id: string;
+  id: string;
   firstName: string;
   lastName: string;
   email: string;
-  profilePicture?: string;
+  profilePicture: string;
   createdAt: Date;
 };
 
