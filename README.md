@@ -1,48 +1,47 @@
-# NestJS + React + Vite + Tailwind + Turbo (with Google Auth)
+# Freelance Dev
 
-This repository is a **full-stack monorepo template** using **npm workspaces** and **Turborepo** to manage a React frontend and a NestJS backend in a single repository.
+A full-stack freelance marketplace designed for **entry-level and early-career web developers** looking to gain freelance experience, build their portfolios, and establish a track record with real clients.
 
-It is based on a minimal monorepo foundation, with **Google OAuth authentication pre-wired using Google Cloud OAuth credentials** so you don't have to build authentication plumbing from scratch.
-
-This is a **template**, not a production-ready system.
+The project is built as a **full-stack monorepo** using **npm workspaces** and **Turborepo**, with a React frontend and NestJS backend.
 
 ---
 
-## What This Template Is
+## What This Project Is
 
-This template provides:
+Freelance Dev is intended to make freelance opportunities more accessible to developers who are still early in their careers.
 
-- A correct, minimal **monorepo setup**
-- Clear separation of frontend and backend concerns
-- Centralized dependency management
-- Coordinated development scripts
-- **Google OAuth authentication across the frontend and backend**
-- JWT-based authentication for authenticated backend requests
+The platform focuses on:
 
-Authentication is included, but only to the extent required to:
+- Smaller, beginner-friendly freelance projects
+- Helping developers build professional experience
+- Building a public track record through completed projects and reviews
+- Freelancer profiles and portfolios
+- GitHub activity as supporting evidence of development experience
+- Client-to-freelancer communication
+- Payments through Stripe
 
-- Sign users in with Google on the frontend
-- Send the Google authentication credential to the backend
-- Verify the Google identity on the backend
-- Establish an authenticated session using a backend-issued JWT
-
-Everything else remains intentionally unopinionated.
+The project is primarily intended as a **learning and portfolio project**, rather than a production-ready competitor to established freelance marketplaces.
 
 ---
 
-## What This Template Is _Not_
+## Core Features
 
-This template does **not** try to be a full application starter.
+The project is being developed around the following features:
 
-It does **not** include:
+- Google OAuth authentication
+- JWT-based authentication
+- Freelancer profiles
+- Client and freelancer accounts
+- Freelance job listings
+- Job applications/proposals
+- Client-to-freelancer messaging
+- Freelancer reviews and star ratings
+- GitHub profile integration
+- Stripe payments
+- PostgreSQL database
+- Database indexing and query optimization
 
-- User roles or permissions
-- Auth-based authorization rules
-- API clients or shared domain models
-- Deployment, Docker, or CI/CD
-- Production session-management infrastructure
-
-Those decisions are left to the user.
+Some features may not yet be implemented.
 
 ---
 
@@ -51,9 +50,9 @@ Those decisions are left to the user.
 ```text
 .
 ├── apps/
-│   ├── backend/          # NestJS backend (Google OAuth + JWT + MongoDB)
-│   └── frontend/         # React + Vite + Tailwind (Google OAuth)
-├── packages/             # Optional shared packages (empty by default)
+│   ├── backend/          # NestJS backend
+│   └── frontend/         # React + Vite + Tailwind frontend
+├── packages/             # Optional shared packages
 ├── package.json          # Root workspace + Turbo configuration
 ├── package-lock.json     # Single lockfile for the entire monorepo
 ├── turbo.json            # Turbo task pipeline
@@ -62,11 +61,12 @@ Those decisions are left to the user.
 
 ### Key Structural Notes
 
-- This **is a monorepo**
-- Dependency management is centralized at the **root**
-- Each app remains a **standalone project**
-- No shared code is assumed
-- Shared packages are optional and explicit
+- This is a **monorepo**.
+- Dependency management is centralized at the **repository root**.
+- Each application remains a standalone project.
+- Frontend and backend communicate through an explicit API.
+- No shared code is required between applications.
+- Shared packages can be introduced later when necessary.
 
 ---
 
@@ -76,9 +76,11 @@ Those decisions are left to the user.
 
 - NestJS
 - TypeScript
+- PostgreSQL
+- Neon
 - Google OAuth
-- JWT-based session tokens
-- MongoDB
+- JWT authentication
+- Stripe
 
 ### Frontend (`apps/frontend`)
 
@@ -103,6 +105,7 @@ You need:
 - npm (v7+ for workspaces)
 - A Google Cloud project
 - Google OAuth credentials
+- A Neon account/database
 
 ---
 
@@ -114,90 +117,15 @@ From the **repository root**:
 npm install
 ```
 
-This installs dependencies for **all workspace packages** and generates a **single `package-lock.json`**.
+This installs dependencies for all workspace packages and generates a single `package-lock.json`.
 
-Do not run `npm install` inside individual apps.
-
----
-
-## Google OAuth Setup
-
-Google authentication uses **OAuth 2.0 credentials from Google Cloud Console**.
-
-Firebase is **not required** for authentication in this template.
-
-### 1. Create or Select a Google Cloud Project
-
-Open the [Google Cloud Console](https://console.cloud.google.com/) and create a new project or select an existing one.
+Do **not** run `npm install` inside individual applications.
 
 ---
 
-### 2. Configure the OAuth Consent Screen
+# Environment Variables
 
-In Google Cloud Console:
-
-1. Open **Google Auth Platform** / **OAuth consent screen**
-2. Configure the application information
-3. Select the appropriate audience for your application
-4. Add the scopes required by the application
-
-For basic Google sign-in, the application generally needs access to the user's basic profile and email information.
-
-If the application is in testing mode, make sure the Google accounts you intend to use are configured as test users.
-
----
-
-### 3. Create OAuth Client Credentials
-
-In Google Cloud Console, go to:
-
-**Google Auth Platform → Clients**
-
-Create an **OAuth 2.0 Client ID**.
-
-For a browser-based React application, configure a **Web application** client.
-
-Add the frontend origin used during local development to the authorized JavaScript origins:
-
-```text
-http://localhost:5173
-```
-
-If your application is deployed later, add the appropriate production origin as well.
-
-> The exact Google Cloud Console navigation may change over time, but the credentials you need are an OAuth 2.0 **Client ID** and **Client Secret** for a web application.
-
----
-
-### 4. Copy the OAuth Credentials
-
-After creating the OAuth client, Google provides:
-
-- **Client ID**
-- **Client Secret**
-
-The **Client ID** is used by both the frontend and backend.
-
-The **Client Secret is backend-only** and must never be exposed to the frontend.
-
-The frontend uses:
-
-```env
-VITE_GOOGLE_OAUTH_CLIENT_ID=your_google_oauth_client_id_here
-```
-
-The backend uses:
-
-```env
-GOOGLE_OAUTH_CLIENT_ID=your_google_oauth_client_id_here
-GOOGLE_OAUTH_CLIENT_SECRET=your_google_oauth_client_secret_here
-```
-
----
-
-## Environment Variables
-
-The repository includes example environment files for both applications:
+The repository contains example environment files for both applications:
 
 ```text
 apps/
@@ -207,9 +135,7 @@ apps/
     └── .env.example
 ```
 
-These files are the **source of truth for the environment variables required by each application**.
-
-Copy each example file to `.env` before starting the application.
+Copy each example file to `.env` before starting the applications.
 
 ### Backend
 
@@ -217,19 +143,19 @@ Copy each example file to `.env` before starting the application.
 cp apps/backend/.env.example apps/backend/.env
 ```
 
-The backend example file contains configuration for:
-
-- JWT authentication
-- NestJS
-- MongoDB
-- Google OAuth
-- Frontend CORS configuration
-
-In particular, Google OAuth requires:
+The backend environment variables should include:
 
 ```env
+JWT_SECRET=your_jwt_secret_here
+JWT_EXPIRES=604800000
+PORT=3000
+NODE_ENV=development
+FRONTEND_URL=http://localhost:5173
+
 GOOGLE_OAUTH_CLIENT_ID=your_google_oauth_client_id_here
 GOOGLE_OAUTH_CLIENT_SECRET=your_google_oauth_client_secret_here
+
+NEON_DB_URL=your_neon_db_url_here
 ```
 
 ### Frontend
@@ -238,59 +164,193 @@ GOOGLE_OAUTH_CLIENT_SECRET=your_google_oauth_client_secret_here
 cp apps/frontend/.env.example apps/frontend/.env
 ```
 
-The frontend example file contains the backend URL and Google OAuth client ID:
+The frontend should contain the backend URL and Google OAuth client ID:
 
 ```env
 VITE_BACKEND_URL=http://localhost:3000
 VITE_GOOGLE_OAUTH_CLIENT_ID=your_google_oauth_client_id_here
 ```
 
-Because Vite exposes variables prefixed with `VITE_` to browser code, **never put the Google OAuth client secret in the frontend `.env` file**.
+Because Vite exposes variables prefixed with `VITE_` to browser code:
+
+**Never put the Google OAuth client secret in the frontend `.env` file.**
 
 ---
 
-## MongoDB Setup
+# Google OAuth Setup
 
-The backend requires a MongoDB connection string through:
+Google authentication uses **OAuth 2.0 credentials from Google Cloud Console**.
 
-```env
-MONGO_URI=mongodb_connection_string
-```
+Firebase is **not required** for authentication.
 
-This can be:
+## 1. Create or Select a Google Cloud Project
 
-- A local MongoDB instance:
+Open the [Google Cloud Console](https://console.cloud.google.com/) and create a new project or select an existing project.
+
+---
+
+## 2. Configure the OAuth Consent Screen
+
+In Google Cloud Console:
+
+1. Open **Google Auth Platform** / **OAuth consent screen**.
+2. Configure the application information.
+3. Select the appropriate audience for your application.
+4. Configure the scopes required by the application.
+
+For basic Google sign-in, the application generally needs access to the user's basic profile and email information.
+
+If the application is in testing mode, make sure the Google accounts you intend to use are configured as test users.
+
+---
+
+## 3. Create OAuth Client Credentials
+
+In Google Cloud Console, go to:
+
+**Google Auth Platform → Clients**
+
+Create an **OAuth 2.0 Client ID**.
+
+For the React frontend, configure a **Web application** client.
+
+Add the frontend origin used during local development to the authorized JavaScript origins:
 
 ```text
-mongodb://localhost:27017/your-db-name
+http://localhost:5173
 ```
 
-- Or a hosted MongoDB provider such as MongoDB Atlas.
+If the application is deployed later, add the appropriate production origin as well.
 
-If `MONGO_URI` is missing or invalid, the backend will fail during startup.
+> The exact Google Cloud Console navigation may change over time, but the application requires an OAuth 2.0 **Client ID** and **Client Secret**.
 
 ---
 
-## Development
+## 4. Configure the Credentials
 
-Run all development servers concurrently:
+Google provides:
+
+- Client ID
+- Client Secret
+
+The **Client ID** is safe to use in the frontend and is also required by the backend.
+
+The **Client Secret is confidential** and must only be available to the backend.
+
+### Backend
+
+```env
+GOOGLE_OAUTH_CLIENT_ID=your_google_oauth_client_id_here
+GOOGLE_OAUTH_CLIENT_SECRET=your_google_oauth_client_secret_here
+```
+
+### Frontend
+
+```env
+VITE_GOOGLE_OAUTH_CLIENT_ID=your_google_oauth_client_id_here
+```
+
+The same Google OAuth Client ID should be used in both applications.
+
+---
+
+# Neon PostgreSQL Setup
+
+The backend uses **PostgreSQL hosted through Neon**.
+
+## 1. Create a Neon Account
+
+Create an account at [Neon](https://neon.tech/).
+
+Create a new PostgreSQL project for the application.
+
+---
+
+## 2. Create or Select a Database
+
+After creating the Neon project, select the PostgreSQL database associated with the project.
+
+Neon provides a PostgreSQL connection string for the database.
+
+It will generally look similar to:
+
+```text
+postgresql://username:password@host/database?sslmode=require
+```
+
+The exact connection string will be provided by Neon.
+
+---
+
+## 3. Add the Connection String to the Backend
+
+Open:
+
+```text
+apps/backend/.env
+```
+
+and set:
+
+```env
+NEON_DB_URL=your_neon_db_url_here
+```
+
+For example:
+
+```env
+NEON_DB_URL=postgresql://username:password@ep-example.us-east-2.aws.neon.tech/freelance_dev?sslmode=require
+```
+
+Use the connection string provided by **your Neon project** rather than the example above.
+
+---
+
+## 4. Verify the Database Connection
+
+Start the backend:
 
 ```bash
 npm run dev
 ```
 
-This uses Turbo to:
+If the Neon connection string is valid and the backend's database configuration is correct, NestJS should successfully establish a connection to PostgreSQL.
 
-- Start the NestJS backend
-- Start the Vite frontend
-- Stream logs with app prefixes
+If the connection fails, verify:
+
+- `NEON_DB_URL` is present
+- The connection string is copied correctly
+- The Neon database is available
+- The connection string includes the required SSL configuration
+- Your database credentials are correct
+
+---
+
+# Development
+
+From the repository root, run:
+
+```bash
+npm run dev
+```
+
+Turborepo will start the development servers for the applications.
 
 ### Default Ports
 
-- Backend: `http://localhost:3000`
-- Frontend: `http://localhost:5173`
+Backend:
 
-Make sure the frontend URL matches the URL configured in:
+```text
+http://localhost:3000
+```
+
+Frontend:
+
+```text
+http://localhost:5173
+```
+
+The frontend URL must match:
 
 ```env
 FRONTEND_URL=http://localhost:5173
@@ -300,7 +360,7 @@ and the Google OAuth client's authorized JavaScript origins.
 
 ---
 
-## Authentication Flow
+# Authentication Flow
 
 The authentication flow is intentionally simple:
 
@@ -313,7 +373,7 @@ The authentication flow is intentionally simple:
        │ 1. Sign in with Google
        ▼
 ┌─────────────────┐
-│  Google OAuth   │
+│   Google OAuth  │
 └────────┬────────┘
          │
          │ 2. Google credential
@@ -333,7 +393,7 @@ The authentication flow is intentionally simple:
 └─────────────────┘
 ```
 
-Google is responsible for authenticating the user.
+Google is responsible for authenticating the user's Google account.
 
 The backend is responsible for:
 
@@ -342,41 +402,118 @@ The backend is responsible for:
 - Issuing the application's JWT
 - Authenticating subsequent API requests
 
-This keeps the frontend and backend independently deployable while still providing a clear authentication boundary.
+This keeps the authentication boundary on the backend while allowing the React frontend and NestJS backend to remain independently deployable.
 
 ---
 
-### Do not commit `.env` files
+# JWT Configuration
 
-The repository should contain the example files:
+The backend uses JWTs for authenticated API requests.
+
+The following environment variables control JWT behavior:
+
+```env
+JWT_SECRET=your_jwt_secret_here
+JWT_EXPIRES=604800000
+```
+
+### `JWT_SECRET`
+
+A secret used by the backend to sign and verify JWTs.
+
+For local development, you can generate your own random secret.
+
+**Never commit the real secret to Git.**
+
+### `JWT_EXPIRES`
+
+Controls the JWT expiration period.
+
+The current development configuration is:
+
+```env
+JWT_EXPIRES=604800000
+```
+
+---
+
+# Environment Variable Security
+
+Do **not** commit local `.env` files.
+
+The repository should contain:
 
 ```text
 .env.example
 ```
 
-but local secrets should live in:
+while local secrets should remain in:
 
 ```text
 .env
 ```
 
-Make sure your `.gitignore` excludes local environment files.
+Make sure `.gitignore` excludes local environment files.
 
 ### OAuth Client ID vs Client Secret
 
-The Google OAuth **Client ID is not considered a secret** and is expected to be used by the browser.
+The Google OAuth **Client ID is not considered a secret** and is expected to be used by browser code.
 
-The **Client Secret is confidential** and should only be available to the backend.
+The Google OAuth **Client Secret is confidential** and should only be available to the backend.
+
+The Neon database connection string should also be treated as confidential because it contains database credentials.
 
 ---
 
-## App Independence
+# Project Goals
 
-Even with authentication included:
+This project is being built as a practical full-stack learning project.
 
-- Frontend and backend are **not tightly coupled**
-- They can be deployed independently
-- No shared packages are required
-- API communication is explicit
+The primary goals are to gain experience with:
 
-Authentication establishes **trust**, not architectural dependency.
+- Building a full-stack marketplace
+- Designing PostgreSQL schemas
+- Writing relational queries
+- Database indexes and query performance
+- Authentication and OAuth
+- JWT-based sessions
+- Stripe payment integration
+- Third-party API integrations
+- Backend architecture with NestJS
+- Frontend architecture with React
+- Building and consuming REST APIs
+- Deploying a full-stack application
+
+The project intentionally avoids unnecessary complexity so that the core application can remain achievable within approximately **one month**.
+
+---
+
+# Future Features
+
+Potential future additions include:
+
+- GitHub integration
+- Freelancer reputation/progression
+- Real-time messaging
+- Email notifications
+- Advanced job search
+- Freelancer recommendations
+- Improved marketplace analytics
+- Production deployment
+- Docker/containerization
+
+These features are not necessarily part of the initial MVP.
+
+---
+
+# Status
+
+**In development**
+
+The application is being built incrementally, with the goal of producing a functional MVP rather than attempting to reproduce every feature of a large freelance marketplace.
+
+---
+
+## License
+
+This project is currently intended as a personal learning and portfolio project.
