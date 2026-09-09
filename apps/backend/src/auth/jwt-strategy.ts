@@ -1,19 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import { PassportStrategy } from '@nestjs/passport';
-import { Model } from 'mongoose';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
-import { User, UserDocument } from '../schemas/User';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(
-    @InjectModel(User.name)
-    private userModel: Model<UserDocument>,
-    private configService: ConfigService,
-  ) {
+  constructor(private configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (req: Request) => req?.cookies?.['auth-session'],
@@ -24,10 +17,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: { _id: string; sub: string }) {
     const { _id } = payload;
-    const user = await this.userModel.findById(_id).exec();
-    if (!user) {
-      throw new UnauthorizedException('Please log in first');
-    }
-    return user;
+    // const user = await this.userModel.findById(_id).exec();
+    // if (!user) {
+    //   throw new UnauthorizedException('Please log in first');
+    // }
+    // return user;
   }
 }
