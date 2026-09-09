@@ -6,6 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt-strategy';
 import { GoogleOAuthConfig } from 'src/config/google-oauth-config';
+import { NeonDBProvider } from 'src/config/postgres-db';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { GoogleOAuthConfig } from 'src/config/google-oauth-config';
       },
     }),
   ],
-  providers: [AuthService, JwtStrategy, GoogleOAuthConfig],
+  providers: [AuthService, JwtStrategy, GoogleOAuthConfig, NeonDBProvider],
   controllers: [AuthController],
   exports: [PassportModule, JwtStrategy, AuthService],
 })
