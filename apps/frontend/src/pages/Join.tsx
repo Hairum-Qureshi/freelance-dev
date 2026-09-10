@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import freelanceDevLogo from "../assets/freelance-dev-logo.jpeg";
 import GoogleOAuthButton from "../components/GoogleOAuthButton";
 
@@ -27,17 +28,31 @@ export default function Join() {
 
 			{/* Join form */}
 			<div className="flex items-center justify-center px-6 py-12 sm:px-10">
-				<div className="w-5/6 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
-					<h2 className="text-2xl font-semibold text-slate-900">
-						Join Freelance Dev
-					</h2>
+				<div className="w-fullrounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+					<div className="w-full max-w-sm">
+						<div className="text-center">
+							<h2 className="text-3xl font-bold tracking-tight text-slate-900">
+								Join Freelance Dev
+							</h2>
 
-					<p className="mt-2 text-sm text-slate-500">
-						Create your account and start connecting.
-					</p>
+							<p className="mt-3 text-sm leading-6 text-slate-500">
+								Create your account and start connecting with talented
+								developers.
+							</p>
+						</div>
 
-					<div className = "my-4 flex justify-center">
-						<GoogleOAuthButton />
+						<div className="my-4 flex justify-center">
+							<GoogleOAuthButton />
+						</div>
+
+						<div className="mt-6 text-center">
+							<Link
+								to="/"
+								className="text-sm font-medium text-slate-500 transition hover:text-slate-900"
+							>
+								← Go back home
+							</Link>
+						</div>
 					</div>
 
 					{/* 
