@@ -9,6 +9,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import ShowFooter from "./middleware/ShowFooter";
+import Onboarding from "../pages/Onboarding";
 
 export default function App() {
 	return (
@@ -23,6 +24,7 @@ export default function App() {
 					<Route path="/" element={<Home />} />
 					<Route path="/about" element={<About />} />
 					<Route path="/join" element={<Join />} />
+					<Route path="/onboarding" element={<Onboarding />} />
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</GoogleOAuthProvider>
