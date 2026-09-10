@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserPayload } from '../types';
 import { ConfigService } from '@nestjs/config';
 import { neon } from '@neondatabase/serverless';
+import { SnowflakeId } from 'snowflake-id';
 
 @Injectable()
 export class AuthService {
@@ -35,8 +36,13 @@ export class AuthService {
       .sql`SELECT * FROM users WHERE email = ${email}`) as UserPayload[];
 
     if (!user) {
+      const snowflake = new SnowflakeId({
+        mid: 42,
+        offset: (2026 - 1970) * 31536000 * 1000,
+      });
+
       [user] = (await this
-        .sql`INSERT INTO users (first_name, last_name, email, profile_picture) VALUES (${given_name || 'GoogleUser'}, ${family_name || 'GoogleUser'}, ${email}, ${picture}) RETURNING *`) as UserPayload[];
+        .sql`INSERT INTO users (id, first_name, last_name, email, profile_picture) VALUES (${snowflake.generate()}, ${given_name || 'GoogleUser'}, ${family_name || 'GoogleUser'}, ${email}, ${picture}) RETURNING *`) as UserPayload[];
     }
 
     const jwtToken = this.jwtService.sign({
