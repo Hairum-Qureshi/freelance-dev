@@ -5,6 +5,7 @@ type UserPayload = {
   email: string;
   profilePicture: string;
   createdAt: Date;
+  updatedAt: Date;
 };
 
 type AuthRequest = Request & {
