@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ShowNavbar from "./middleware/ShowNavbar";
 import Home from "../pages/Home";
 import About from "../pages/About";
 import NotFound from "../pages/NotFound";
@@ -12,7 +13,9 @@ import ShowFooter from "./middleware/ShowFooter";
 export default function App() {
 	return (
 		<BrowserRouter>
-			<Navbar />
+			<ShowNavbar>
+				<Navbar />
+			</ShowNavbar>
 			<GoogleOAuthProvider
 				clientId={import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID}
 			>
