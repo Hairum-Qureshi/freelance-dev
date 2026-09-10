@@ -1,5 +1,7 @@
+import type { UseMutationResult } from "@tanstack/react-query";
+
 interface UseGoogleAuthHook {
-	googleSignInMutation: (credential: string) => Promise<void>;
+	googleSignInMutation: UseMutationResult<void, Error, string, unknown>;
 	signOut: () => Promise<void>;
 }
 
