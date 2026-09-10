@@ -24,8 +24,9 @@ export class AuthController {
   async googleAuth(
     @BearerToken() accessToken: string,
     @Res({ passthrough: true }) res: express.Response,
-  ): Promise<{ jwtToken: string }> {
-    const { jwtToken } = await this.authService.googleAuth(accessToken);
+  ): Promise<{ jwtToken: string; newAccount: boolean }> {
+    const { jwtToken, newAccount } =
+      await this.authService.googleAuth(accessToken);
 
     res.cookie('auth-session', jwtToken, {
       httpOnly: true,
@@ -34,7 +35,7 @@ export class AuthController {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return { jwtToken };
+    return { jwtToken, newAccount };
   }
 
   @Post('sign-out')
