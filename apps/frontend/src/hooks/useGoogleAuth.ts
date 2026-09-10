@@ -1,42 +1,52 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import type { UseGoogleAuthHook } from "../interfaces";
+import type { GoogleSignInResponse, UseGoogleAuthHook } from "../interfaces";
+import { useMutation } from "@tanstack/react-query";
 
 export default function useGoogleAuth(): UseGoogleAuthHook {
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
+	const navigate = useNavigate();
+	const queryClient = useQueryClient();
 
-  const googleSignInMutation = async (credential: string) => {
-    await axios.post(
-      `${import.meta.env.VITE_BACKEND_BASE_URL}/api/auth/google/sign-in`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${credential}`,
-        },
-        withCredentials: true,
-      },
-    );
+	const googleSignInMutation = useMutation({
+		mutationFn: async (accessToken: string): Promise<GoogleSignInResponse> => {
+			const response = await axios.post<GoogleSignInResponse>(
+				`${import.meta.env.VITE_BACKEND_URL}/api/auth/google/sign-in`,
+				{},
+				{
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					},
+					withCredentials: true
+				}
+			);
 
-    await queryClient.invalidateQueries({ queryKey: ["currentUser"] });
+			return response.data;
+		},
 
-    navigate("/profile");
-  };
+		onSuccess: async ({ newAccount }) => {
+			await queryClient.invalidateQueries({
+				queryKey: ["currentUser"]
+			});
 
-  const signOut = async () => {
-    await axios.post(
-      `${import.meta.env.VITE_BACKEND_BASE_URL}/api/auth/sign-out`,
-      {},
-      {
-        withCredentials: true,
-      },
-    );
+			if (newAccount) navigate("/onboarding");
+			else navigate("/");
+		}
+	});
 
-    queryClient.setQueryData(["currentUser"], null);
-    queryClient.removeQueries({ queryKey: ["total-notifications"] });
-    queryClient.removeQueries({ queryKey: ["your-chats"] });
-  };
+	const signOut = async () => {
+		await axios.post(
+			`${import.meta.env.VITE_BACKEND_URL}/api/auth/sign-out`,
+			{},
+			{
+				withCredentials: true
+			}
+		);
 
-  return { googleSignInMutation, signOut };
+		queryClient.setQueryData(["currentUser"], null);
+		queryClient.removeQueries({ queryKey: ["total-notifications"] });
+		queryClient.removeQueries({ queryKey: ["your-chats"] });
+	};
+
+	return { googleSignInMutation, signOut };
 }
