@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { PassportModule } from '@nestjs/passport';
@@ -23,6 +24,7 @@ import { NeonDBProvider } from 'src/config/postgres-db';
         };
       },
     }),
+    HttpModule,
   ],
   providers: [AuthService, JwtStrategy, GoogleOAuthConfig, NeonDBProvider],
   controllers: [AuthController],
