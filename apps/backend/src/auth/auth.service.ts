@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { OAuth2Client } from 'google-auth-library';
 import { JwtService } from '@nestjs/jwt';
 import { UserPayload } from '../types';
-import crypto from 'crypto';
 import { ConfigService } from '@nestjs/config';
+import { neon } from '@neondatabase/serverless';
 
 @Injectable()
 export class AuthService {
@@ -11,6 +11,7 @@ export class AuthService {
     private jwtService: JwtService,
     @Inject('GoogleOAuthClient') private googleOAuthClient: OAuth2Client,
     private configService: ConfigService,
+    @Inject('NeonDBProvider') private sql: ReturnType<typeof neon>,
   ) {}
 
   getAuthCookieOptions() {
@@ -30,22 +31,17 @@ export class AuthService {
     const { email, picture, given_name, family_name } =
       ticket.getPayload() || {};
 
-    // let user = await this.userModel.findOne({ email });
+    let [user] = (await this
+      .sql`SELECT * FROM users WHERE email = ${email}`) as UserPayload[];
 
-    // if (!user) {
-    //   user = new this.userModel({
-    //     _id: crypto.randomUUID(),
-    //     firstName: given_name || 'GoogleUser',
-    //     lastName: family_name || 'GoogleUser',
-    //     email,
-    //     profilePicture: picture,
-    //   });
-    //   await user.save();
-    // }
+    if (!user) {
+      [user] = (await this
+        .sql`INSERT INTO users (first_name, last_name, email, profile_picture) VALUES (${given_name || 'GoogleUser'}, ${family_name || 'GoogleUser'}, ${email}, ${picture}) RETURNING *`) as UserPayload[];
+    }
 
-    // const jwtToken = this.jwtService.sign({
-    //   _id: user._id,
-    // });
+    const jwtToken = this.jwtService.sign({
+      _id: user.id,
+    });
 
     return { jwtToken };
   }
