@@ -5,7 +5,7 @@ import { UserPayload } from '../types';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { neon } from '@neondatabase/serverless';
-import { SnowflakeId } from 'snowflake-id';
+import SnowflakeId from 'snowflake-id';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable()
@@ -58,7 +58,7 @@ export class AuthService {
       });
 
       [user] = (await this
-        .sql`INSERT INTO users (id, first_name, last_name, email, profile_picture) VALUES (${snowflake.generate()}, ${given_name || 'GoogleUser'}, ${family_name || 'GoogleUser'}, ${email}, ${picture}) RETURNING *`) as UserPayload[];
+        .sql`INSERT INTO users (id, "firstName", "lastName", email, "profilePicture", "createdAt", "updatedAt") VALUES (${snowflake.generate()}, ${given_name}, ${family_name}, ${email}, ${picture}, NOW(), NOW()) RETURNING *`) as UserPayload[];
     }
 
     const jwtToken = this.jwtService.sign({ id: user.id });
