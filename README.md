@@ -304,6 +304,16 @@ NEON_DB_URL=postgresql://username:password@ep-example.us-east-2.aws.neon.tech/fr
 
 Use the connection string provided by **your Neon project** rather than the example above.
 
+## Database Table Queries
+
+The SQL queries for creating the application's PostgreSQL tables are stored in the [`apps/backend/tables`](apps/backend/tables) folder. Open each `.sql` file, copy its contents, and run it in the Neon SQL Editor to create the corresponding table.
+
+Current table query:
+
+- [`users.sql`](apps/backend/tables/users.sql) - Creates the `users` table
+
+Run the table queries in Neon after creating your database and before starting the backend. New table scripts will be added to the [`apps/backend/tables`](apps/backend/tables) folder as the application grows.
+
 ---
 
 ## 4. Verify the Database Connection
