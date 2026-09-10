@@ -14,7 +14,7 @@ export default function GoogleOAuthButton() {
 			onClick={() => {
 				login();
 			}}
-			className="w-1/2 rounded-lg bg-black px-4 py-3 font-medium text-white transition"
+			className="w-1/2 rounded-lg bg-black px-4 py-3 font-medium text-white transition hover:bg-gray-800 hover:cursor-pointer"
 		>
 			<FaGoogle className="inline mr-2" />
 			Sign in with Google
