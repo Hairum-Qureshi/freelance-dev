@@ -26,7 +26,9 @@ export class AuthService {
     };
   }
 
-  async googleAuth(accessToken: string): Promise<{ jwtToken: string }> {
+  async googleAuth(
+    accessToken: string,
+  ): Promise<{ jwtToken: string; newAccount: boolean }> {
     const response = await firstValueFrom(
       this.httpService.get('https://www.googleapis.com/oauth2/v3/userinfo', {
         headers: {
@@ -59,11 +61,17 @@ export class AuthService {
 
       [user] = (await this
         .sql`INSERT INTO users (id, "firstName", "lastName", email, "profilePicture", "createdAt", "updatedAt") VALUES (${snowflake.generate()}, ${given_name}, ${family_name}, ${email}, ${picture}, NOW(), NOW()) RETURNING *`) as UserPayload[];
+      const jwtToken = this.jwtService.sign({ id: user.id });
+
+      return {
+        jwtToken,
+        newAccount: true,
+      };
     }
 
     const jwtToken = this.jwtService.sign({ id: user.id });
 
-    return { jwtToken };
+    return { jwtToken, newAccount: false };
   }
 
   getCurrentUser(user: UserPayload): UserPayload {
