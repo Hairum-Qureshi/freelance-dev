@@ -8,5 +8,5 @@ export default function ShowNavbar({
 }) {
 	const location = useLocation();
 
-	return location.pathname !== "/join" ? <>{children}</> : null;
+	return location.pathname !== "/join" && location.pathname !== "/onboarding" ? <>{children}</> : null;
 }
