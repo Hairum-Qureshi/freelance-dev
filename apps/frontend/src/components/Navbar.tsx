@@ -9,12 +9,14 @@ export default function Navbar() {
 	return (
 		<div className="w-full h-16 bg-slate-100/50 text-black flex items-center px-5">
 			<div className="flex items-center">
-				<img
-					src={freelanceDevLogo}
-					alt="Freelance Dev Logo"
-					className="h-22 w-22 object-cover"
-				/>
-				<h1 className="font-semibold text-2xl">Freelance Dev</h1>
+				<Link to="/" className="flex items-center">
+					<img
+						src={freelanceDevLogo}
+						alt="Freelance Dev Logo"
+						className="h-22 w-22 object-cover"
+					/>
+					<h1 className="font-semibold text-2xl">Freelance Dev</h1>
+				</Link>
 			</div>
 			<div className="ml-auto space-x-3">
 				<Link to="/about" className="hover:underline">
