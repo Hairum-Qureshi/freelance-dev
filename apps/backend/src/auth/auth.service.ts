@@ -37,7 +37,7 @@ export class AuthService {
       }),
     );
 
-    if (!response) {
+    if (response.status !== 200) {
       throw new UnauthorizedException('Invalid Google access token');
     }
 
