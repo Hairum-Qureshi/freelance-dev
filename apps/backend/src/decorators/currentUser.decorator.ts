@@ -14,6 +14,8 @@ export const CurrentUser = createParamDecorator(
       email: user.email,
       profilePicture: user.profilePicture,
       onboardingAnswers: user.onboardingAnswers,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
     };
     return userPayload;
   },
