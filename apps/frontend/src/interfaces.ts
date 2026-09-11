@@ -11,7 +11,18 @@ interface UseGoogleAuthHook {
 		string,
 		unknown
 	>;
-	signOut: () => Promise<void>;
+	signOutMutation: UseMutationResult<void, Error, void, unknown>;
 }
 
-export type { GoogleSignInResponse, UseGoogleAuthHook };
+interface OnboardingData {
+	role: "Hire" | "Work" | null;
+	budget?: string;
+	hiringFor?: string[];
+	interests?: string[];
+	seekingProjects?: string[];
+	experience?: string;
+	hopes?: string[];
+	technologies?: string[];
+}
+
+export type { GoogleSignInResponse, UseGoogleAuthHook, OnboardingData };
