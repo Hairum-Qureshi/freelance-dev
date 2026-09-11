@@ -7,6 +7,7 @@ type OnboardingAnswers = {
   experience?: string;
   hopes?: string[];
   technologies?: string[];
+  responseTime?: string;
 };
 
 type UserPayload = {

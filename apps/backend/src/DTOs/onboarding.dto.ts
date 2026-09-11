@@ -37,4 +37,8 @@ export class OnboardingDTO {
   @IsArray()
   @IsString({ each: true })
   technologies?: string[];
+
+  @IsOptional()
+  @IsString()
+  responseTime?: string;
 }

@@ -23,6 +23,7 @@ interface OnboardingData {
 	experience?: string;
 	hopes?: string[];
 	technologies?: string[];
+	responseTime?: string;
 }
 
 export type { GoogleSignInResponse, UseGoogleAuthHook, OnboardingData };

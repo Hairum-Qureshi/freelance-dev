@@ -206,21 +206,34 @@ export default function Onboarding() {
 		},
 		{
 			id: 7,
-			title: "Which technologies do you work with? (Select all that apply)",
+			title:
+				"Which technologies do you work with? Select all that apply. You can add more later.",
 			multiSelect: true,
 			options: [
+				{ text: "JavaScript", nextText: 9 },
+				{ text: "TypeScript", nextText: 9 },
+				{ text: "Python", nextText: 9 },
+				{ text: "Java", nextText: 9 },
+				{ text: "C#", nextText: 9 },
+				{ text: "C++", nextText: 9 },
+				{ text: "C", nextText: 9 },
+				{ text: "Go", nextText: 9 },
+				{ text: "Rust", nextText: 9 },
+				{ text: "PHP", nextText: 9 },
+				{ text: "Ruby", nextText: 9 },
+				{ text: "Kotlin", nextText: 9 },
+				{ text: "Swift", nextText: 9 },
 				{ text: "React", nextText: 9 },
 				{ text: "Next.js", nextText: 9 },
 				{ text: "Vue", nextText: 9 },
 				{ text: "Angular", nextText: 9 },
+				{ text: "Svelte", nextText: 9 },
 				{ text: "Node.js", nextText: 9 },
-				{ text: "NestJS", nextText: 9 },
-				{ text: "Python", nextText: 9 },
-				{ text: "Java", nextText: 9 },
-				{ text: "C#", nextText: 9 },
-				{ text: "PHP", nextText: 9 },
-				{ text: "PostgreSQL", nextText: 9 },
-				{ text: "MongoDB", nextText: 9 }
+				{ text: "React Native", nextText: 9 },
+				{ text: "Flutter", nextText: 9 },
+				{ text: "AWS", nextText: 9 },
+				{ text: "Docker", nextText: 9 },
+				{ text: "Kubernetes", nextText: 9 }
 			]
 		},
 		{
@@ -243,6 +256,40 @@ export default function Onboarding() {
 		},
 		{
 			id: 9,
+			title: "How quickly do you typically respond?",
+			multiSelect: false,
+			options: [
+				{
+					text: "Within 1 hour",
+					nextText: 10,
+					onClick: () =>
+						setOnboardData({ ...onboardingData, responseTime: "Within 1 hour" })
+				},
+				{
+					text: "Within 24 hours",
+					nextText: 10,
+					onClick: () =>
+						setOnboardData({
+							...onboardingData,
+							responseTime: "Within 24 hours"
+						})
+				},
+				{
+					text: "Within 3 days",
+					nextText: 10,
+					onClick: () =>
+						setOnboardData({ ...onboardingData, responseTime: "Within 3 days" })
+				},
+				{
+					text: "Within a week",
+					nextText: 10,
+					onClick: () =>
+						setOnboardData({ ...onboardingData, responseTime: "Within a week" })
+				}
+			]
+		},
+		{
+			id: 10,
 			title: "You're all set!",
 			multiSelect: false,
 			options: [{ text: "View Profile", nextText: -1 }],
@@ -320,7 +367,7 @@ export default function Onboarding() {
 											</label>
 										</div>
 									) : (
-										step.id !== 9 && (
+										step.id !== 10 && (
 											<button
 												key={option.text}
 												type="button"
@@ -347,7 +394,7 @@ export default function Onboarding() {
 										</button>
 									</div>
 								)}
-								{step.id === 9 && (
+								{step.id === 10 && (
 									<div className="w-full mt-4 flex justify-center">
 										<button
 											type="button"

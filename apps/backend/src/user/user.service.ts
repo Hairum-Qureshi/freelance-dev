@@ -9,6 +9,6 @@ export class UserService {
 
   async submitOnboardingAnswers(userID: string, onboardingData: OnboardingDTO) {
     await this
-      .sql`UPDATE users SET "onboardingAnswers" = ${onboardingData} WHERE id = ${userID}`;
+      .sql`UPDATE users SET "onboardingAnswers" = ${onboardingData}, "completedOnboarding" = true WHERE id = ${userID}`;
   }
 }
