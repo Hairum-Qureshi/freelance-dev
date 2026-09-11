@@ -10,6 +10,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import ShowFooter from "./middleware/ShowFooter";
 import Onboarding from "../pages/Onboarding";
+import OnboardViewing from "./middleware/OnboardViewing";
 
 export default function App() {
 	return (
@@ -24,7 +25,14 @@ export default function App() {
 					<Route path="/" element={<Home />} />
 					<Route path="/about" element={<About />} />
 					<Route path="/join" element={<Join />} />
-					<Route path="/onboarding" element={<Onboarding />} />
+					<Route
+						path="/onboarding"
+						element={
+							<OnboardViewing>
+								<Onboarding />
+							</OnboardViewing>
+						}
+					/>
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</GoogleOAuthProvider>
