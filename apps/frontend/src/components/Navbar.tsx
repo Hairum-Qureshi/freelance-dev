@@ -20,9 +20,9 @@ export default function Navbar() {
 					<img
 						src={freelanceDevLogo}
 						alt="Freelance Dev Logo"
-						className="h-14 w-14 object-cover"
+						className="h-20 w-20 object-cover"
 					/>
-					<h1 className="font-semibold text-2xl ml-2">Freelance Dev</h1>
+					<h1 className="font-semibold text-2xl">Freelance Dev</h1>
 				</Link>
 			</div>
 
