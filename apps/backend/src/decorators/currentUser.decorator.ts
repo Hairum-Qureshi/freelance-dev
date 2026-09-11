@@ -13,6 +13,7 @@ export const CurrentUser = createParamDecorator(
       lastName: user.lastName,
       email: user.email,
       profilePicture: user.profilePicture,
+      onboardingAnswers: user.onboardingAnswers,
     };
     return userPayload;
   },
