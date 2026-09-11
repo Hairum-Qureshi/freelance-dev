@@ -12,6 +12,7 @@ import ShowFooter from "./middleware/ShowFooter";
 import Onboarding from "../pages/Onboarding";
 import OnboardViewing from "./middleware/OnboardViewing";
 import Profile from "../pages/Profile";
+import Settings from "../pages/Settings";
 
 export default function App() {
 	return (
@@ -27,6 +28,8 @@ export default function App() {
 					<Route path="/about" element={<About />} />
 					<Route path="/join" element={<Join />} />
 					<Route path="/p/:uid" element={<Profile />} />
+					<Route path="/p/:uid/settings" element={<Settings />} />
+
 					<Route
 						path="/onboarding"
 						element={
