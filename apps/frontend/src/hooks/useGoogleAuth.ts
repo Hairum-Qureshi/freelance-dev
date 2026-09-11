@@ -34,19 +34,20 @@ export default function useGoogleAuth(): UseGoogleAuthHook {
 		}
 	});
 
-	const signOut = async () => {
-		await axios.post(
-			`${import.meta.env.VITE_BACKEND_URL}/api/auth/sign-out`,
-			{},
-			{
-				withCredentials: true
-			}
-		);
+	const signOutMutation = useMutation({
+		mutationFn: async (): Promise<void> => {
+			await axios.post(
+				`${import.meta.env.VITE_BACKEND_URL}/api/auth/sign-out`,
+				{},
+				{
+					withCredentials: true
+				}
+			);
+		},
+		onSuccess: () => {
+			queryClient.setQueryData(["currentUser"], null);
+		}
+	});
 
-		queryClient.setQueryData(["currentUser"], null);
-		queryClient.removeQueries({ queryKey: ["total-notifications"] });
-		queryClient.removeQueries({ queryKey: ["your-chats"] });
-	};
-
-	return { googleSignInMutation, signOut };
+	return { googleSignInMutation, signOutMutation };
 }
