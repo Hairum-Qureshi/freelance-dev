@@ -11,6 +11,7 @@ import Footer from "./Footer";
 import ShowFooter from "./middleware/ShowFooter";
 import Onboarding from "../pages/Onboarding";
 import OnboardViewing from "./middleware/OnboardViewing";
+import Profile from "../pages/Profile";
 
 export default function App() {
 	return (
@@ -25,6 +26,7 @@ export default function App() {
 					<Route path="/" element={<Home />} />
 					<Route path="/about" element={<About />} />
 					<Route path="/join" element={<Join />} />
+					<Route path="/p/:uid" element={<Profile />} />
 					<Route
 						path="/onboarding"
 						element={
