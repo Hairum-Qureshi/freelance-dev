@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import freelanceDevLogo from "../assets/freelance-dev-logo.jpeg";
+import freelanceDevLogo from "../assets/freelance-dev-logo.svg";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import { MdLogout, MdPerson } from "react-icons/md";
 import useGoogleAuth from "../hooks/useGoogleAuth";
@@ -20,7 +20,7 @@ export default function Navbar() {
 					<img
 						src={freelanceDevLogo}
 						alt="Freelance Dev Logo"
-						className="h-20 w-20 object-cover"
+						className="h-25 w-20 object-cover"
 					/>
 					<h1 className="font-semibold text-2xl">Freelance Dev</h1>
 				</Link>
