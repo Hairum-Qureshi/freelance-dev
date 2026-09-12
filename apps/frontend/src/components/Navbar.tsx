@@ -35,9 +35,11 @@ export default function Navbar() {
 					Contact
 				</Link>
 
-				<Link to="/services" className="hover:underline">
-					Services
-				</Link>
+				{currUserData?.onboardingAnswers.role === "Hire" && (
+					<Link to="/post-job" className="hover:underline">
+						Post a Job
+					</Link>
+				)}
 
 				{!currUserData ? (
 					<button
