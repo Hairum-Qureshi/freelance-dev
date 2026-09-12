@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import freelanceDevLogo from "../assets/freelance-dev-logo.jpeg";
+import freelanceDevLogo from "../assets/freelance-dev-logo.svg";
 import GoogleOAuthButton from "../components/GoogleOAuthButton";
 
 export default function Join() {
@@ -8,7 +8,7 @@ export default function Join() {
 			{/* Branding */}
 			<div className="relative flex items-center justify-center overflow-hidden bg-black px-8 py-16 text-white">
 				<div className="flex max-w-md flex-col items-center text-center">
-					<div className="mb-8 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+					<div className="mb-8 rounded-2xl border border-white/10 bg-white p-4">
 						<img
 							src={freelanceDevLogo}
 							alt="Freelance Dev Logo"
@@ -28,7 +28,7 @@ export default function Join() {
 
 			{/* Join form */}
 			<div className="flex items-center justify-center px-6 py-12 sm:px-10">
-				<div className="w-fullrounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+				<div className="w-full rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
 					<div className="w-full max-w-sm">
 						<div className="text-center">
 							<h2 className="text-3xl font-bold tracking-tight text-slate-900">
