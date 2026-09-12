@@ -1,4 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Contact from "../pages/Contact";
+import PostJob from "../pages/PostJob";
 import ShowNavbar from "./middleware/ShowNavbar";
 import Home from "../pages/Home";
 import About from "../pages/About";
@@ -29,7 +31,8 @@ export default function App() {
 					<Route path="/join" element={<Join />} />
 					<Route path="/p/:uid" element={<Profile />} />
 					<Route path="/p/:uid/settings" element={<Settings />} />
-
+					<Route path="/post-job" element={<PostJob />} />
+					<Route path="/contact" element={<Contact />} />
 					<Route
 						path="/onboarding"
 						element={
