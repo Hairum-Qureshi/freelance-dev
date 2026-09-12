@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import freelanceDevLogo from "../assets/freelance-dev-logo.jpeg";
+import freelanceDevLogo from "../assets/freelance-dev-logo.svg";
 
 export default function Footer() {
 	return (
