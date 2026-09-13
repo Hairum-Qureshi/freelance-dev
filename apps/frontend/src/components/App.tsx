@@ -17,6 +17,7 @@ import Profile from "../pages/Profile";
 import Settings from "../pages/Settings";
 import Inbox from "../pages/Inbox";
 import Listings from "../pages/Listings";
+import Listing from "../pages/Listing";
 
 export default function App() {
 	return (
@@ -37,6 +38,7 @@ export default function App() {
 					<Route path="/contact" element={<Contact />} />
 					<Route path="/inbox" element={<Inbox />} />
 					<Route path="/listings" element={<Listings />} />
+					<Route path="/listing/:listingID" element={<Listing />} />
 					<Route
 						path="/onboarding"
 						element={
