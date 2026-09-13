@@ -39,6 +39,10 @@ export default function Navbar() {
 					Inbox
 				</Link>
 
+				<Link to="/listings" className="hover:underline">
+					Listings
+				</Link>
+
 				{currUserData?.onboardingAnswers.role === "Hire" && (
 					<Link to="/post-job" className="hover:underline">
 						Post a Job
