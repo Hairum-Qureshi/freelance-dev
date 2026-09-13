@@ -53,10 +53,10 @@ export default function Navbar() {
 						Join Now
 					</button>
 				) : (
-					<div>
+					<div className="relative">
 						<button
 							className="flex items-center gap-1.5 text-black px-2 py-1.5 rounded-md hover:bg-gray-200 active:bg-gray-300 transition-colors cursor-pointer"
-							onClick={() => setOpenDropdown(!openDropdown)}
+							onClick={() => setOpenDropdown(prev => !prev)}
 						>
 							<FaCircleUser size={24} />
 							<span>
@@ -64,40 +64,35 @@ export default function Navbar() {
 							</span>
 						</button>
 						{openDropdown && (
-							<div className="absolute right-5 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
-								<button
-									className="w-full text-left px-3 py-2 hover:bg-gray-100 hover:cursor-pointer"
-									onClick={() => navigate(`/p/${currUserData.id}`)}
-								>
-									<MdPerson size={22} className="inline mr-2" />
-									View Profile
-								</button>
-								<button
-									className="w-full text-left px-3 py-2 text-red-600 hover:bg-gray-100 hover:cursor-pointer"
-									onClick={() => {
-										signOutMutation.mutate();
-									}}
-								>
-									<MdLogout size={18} className="inline mr-2" />
-									Logout
-								</button>
-							</div>
+							<>
+								<div
+									className="fixed inset-0 z-40"
+									onClick={() => setOpenDropdown(false)}
+								/>
+								<div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+									<button
+										className="w-full text-left px-3 py-2 hover:bg-gray-100 hover:cursor-pointer"
+										onClick={() => {
+											navigate(`/p/${currUserData.id}`);
+											setOpenDropdown(false);
+										}}
+									>
+										<MdPerson size={22} className="inline mr-2" />
+										View Profile
+									</button>
+									<button
+										className="w-full text-left px-3 py-2 text-red-600 hover:bg-gray-100 hover:cursor-pointer"
+										onClick={() => {
+											signOutMutation.mutate();
+											setOpenDropdown(false);
+										}}
+									>
+										<MdLogout size={18} className="inline mr-2" />
+										Logout
+									</button>
+								</div>
+							</>
 						)}
-						{/* <button
-							className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 active:bg-gray-900 transition-colors cursor-pointer"
-							onClick={() => navigate(`/p/${currUserData.id}`)}
-						>
-							View Profile
-						</button>
-						<button
-							className="flex items-center gap-1.5 text-red-600 px-2 py-1.5 rounded-md hover:text-red-700 active:text-red-800 transition-colors cursor-pointer"
-							onClick={() => {
-								signOutMutation.mutate();
-							}}
-						>
-							<MdLogout size={18} />
-							Logout
-						</button> */}
 					</div>
 				)}
 			</div>
