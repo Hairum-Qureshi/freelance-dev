@@ -15,6 +15,8 @@ import Onboarding from "../pages/Onboarding";
 import OnboardViewing from "./middleware/OnboardViewing";
 import Profile from "../pages/Profile";
 import Settings from "../pages/Settings";
+import Inbox from "../pages/Inbox";
+import Listings from "../pages/Listings";
 
 export default function App() {
 	return (
@@ -33,6 +35,8 @@ export default function App() {
 					<Route path="/p/:uid/settings" element={<Settings />} />
 					<Route path="/post-job" element={<PostJob />} />
 					<Route path="/contact" element={<Contact />} />
+					<Route path="/inbox" element={<Inbox />} />
+					<Route path="/listings" element={<Listings />} />
 					<Route
 						path="/onboarding"
 						element={
