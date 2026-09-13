@@ -45,14 +45,6 @@ export default function Footer() {
 										Contact
 									</Link>
 								</li>
-								<li>
-									<Link
-										to="/services"
-										className="transition hover:text-slate-900 hover:underline"
-									>
-										Services
-									</Link>
-								</li>
 							</ul>
 						</div>
 
@@ -85,9 +77,9 @@ export default function Footer() {
 								Contact
 							</p>
 							<ul className="mt-3 space-y-2 text-sm">
-								<li>hello@freelancedev.com</li>
-								<li>+1 (555) 123-4567</li>
-								<li>New York, NY</li>
+								<li>placeholder@example.com</li>
+								<li>+1 (XXX) XXX-XXX</li>
+								<li>XXX, XX, United States</li>
 							</ul>
 						</div>
 					</div>
