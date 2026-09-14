@@ -9,7 +9,7 @@ CREATE TABLE users (
     deleted BOOLEAN NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
-    resume TEXT,
+    resume_url TEXT,
 
     CONSTRAINT users_pkey PRIMARY KEY (id)
 );
