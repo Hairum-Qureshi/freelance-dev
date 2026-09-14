@@ -12,13 +12,16 @@ type OnboardingAnswers = {
 
 type UserPayload = {
   id: string;
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   email: string;
-  profilePicture: string;
-  onboardingAnswers: OnboardingAnswers;
-  createdAt: Date;
-  updatedAt: Date;
+  profile_picture: string;
+  completed_onboarding: boolean;
+  onboarding_answers: OnboardingAnswers;
+  resume_url: string;
+  deleted: boolean;
+  created_at: Date;
+  updated_at: Date;
 };
 
 type AuthRequest = Request & {
