@@ -9,13 +9,15 @@ export const CurrentUser = createParamDecorator(
 
     const userPayload = {
       id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
+      firstName: user.first_name,
+      lastName: user.last_name,
       email: user.email,
-      profilePicture: user.profilePicture,
-      onboardingAnswers: user.onboardingAnswers,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
+      profilePicture: user.profile_picture,
+      onboardingAnswers: user.onboarding_answers,
+      completedOnboarding: user.completed_onboarding,
+      deleted: user.deleted,
+      createdAt: user.created_at,
+      updatedAt: user.updated_at,
     };
     return userPayload;
   },
