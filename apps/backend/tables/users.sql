@@ -10,6 +10,7 @@ CREATE TABLE users (
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
     resume_url TEXT,
+    location TEXT,
 
     CONSTRAINT users_pkey PRIMARY KEY (id)
 );
