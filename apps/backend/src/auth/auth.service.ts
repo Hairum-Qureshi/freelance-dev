@@ -60,7 +60,7 @@ export class AuthService {
       });
 
       [user] = (await this
-        .sql`INSERT INTO users (id, "firstName", "lastName", email, "profilePicture", "completedOnboarding", "deleted", "createdAt", "updatedAt") VALUES (${snowflake.generate()}, ${given_name}, ${family_name}, ${email}, ${picture}, false, false, NOW(), NOW()) RETURNING *`) as UserPayload[];
+        .sql`INSERT INTO users (id, first_name, last_name, email, profile_picture, completed_onboarding, deleted, created_at, updated_at) VALUES (${snowflake.generate()}, ${given_name}, ${family_name}, ${email}, ${picture}, false, false, NOW(), NOW()) RETURNING *`) as UserPayload[];
       const jwtToken = this.jwtService.sign({ id: user.id });
 
       return {
