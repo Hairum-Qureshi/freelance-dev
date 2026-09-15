@@ -122,14 +122,14 @@ export default function Listings() {
 					</div>
 				</div>
 				<div className="space-y-3 flex-1">
-					{/* <AdCard />
 					<AdCard />
 					<AdCard />
-					<AdCard /> */}
-					<h3 className="flex text-xl items-center h-full justify-center text-slate-600 text-center">
+					<AdCard />
+					<AdCard />
+					{/* <h3 className="flex text-xl items-center h-full justify-center text-slate-600 text-center">
 						There are currently no listings available at this time. <br />
 						Please check back later.
-					</h3>
+					</h3> */}
 				</div>
 			</div>
 		</div>
