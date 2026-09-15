@@ -3,9 +3,11 @@ import {
 	FaArrowLeftLong,
 	FaArrowUpRightFromSquare,
 	FaDownload,
-	FaFilePdf
+	FaFilePdf,
+	FaTrashCan
 } from "react-icons/fa6";
 import { saveAs } from "file-saver";
+import { Link } from "react-router-dom";
 
 export default function Resume({
 	setShowResume
@@ -40,7 +42,8 @@ export default function Resume({
 
 				<div className="flex shrink-0 gap-2">
 					<button
-						className="inline-flex items-center gap-2 rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:cursor-pointer"
+						type="button"
+						className="inline-flex items-center gap-2 rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:cursor-pointer hover:bg-slate-50"
 						onClick={() =>
 							saveAs(
 								pdfUrl,
@@ -51,15 +54,29 @@ export default function Resume({
 						<FaDownload aria-hidden="true" />
 						Download
 					</button>
-					<a
-						href={pdfUrl}
+
+					<Link
+						to={pdfUrl}
 						target="_blank"
 						rel="noreferrer"
 						className="inline-flex items-center gap-2 rounded-md bg-slate-950 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800"
 					>
 						Open full screen
 						<FaArrowUpRightFromSquare aria-hidden="true" />
-					</a>
+					</Link>
+
+					<div className="mx-1 w-px self-stretch bg-slate-200" />
+
+					<button
+						type="button"
+						className="inline-flex items-center gap-2 rounded-md border border-rose-200 bg-white px-3 py-2 text-sm font-medium text-rose-600 transition hover:cursor-pointer hover:border-rose-300 hover:bg-rose-50"
+						onClick={() => {
+							// remove resume
+						}}
+					>
+						<FaTrashCan aria-hidden="true" />
+						Remove
+					</button>
 				</div>
 			</div>
 
