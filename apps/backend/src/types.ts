@@ -19,6 +19,7 @@ type UserPayload = {
   completed_onboarding: boolean;
   onboarding_answers: OnboardingAnswers;
   resume_url: string;
+  location: string;
   deleted: boolean;
   created_at: Date;
   updated_at: Date;
