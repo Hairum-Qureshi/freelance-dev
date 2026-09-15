@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
+import useUser from "../../hooks/useUser";
+import { useRef } from "react";
 import type { OnboardingData } from "../../interfaces";
 
 export default function ProfileContent({
@@ -9,7 +11,8 @@ export default function ProfileContent({
 	hiringNeeds,
 	technologies,
 	workerTab,
-	setWorkerTab
+	setWorkerTab,
+	setShowResume
 }: {
 	isWorker: boolean;
 	onboardingAnswers: OnboardingData;
@@ -18,9 +21,12 @@ export default function ProfileContent({
 	technologies: string[];
 	workerTab: "history" | "payments";
 	setWorkerTab: (tab: "history" | "payments") => void;
+	setShowResume: (show: boolean) => void;
 }) {
 	const { data: currUserData } = useCurrentUser();
 	const navigate = useNavigate();
+	const fileInputRef = useRef<HTMLInputElement | null>(null);
+	const { attachResumeMutation } = useUser();
 
 	return (
 		<main className="rounded-md border border-slate-300 bg-white p-5 shadow-sm sm:p-8">
@@ -53,21 +59,37 @@ export default function ProfileContent({
 							type="button"
 							className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:cursor-pointer hover:bg-slate-50"
 							onClick={() => {
-								// Open resume
+								setShowResume(true);
 							}}
 						>
 							View resume
 						</button>
 					) : (
-						<button
-							type="button"
-							className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:cursor-pointer hover:bg-slate-50"
-							onClick={() => {
-								// Open resume
-							}}
-						>
-							Add resume
-						</button>
+						<>
+							<input
+								ref={fileInputRef}
+								type="file"
+								accept=".pdf,application/pdf"
+								className="hidden"
+								onChange={e => {
+									if (e.target.files && e.target.files[0]) {
+										attachResumeMutation.mutate({ file: e.target.files[0] });
+									}
+								}}
+							/>
+							<button
+								type="button"
+								className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:cursor-pointer hover:bg-slate-50"
+								onClick={() => {
+									fileInputRef.current?.click();
+									if (fileInputRef.current) {
+										fileInputRef.current.value = "";
+									}
+								}}
+							>
+								Add resume
+							</button>
+						</>
 					)}
 
 					<button
