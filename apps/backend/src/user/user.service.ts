@@ -13,7 +13,7 @@ export class UserService {
 
   async submitOnboardingAnswers(userID: string, onboardingData: OnboardingDTO) {
     await this
-      .sql`UPDATE users SET "onboardingAnswers" = ${onboardingData}, "completedOnboarding" = true WHERE id = ${userID}`;
+      .sql`UPDATE users SET onboarding_answers = ${onboardingData}, completed_onboarding = true WHERE id = ${userID}`;
   }
 
   async attachResume(userID: string, resume: Express.Multer.File) {
