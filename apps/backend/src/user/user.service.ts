@@ -17,6 +17,20 @@ export class UserService {
   }
 
   async attachResume(userID: string, resume: Express.Multer.File) {
+    if (!resume)
+      throw new HttpException(
+        'No resume file provided',
+        HttpStatus.BAD_REQUEST,
+      );
+
+    const resumeExists = (await this
+      .sql`SELECT resume_url FROM users WHERE id = ${userID}`) as {
+      resume_url: string;
+    }[];
+
+    if (resumeExists.length)
+      throw new HttpException('Resume already exists', HttpStatus.BAD_REQUEST);
+
     const resumeData = await this.imageKit.upload({
       file: resume.buffer,
       folder: `/profiles/${userID}`,
