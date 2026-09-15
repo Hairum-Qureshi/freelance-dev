@@ -7,6 +7,8 @@ import MainChatContainer from "../components/chat/MainChatContainer";
 export default function Inbox() {
 	const showStartChatMessage = true;
 
+	// if you're a hirer, add a 'Hire' button in the conversation header
+
 	return (
 		<div className="h-[calc(100vh-4rem)] flex">
 			<div className="border border-slate-200 h-full overflow-y-scroll w-[25%]">
