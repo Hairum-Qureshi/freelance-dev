@@ -28,8 +28,8 @@ export default function Join() {
 
 			{/* Join form */}
 			<div className="flex items-center justify-center px-6 py-12 sm:px-10">
-				<div className="w-full rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
-					<div className="w-full max-w-sm">
+				<div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+					<div className="mx-auto w-full max-w-sm">
 						<div className="text-center">
 							<h2 className="text-3xl font-bold tracking-tight text-slate-900">
 								Join Freelance Dev
