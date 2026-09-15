@@ -1,4 +1,5 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import geoip from 'geoip-country';
 import { OAuth2Client } from 'google-auth-library';
 import { JwtService } from '@nestjs/jwt';
 import { UserPayload } from '../types';
@@ -28,6 +29,7 @@ export class AuthService {
 
   async googleAuth(
     accessToken: string,
+    userIP: string,
   ): Promise<{ jwtToken: string; newAccount: boolean }> {
     const response = await firstValueFrom(
       this.httpService.get('https://www.googleapis.com/oauth2/v3/userinfo', {
@@ -40,6 +42,8 @@ export class AuthService {
     if (response.status !== 200) {
       throw new UnauthorizedException('Invalid Google access token');
     }
+
+    const geo = geoip.lookup(userIP);
 
     const googleUser = (await response.data) as {
       email: string;
@@ -60,7 +64,7 @@ export class AuthService {
       });
 
       [user] = (await this
-        .sql`INSERT INTO users (id, first_name, last_name, email, profile_picture, completed_onboarding, deleted, created_at, updated_at) VALUES (${snowflake.generate()}, ${given_name}, ${family_name}, ${email}, ${picture}, false, false, NOW(), NOW()) RETURNING *`) as UserPayload[];
+        .sql`INSERT INTO users (id, first_name, last_name, email, profile_picture, completed_onboarding, deleted, location, created_at, updated_at) VALUES (${snowflake.generate()}, ${given_name}, ${family_name}, ${email}, ${picture}, false, false, ${geo?.name ?? null}, NOW(), NOW()) RETURNING *`) as UserPayload[];
       const jwtToken = this.jwtService.sign({ id: user.id });
 
       return {
