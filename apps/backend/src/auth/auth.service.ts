@@ -5,9 +5,11 @@ import { JwtService } from '@nestjs/jwt';
 import { UserPayload } from '../types';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { neon } from '@neondatabase/serverless';
 import SnowflakeId from 'snowflake-id';
 import { firstValueFrom } from 'rxjs';
+import { eq } from 'drizzle-orm';
+import { usersTable } from 'src/schema';
+import type { Database } from 'src/providers/postgres-db';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +17,7 @@ export class AuthService {
     private jwtService: JwtService,
     @Inject('GoogleOAuthClient') private googleOAuthClient: OAuth2Client,
     private configService: ConfigService,
-    @Inject('NeonDBProvider') private sql: ReturnType<typeof neon>,
+    @Inject('NeonDBProvider') private readonly db: Database,
     private httpService: HttpService,
   ) {}
 
@@ -54,8 +56,11 @@ export class AuthService {
 
     const { email, picture, given_name, family_name } = googleUser;
 
-    let [user] = (await this
-      .sql`SELECT * FROM users WHERE email = ${email}`) as UserPayload[];
+    let [user] = await this.db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.email, email))
+      .limit(1);
 
     if (!user) {
       const snowflake = new SnowflakeId({
@@ -63,8 +68,18 @@ export class AuthService {
         offset: (2026 - 1970) * 31536000 * 1000,
       });
 
-      [user] = (await this
-        .sql`INSERT INTO users (id, first_name, last_name, email, profile_picture, completed_onboarding, deleted, location, created_at, updated_at) VALUES (${snowflake.generate()}, ${given_name}, ${family_name}, ${email}, ${picture}, false, false, ${geo?.name ?? null}, NOW(), NOW()) RETURNING *`) as UserPayload[];
+      [user] = await this.db
+        .insert(usersTable)
+        .values({
+          id: snowflake.generate(),
+          first_name: given_name,
+          last_name: family_name,
+          email,
+          profile_picture: picture,
+          onboarding_answers: {},
+          location: geo?.name ?? null,
+        })
+        .returning();
       const jwtToken = this.jwtService.sign({ id: user.id });
 
       return {

@@ -1,5 +1,5 @@
 type OnboardingAnswers = {
-  role: 'Hire' | 'Work';
+  role?: 'Hire' | 'Work';
   budget?: string;
   hiringFor?: string[];
   interests?: string[];

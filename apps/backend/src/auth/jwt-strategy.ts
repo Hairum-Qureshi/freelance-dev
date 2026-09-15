@@ -3,12 +3,14 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
-import { neon } from '@neondatabase/serverless';
+import { eq } from 'drizzle-orm';
+import { usersTable } from 'src/schema';
+import type { Database } from 'src/providers/postgres-db';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
-    @Inject('NeonDBProvider') private sql: ReturnType<typeof neon>,
+    @Inject('NeonDBProvider') private readonly db: Database,
     private configService: ConfigService,
   ) {
     super({
@@ -21,12 +23,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: { id: string; sub: string }) {
     const { id } = payload;
-    const user = await this.sql`SELECT * FROM users WHERE id = ${id}`.then(
-      (res) => res[0],
-    );
+    const [user] = await this.db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.id, Number(id)))
+      .limit(1);
     if (!user) {
       throw new UnauthorizedException('Please log in first');
     }
-    return user;
+    return { ...user, id: String(user.id) };
   }
 }
