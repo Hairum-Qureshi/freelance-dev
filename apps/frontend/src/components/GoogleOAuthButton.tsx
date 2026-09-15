@@ -6,18 +6,19 @@ export default function GoogleOAuthButton() {
 	const { googleSignInMutation } = useGoogleAuth();
 
 	const login = useGoogleLogin({
-		onSuccess: tokenResponse => googleSignInMutation(tokenResponse.access_token)
+		onSuccess: credentialResponse =>
+			googleSignInMutation.mutate(credentialResponse.access_token)
 	});
 
 	return (
 		<button
+			type="button"
 			onClick={() => {
 				login();
 			}}
-			className="w-1/2 rounded-lg bg-black px-4 py-3 font-medium text-white transition hover:bg-gray-800 hover:cursor-pointer"
+			className="w-3/4 rounded-lg bg-black px-4 py-3 font-medium text-white transition hover:bg-gray-800 hover:cursor-pointer"
 		>
-			<FaGoogle className="inline mr-2" />
-			Sign in with Google
+			<FaGoogle className="inline mr-2" /> Sign in with Google
 		</button>
 	);
 }
