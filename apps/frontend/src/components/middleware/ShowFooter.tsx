@@ -7,6 +7,12 @@ export default function ShowFooter({
 	children: React.ReactNode;
 }) {
 	const location = useLocation();
+	const isFocusedPage =
+		location.pathname === "/inbox" || location.pathname.startsWith("/p/");
 
-	return location.pathname !== "/join" && location.pathname !== "/onboarding" ? <>{children}</> : null;
+	return location.pathname !== "/join" &&
+		location.pathname !== "/onboarding" &&
+		!isFocusedPage ? (
+		<>{children}</>
+	) : null;
 }
