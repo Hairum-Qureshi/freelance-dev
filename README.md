@@ -308,19 +308,31 @@ Use the connection string provided by **your Neon project** rather than the exam
 
 The backend uses [Drizzle ORM](https://orm.drizzle.team/) to define and manage the PostgreSQL schema. The schema is defined in [`apps/backend/src/schema.ts`](apps/backend/src/schema.ts), and Drizzle Kit is configured in [`apps/backend/src/config/drizzle.config.ts`](apps/backend/src/config/drizzle.config.ts).
 
-To generate the database migration, open a terminal in the `apps/backend` directory and run:
+After making a schema change, open a terminal in the `apps/backend` directory and generate a migration:
 
 ```bash
 npx drizzle-kit generate --config src/config/drizzle.config.ts
 ```
 
-You can also run the backend's npm script from the same directory:
+You can also use the backend's npm script:
 
 ```bash
 npm run db:generate
 ```
 
-**Important:** Run either command again anytime you make a schema change or update. This keeps the generated migrations current and prevents issues caused by outdated schemas.
+After generating the migration, apply it to NeonDB from the same `apps/backend` directory:
+
+```bash
+npm run db:migrate
+```
+
+You can also run the migration command directly:
+
+```bash
+npx drizzle-kit migrate --config src/config/drizzle.config.ts
+```
+
+**Important:** `db:generate` creates the migration files but does not update NeonDB. `db:migrate` applies the generated migrations and pushes the schema changes to NeonDB. Repeat both steps whenever you make a schema change or update.
 
 ---
 
