@@ -12,6 +12,7 @@ interface UseUserHook {
 		{ onboardingData: OnboardingData },
 		unknown
 	>;
+	attachResumeMutation: UseMutationResult<void, Error, { file: File }, unknown>;
 }
 
 export default function useUser(): UseUserHook {
@@ -41,5 +42,25 @@ export default function useUser(): UseUserHook {
 		}
 	});
 
-	return { onboardingMutation };
+	const attachResumeMutation = useMutation({
+		mutationFn: async ({ file }: { file: File }): Promise<void> => {
+			const formData = new FormData();
+			formData.append("resume", file);
+
+			await axios.patch(
+				`${import.meta.env.VITE_BACKEND_URL}/api/user/attach-resume`,
+				formData,
+				{
+					withCredentials: true
+				}
+			);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["currentUser"]
+			});
+		}
+	});
+
+	return { onboardingMutation, attachResumeMutation };
 }
