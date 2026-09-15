@@ -20,7 +20,7 @@ export class UserService {
     const resumeData = await this.imageKit.upload({
       file: resume.buffer,
       folder: `/profiles/${userID}`,
-      fileName: resume.originalname,
+      fileName: 'Resume.pdf',
     });
 
     if (!resumeData)
