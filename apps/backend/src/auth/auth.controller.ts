@@ -14,6 +14,7 @@ import * as types from '../types';
 import express from 'express';
 import type { Response } from 'express';
 import { BearerToken } from 'src/decorators/bearerToken.decorator';
+import { RealIP } from 'nestjs-real-ip';
 
 @Controller('auth')
 export class AuthController {
@@ -24,9 +25,12 @@ export class AuthController {
   async googleAuth(
     @BearerToken() accessToken: string,
     @Res({ passthrough: true }) res: express.Response,
+    @RealIP() userIP: string,
   ): Promise<{ jwtToken: string; newAccount: boolean }> {
-    const { jwtToken, newAccount } =
-      await this.authService.googleAuth(accessToken);
+    const { jwtToken, newAccount } = await this.authService.googleAuth(
+      accessToken,
+      userIP,
+    );
 
     res.cookie('auth-session', jwtToken, {
       httpOnly: true,
