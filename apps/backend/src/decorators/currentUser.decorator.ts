@@ -15,7 +15,7 @@ export const CurrentUser = createParamDecorator(
       profilePicture: user.profile_picture,
       onboardingAnswers: user.onboarding_answers,
       completedOnboarding: user.completed_onboarding,
-      resumeUrl: user.resume_url,
+      resumeId: user.resume_id,
       location: user.location,
       deleted: user.deleted,
       createdAt: user.created_at,
