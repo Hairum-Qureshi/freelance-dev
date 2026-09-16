@@ -2,7 +2,7 @@ import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import geoip from 'geoip-country';
 import { OAuth2Client } from 'google-auth-library';
 import { JwtService } from '@nestjs/jwt';
-import { UserPayload } from '../types';
+import type { UserPayload } from '@repo/shared-types';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import SnowflakeId from 'snowflake-id';

@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import type { UseMutationResult } from "@tanstack/react-query";
 import axios from "axios";
-import type { OnboardingData } from "../interfaces";
+import type { OnboardingData } from "@repo/shared-types";
 import { useCurrentUser } from "./useCurrentUser";
 
 interface UseUserHook {

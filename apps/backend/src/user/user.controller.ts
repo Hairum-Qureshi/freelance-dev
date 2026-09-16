@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CurrentUser } from 'src/decorators/currentUser.decorator';
-import type { UserPayload } from 'src/types';
+import type { UserPayload } from '@repo/shared-types';
 import { OnboardingDTO } from 'src/DTOs/onboarding.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';

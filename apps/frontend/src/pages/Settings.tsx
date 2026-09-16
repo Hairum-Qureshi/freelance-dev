@@ -4,7 +4,7 @@ import axios from "axios";
 import { FaArrowLeftLong } from "react-icons/fa6";
 
 import { useCurrentUser } from "../hooks/useCurrentUser";
-import type { OnboardingData } from "../interfaces";
+import type { OnboardingData } from "@repo/shared-types";
 import PillInput from "../components/PillInput";
 import { Link } from "react-router-dom";
 
