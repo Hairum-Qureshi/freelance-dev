@@ -5,3 +5,4 @@ export type {
 	GoogleSignInResponse,
 	UseGoogleAuthHook
 } from "./hooks/use-google-auth.js";
+export type { AuthRequest } from "./types/auth-request.js";
