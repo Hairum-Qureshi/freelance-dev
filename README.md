@@ -51,9 +51,10 @@ Some features may not yet be implemented.
 .
 ├── apps/
 │   ├── backend/          # NestJS backend
-│   └── frontend/         # React + Vite + Tailwind frontend
-├── packages/             # Optional shared packages
-├── package.json          # Root workspace + Turbo configuration
+│   └── frontend/         # React + Vite frontend
+├── packages/
+│   └── shared-types/     # Shared TypeScript types and hooks
+├── package.json          # Root workspace config and scripts
 ├── package-lock.json     # Single lockfile for the entire monorepo
 ├── turbo.json            # Turbo task pipeline
 └── README.md
@@ -61,12 +62,12 @@ Some features may not yet be implemented.
 
 ### Key Structural Notes
 
-- This is a **monorepo**.
+- This is a **monorepo** managed with **npm workspaces**.
 - Dependency management is centralized at the **repository root**.
-- Each application remains a standalone project.
+- Each application remains a standalone project under `apps/`.
+- Shared code is organized in `packages/` and can be consumed by multiple apps.
 - Frontend and backend communicate through an explicit API.
-- No shared code is required between applications.
-- Shared packages can be introduced later when necessary.
+- The current shared package, `@repo/shared-types`, contains reusable TypeScript interfaces and hook types used across the app.
 
 ---
 
@@ -89,6 +90,12 @@ Some features may not yet be implemented.
 - TailwindCSS
 - TypeScript
 - Google OAuth
+
+### Shared Package (`packages/shared-types`)
+
+- Shared TypeScript interfaces and reusable model definitions
+- Shared authentication-related types and hook contracts
+- Consumed by frontend and backend-adjacent code as needed
 
 ### Tooling
 
