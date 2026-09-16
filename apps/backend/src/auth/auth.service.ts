@@ -80,7 +80,7 @@ export class AuthService {
           location: geo?.name ?? null,
         })
         .returning();
-      const jwtToken = this.jwtService.sign({ id: user.id });
+      const jwtToken = this.jwtService.sign({ id: String(user.id) });
 
       return {
         jwtToken,
@@ -88,7 +88,7 @@ export class AuthService {
       };
     }
 
-    const jwtToken = this.jwtService.sign({ id: user.id });
+    const jwtToken = this.jwtService.sign({ id: String(user.id) });
 
     return { jwtToken, newAccount: false };
   }
