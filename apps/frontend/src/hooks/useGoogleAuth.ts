@@ -1,7 +1,10 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import type { GoogleSignInResponse, UseGoogleAuthHook } from "../interfaces";
+import type {
+	GoogleSignInResponse,
+	UseGoogleAuthHook
+} from "@repo/shared-types";
 import { useMutation } from "@tanstack/react-query";
 
 export default function useGoogleAuth(): UseGoogleAuthHook {

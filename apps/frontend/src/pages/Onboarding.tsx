@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { OnboardingData } from "../interfaces";
+import type { OnboardingData } from "@repo/shared-types";
 import useUser from "../hooks/useUser";
 
 export default function Onboarding() {

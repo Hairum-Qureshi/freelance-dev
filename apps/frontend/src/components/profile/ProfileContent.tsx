@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
 import useUser from "../../hooks/useUser";
 import { useRef } from "react";
-import type { OnboardingData } from "../../interfaces";
+import type { OnboardingData } from "@repo/shared-types";
 
 export default function ProfileContent({
 	isWorker,
