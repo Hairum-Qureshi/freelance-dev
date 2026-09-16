@@ -8,5 +8,5 @@ export default function OnboardViewing({
 }) {
 	const { data: currUserData } = useCurrentUser();
 
-	return !currUserData?.onboardingAnswers ? children : <NotFound />;
+	return !currUserData?.completedOnboarding ? children : <NotFound />;
 }
