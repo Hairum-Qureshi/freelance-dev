@@ -126,6 +126,12 @@ export default function Profile() {
 							) : (
 								<>
 									<div className="flex justify-between gap-3">
+										<dt className="text-slate-500">Location</dt>
+										<dd className="text-right font-medium text-slate-800">
+											{currUserData?.location ?? "Not specified"}
+										</dd>
+									</div>
+									<div className="flex justify-between gap-3">
 										<dt className="text-slate-500">Budget</dt>
 										<dd className="text-right font-medium text-slate-800">
 											{onboardingAnswers?.budget ?? "Not specified"}
