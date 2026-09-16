@@ -6,7 +6,7 @@ import {
   boolean,
   jsonb,
 } from 'drizzle-orm/pg-core';
-import { OnboardingAnswers } from './types';
+import type { OnboardingAnswers } from '@repo/shared-types';
 
 export const usersTable = pgTable('users', {
   id: bigint({ mode: 'bigint' }).primaryKey(),
