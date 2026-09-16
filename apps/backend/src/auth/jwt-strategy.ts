@@ -26,8 +26,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const [user] = await this.db
       .select()
       .from(usersTable)
-      .where(eq(usersTable.id, Number(id)))
+      .where(eq(usersTable.id, BigInt(id)))
       .limit(1);
+
     if (!user) {
       throw new UnauthorizedException('Please log in first');
     }
