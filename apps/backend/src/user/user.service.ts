@@ -20,7 +20,7 @@ export class UserService {
         onboarding_answers: onboardingData,
         completed_onboarding: true,
       })
-      .where(eq(usersTable.id, Number(userID)));
+      .where(eq(usersTable.id, BigInt(userID)));
   }
 
   async attachResume(userID: string, resume: Express.Multer.File) {
@@ -33,7 +33,7 @@ export class UserService {
     const resumeExists = await this.db
       .select({ resume_url: usersTable.resume_url })
       .from(usersTable)
-      .where(eq(usersTable.id, Number(userID)))
+      .where(eq(usersTable.id, BigInt(userID)))
       .limit(1);
 
     if (resumeExists[0]?.resume_url)
@@ -56,6 +56,6 @@ export class UserService {
       .set({
         resume_url: resumeData.url,
       })
-      .where(eq(usersTable.id, Number(userID)));
+      .where(eq(usersTable.id, BigInt(userID)));
   }
 }
