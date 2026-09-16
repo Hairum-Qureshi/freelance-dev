@@ -18,9 +18,9 @@ export const usersTable = pgTable('users', {
   onboarding_answers: jsonb('onboarding_answers')
     .$type<OnboardingAnswers>()
     .notNull(),
+  resume_id: text('resume_id'),
+  location: text('location'),
   deleted: boolean('deleted').default(false),
   created_at: timestamp('created_at').defaultNow(),
   updated_at: timestamp('updated_at').defaultNow(),
-  resume_url: text('resume_url'),
-  location: text('location'),
 });
