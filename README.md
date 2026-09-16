@@ -304,19 +304,39 @@ NEON_DB_URL=postgresql://username:password@ep-example.us-east-2.aws.neon.tech/fr
 
 Use the connection string provided by **your Neon project** rather than the example above.
 
-## Database Table Queries
+## 4. Drizzle ORM Setup
 
-The SQL queries for creating the application's PostgreSQL tables are stored in the [`apps/backend/tables`](apps/backend/tables) folder. Open each `.sql` file, copy its contents, and run it in the Neon SQL Editor to create the corresponding table.
+The backend uses [Drizzle ORM](https://orm.drizzle.team/) to define and manage the PostgreSQL schema. The schema is defined in [`apps/backend/src/schema.ts`](apps/backend/src/schema.ts), and Drizzle Kit is configured in [`apps/backend/src/config/drizzle.config.ts`](apps/backend/src/config/drizzle.config.ts).
 
-Current table query:
+After making a schema change, open a terminal in the `apps/backend` directory and generate a migration:
 
-- [`users.sql`](apps/backend/tables/users.sql) - Creates the `users` table
+```bash
+npx drizzle-kit generate --config src/config/drizzle.config.ts
+```
 
-Run the table queries in Neon after creating your database and before starting the backend. New table scripts will be added to the [`apps/backend/tables`](apps/backend/tables) folder as the application grows.
+You can also use the backend's npm script:
+
+```bash
+npm run db:generate
+```
+
+After generating the migration, apply it to NeonDB from the same `apps/backend` directory:
+
+```bash
+npm run db:migrate
+```
+
+You can also run the migration command directly:
+
+```bash
+npx drizzle-kit migrate --config src/config/drizzle.config.ts
+```
+
+**Important:** `db:generate` creates the migration files but does not update NeonDB. `db:migrate` applies the generated migrations and pushes the schema changes to NeonDB. Repeat both steps whenever you make a schema change or update.
 
 ---
 
-## 4. Verify the Database Connection
+## 5. Verify the Database Connection
 
 Start the backend:
 

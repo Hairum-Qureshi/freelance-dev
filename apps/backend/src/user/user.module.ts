@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
-import { NeonDBProvider } from 'src/config/postgres-db';
-import { ImageKitProvider } from 'src/config/imagekit';
+import { NeonDBProvider } from 'src/providers/postgres-db';
+import { ImageKitProvider } from 'src/providers/imagekit';
 
 @Module({
   providers: [UserService, NeonDBProvider, ImageKitProvider],
