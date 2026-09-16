@@ -1,4 +1,5 @@
 import { useCurrentUser } from "../../hooks/useCurrentUser";
+import useUser from "../../hooks/useUser";
 import {
 	FaArrowLeftLong,
 	FaArrowUpRightFromSquare,
@@ -15,10 +16,11 @@ export default function Resume({
 	setShowResume: (show: boolean) => void;
 }) {
 	const { data: currUserData } = useCurrentUser();
-	const resumeUrl = currUserData?.resumeUrl;
-	const pdfUrl = resumeUrl ?? "https://pdfobject.com/pdf/sample.pdf";
+	const resumeId = currUserData?.resumeId;
+	const pdfUrl = `${import.meta.env.VITE_IMAGE_KIT_URL_ENDPOINT}/profiles/${currUserData?.id}/Resume.pdf`;
 	const displayName =
 		`${currUserData?.firstName ?? ""} ${currUserData?.lastName ?? ""}`.trim();
+	const { removeResumeMutation } = useUser();
 
 	return (
 		<main className="overflow-hidden rounded-md border border-slate-300 bg-white shadow-sm">
@@ -71,7 +73,7 @@ export default function Resume({
 						type="button"
 						className="inline-flex items-center gap-2 rounded-md border border-rose-200 bg-white px-3 py-2 text-sm font-medium text-rose-600 transition hover:cursor-pointer hover:border-rose-300 hover:bg-rose-50"
 						onClick={() => {
-							// remove resume
+							removeResumeMutation.mutate();
 						}}
 					>
 						<FaTrashCan aria-hidden="true" />
@@ -91,7 +93,7 @@ export default function Resume({
 						</div>
 						<div className="min-w-0">
 							<p className="truncate text-sm font-semibold text-slate-800">
-								{resumeUrl ? "Uploaded resume" : "Resume preview"}
+								{resumeId ? "Uploaded resume" : "Resume preview"}
 							</p>
 							<p className="text-xs text-slate-500">PDF document</p>
 						</div>
