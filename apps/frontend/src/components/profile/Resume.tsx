@@ -76,6 +76,7 @@ export default function Resume({
 							className="inline-flex items-center gap-2 rounded-md border border-rose-200 bg-white px-3 py-2 text-sm font-medium text-rose-600 transition hover:cursor-pointer hover:border-rose-300 hover:bg-rose-50"
 							onClick={() => {
 								removeResumeMutation.mutate();
+								setShowResume(false);
 							}}
 						>
 							<FaTrashCan aria-hidden="true" />
