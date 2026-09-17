@@ -49,6 +49,9 @@ export default function useUser(): UseUserHook {
 			queryClient.invalidateQueries({
 				queryKey: ["currentUser"]
 			});
+			queryClient.invalidateQueries({
+				queryKey: ["user", currUserId]
+			});
 		}
 	});
 
@@ -64,6 +67,9 @@ export default function useUser(): UseUserHook {
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: ["currentUser"]
+			});
+			queryClient.invalidateQueries({
+				queryKey: ["user", currUserId]
 			});
 		}
 	});
@@ -86,6 +92,7 @@ export default function useUser(): UseUserHook {
 		onboardingMutation,
 		attachResumeMutation,
 		removeResumeMutation,
-		userProfileData
+		userProfileData,
+		isAddingResume: attachResumeMutation.isPending
 	};
 }
