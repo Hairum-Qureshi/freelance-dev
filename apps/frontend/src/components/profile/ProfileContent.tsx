@@ -3,6 +3,8 @@ import { useCurrentUser } from "../../hooks/useCurrentUser";
 import useUser from "../../hooks/useUser";
 import { useRef } from "react";
 import type { OnboardingAnswers } from "@repo/shared-types";
+import { Tailspin } from "ldrs/react";
+import "ldrs/react/Tailspin.css";
 
 export default function ProfileContent({
 	isWorker,
@@ -57,21 +59,15 @@ export default function ProfileContent({
 					)}
 
 					{userProfileData?.resume_id ? (
-						isAddingResume ? (
-							<div className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:cursor-not-allowed hover:bg-slate-50">
-								Uploading...
-							</div>
-						) : (
-							<button
-								type="button"
-								className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:cursor-pointer hover:bg-slate-50"
-								onClick={() => {
-									setShowResume(true);
-								}}
-							>
-								View resume
-							</button>
-						)
+						<button
+							type="button"
+							className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:cursor-pointer hover:bg-slate-50"
+							onClick={() => {
+								setShowResume(true);
+							}}
+						>
+							View resume
+						</button>
 					) : (
 						<>
 							<input
@@ -87,8 +83,9 @@ export default function ProfileContent({
 							/>
 							{currUserData?.id === userProfileData?.id &&
 								(isAddingResume ? (
-									<div className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:cursor-not-allowed hover:bg-slate-50">
-										Uploading...
+									<div className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:cursor-not-allowed hover:bg-slate-50 flex items-center gap-2">
+										<Tailspin size="20" stroke="3" speed="0.9" color="black" />
+										<span>Uploading...</span>
 									</div>
 								) : (
 									<button
