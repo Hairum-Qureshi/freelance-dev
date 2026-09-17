@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
 import useUser from "../../hooks/useUser";
 import { useRef } from "react";
-import type { OnboardingData } from "@repo/shared-types";
+import type { OnboardingAnswers } from "@repo/shared-types";
 
 export default function ProfileContent({
 	isWorker,
@@ -15,7 +15,7 @@ export default function ProfileContent({
 	setShowResume
 }: {
 	isWorker: boolean;
-	onboardingAnswers: OnboardingData;
+	onboardingAnswers: OnboardingAnswers;
 	projectTypes: string[];
 	hiringNeeds: string[];
 	technologies: string[];
@@ -26,7 +26,7 @@ export default function ProfileContent({
 	const { data: currUserData } = useCurrentUser();
 	const navigate = useNavigate();
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
-	const { attachResumeMutation } = useUser();
+	const { attachResumeMutation, userProfileData } = useUser();
 
 	return (
 		<main className="rounded-md border border-slate-300 bg-white p-5 shadow-sm sm:p-8">
@@ -46,15 +46,17 @@ export default function ProfileContent({
 				</div>
 
 				<div className="flex shrink-0 gap-2">
-					<button
-						type="button"
-						className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:cursor-pointer hover:bg-slate-50"
-						onClick={() => navigate(`settings`)}
-					>
-						Edit profile
-					</button>
+					{userProfileData?.id === currUserData?.id && (
+						<button
+							type="button"
+							className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:cursor-pointer hover:bg-slate-50"
+							onClick={() => navigate(`settings`)}
+						>
+							Edit profile
+						</button>
+					)}
 
-					{currUserData?.resumeId ? (
+					{userProfileData?.resume_id ? (
 						<button
 							type="button"
 							className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:cursor-pointer hover:bg-slate-50"
@@ -77,27 +79,31 @@ export default function ProfileContent({
 									}
 								}}
 							/>
-							<button
-								type="button"
-								className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:cursor-pointer hover:bg-slate-50"
-								onClick={() => {
-									fileInputRef.current?.click();
-									if (fileInputRef.current) {
-										fileInputRef.current.value = "";
-									}
-								}}
-							>
-								Add resume
-							</button>
+							{currUserData?.id === userProfileData?.id && (
+								<button
+									type="button"
+									className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:cursor-pointer hover:bg-slate-50"
+									onClick={() => {
+										fileInputRef.current?.click();
+										if (fileInputRef.current) {
+											fileInputRef.current.value = "";
+										}
+									}}
+								>
+									Add resume
+								</button>
+							)}
 						</>
 					)}
 
-					<button
-						type="button"
-						className="rounded-md bg-slate-950 px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-slate-800"
-					>
-						Contact
-					</button>
+					{userProfileData?.id !== currUserData?.id && (
+						<button
+							type="button"
+							className="rounded-md bg-slate-950 px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-slate-800"
+						>
+							Contact
+						</button>
+					)}
 				</div>
 			</div>
 
