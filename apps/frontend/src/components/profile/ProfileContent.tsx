@@ -5,6 +5,7 @@ import { useRef } from "react";
 import type { OnboardingAnswers } from "@repo/shared-types";
 import { Tailspin } from "ldrs/react";
 import "ldrs/react/Tailspin.css";
+import { simpleflake } from "simpleflakes";
 
 export default function ProfileContent({
 	isWorker,
@@ -29,6 +30,8 @@ export default function ProfileContent({
 	const navigate = useNavigate();
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	const { attachResumeMutation, userProfileData, isAddingResume } = useUser();
+
+	const chatId = simpleflake();
 
 	return (
 		<main className="rounded-md border border-slate-300 bg-white p-5 shadow-sm sm:p-8">
@@ -108,6 +111,7 @@ export default function ProfileContent({
 						<button
 							type="button"
 							className="rounded-md bg-slate-950 px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-slate-800"
+							onClick={() => navigate(`/inbox/c/${chatId}?to=${userProfileData?.id}`)}
 						>
 							Contact
 						</button>

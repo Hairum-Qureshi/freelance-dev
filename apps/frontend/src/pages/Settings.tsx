@@ -63,6 +63,10 @@ export default function Settings() {
 			role:
 				(formData.get("role") as "Hire" | "Work") ?? onboardingAnswers?.role,
 
+			hirerTitle: String(
+				formData.get("hirerTitle") ?? onboardingAnswers?.hirerTitle ?? ""
+			),
+
 			budget: String(formData.get("budget") ?? onboardingAnswers?.budget ?? ""),
 
 			hiringFor: formData.has("hiringFor")
@@ -450,11 +454,22 @@ export default function Settings() {
 								</h2>
 
 								<p className="mt-1 text-sm text-gray-500">
-									Set your budget and the work you need completed.
+									Set your title, budget, and the work you need completed.
 								</p>
 
-								{/* Budget */}
 								<label className="mt-6 block text-sm font-medium text-gray-700">
+									Your title
+									<input
+										name="hirerTitle"
+										type="text"
+										className={inputClassName}
+										defaultValue={onboardingAnswers?.hirerTitle ?? ""}
+										placeholder="e.g. Project Manager"
+									/>
+								</label>
+
+								{/* Budget */}
+								<label className="mt-4 block text-sm font-medium text-gray-700">
 									Pay scale
 									<select
 										name="budget"

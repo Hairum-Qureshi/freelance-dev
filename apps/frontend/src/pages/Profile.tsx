@@ -22,7 +22,9 @@ export default function Profile() {
 		onboardingAnswers?.seekingProjects ?? onboardingAnswers?.interests ?? [];
 	const hiringNeeds = onboardingAnswers?.hiringFor ?? [];
 	const isWorker = onboardingAnswers?.role === "Work";
-	const role = isWorker ? "Freelance developer" : "Hiring professional";
+	const role = isWorker
+		? "Freelance developer"
+		: (onboardingAnswers?.hirerTitle ?? "Hiring professional");
 
 	const experienceInfo = onboardingAnswers?.experience
 		? (EXPERIENCE_MAP[onboardingAnswers.experience] ?? {

@@ -7,6 +7,10 @@ export class OnboardingDTO {
 
   @IsOptional()
   @IsString()
+  hirerTitle?: string;
+
+  @IsOptional()
+  @IsString()
   budget?: string;
 
   @IsOptional()
