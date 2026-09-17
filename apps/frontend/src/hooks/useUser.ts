@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import type { OnboardingData, UseUserHook } from "@repo/shared-types";
 import { useCurrentUser } from "./useCurrentUser";
@@ -8,7 +8,8 @@ export default function useUser(): UseUserHook {
 	const queryClient = useQueryClient();
 	const navigate = useNavigate();
 	const { data: currUserData } = useCurrentUser();
-	const { uid: currUserId } = useParams();
+	const { uid: currProfileId } = useParams();
+	const [searchParams] = useSearchParams();
 
 	const onboardingMutation = useMutation({
 		mutationFn: async ({
@@ -50,7 +51,7 @@ export default function useUser(): UseUserHook {
 				queryKey: ["currentUser"]
 			});
 			queryClient.invalidateQueries({
-				queryKey: ["user", currUserId]
+				queryKey: ["user", currProfileId]
 			});
 		}
 	});
@@ -69,17 +70,18 @@ export default function useUser(): UseUserHook {
 				queryKey: ["currentUser"]
 			});
 			queryClient.invalidateQueries({
-				queryKey: ["user", currUserId]
+				queryKey: ["user", currProfileId]
 			});
 		}
 	});
 
 	const { data: userProfileData } = useQuery({
-		queryKey: ["user", currUserId],
+		queryKey: ["user", currProfileId],
 		queryFn: async () => {
-			if (!currUserId) return null;
+			if (!currProfileId && !searchParams.get("to")) return null;
+
 			const response = await axios.get(
-				`${import.meta.env.VITE_BACKEND_URL}/api/user/${currUserId}/profile`,
+				`${import.meta.env.VITE_BACKEND_URL}/api/user/${searchParams.get("to") ?? currProfileId}/profile`,
 				{
 					withCredentials: true
 				}
