@@ -39,6 +39,7 @@ export default function App() {
 					<Route path="/post-job" element={<PostJob />} />
 					<Route path="/contact" element={<Contact />} />
 					<Route path="/inbox" element={<Inbox />} />
+					<Route path="/inbox/c/:chatID" element={<Inbox />} />
 					<Route path="/listings" element={<Listings />} />
 					<Route path="/listing/:listingID" element={<Listing />} />
 					<Route path="/privacy-policy" element={<PrivacyPolicy />} />
