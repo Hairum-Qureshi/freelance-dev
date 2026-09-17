@@ -26,7 +26,7 @@ export default function ProfileContent({
 	const { data: currUserData } = useCurrentUser();
 	const navigate = useNavigate();
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
-	const { attachResumeMutation, userProfileData } = useUser();
+	const { attachResumeMutation, userProfileData, isAddingResume } = useUser();
 
 	return (
 		<main className="rounded-md border border-slate-300 bg-white p-5 shadow-sm sm:p-8">
@@ -57,15 +57,21 @@ export default function ProfileContent({
 					)}
 
 					{userProfileData?.resume_id ? (
-						<button
-							type="button"
-							className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:cursor-pointer hover:bg-slate-50"
-							onClick={() => {
-								setShowResume(true);
-							}}
-						>
-							View resume
-						</button>
+						isAddingResume ? (
+							<div className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:cursor-not-allowed hover:bg-slate-50">
+								Uploading...
+							</div>
+						) : (
+							<button
+								type="button"
+								className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:cursor-pointer hover:bg-slate-50"
+								onClick={() => {
+									setShowResume(true);
+								}}
+							>
+								View resume
+							</button>
+						)
 					) : (
 						<>
 							<input
@@ -79,20 +85,25 @@ export default function ProfileContent({
 									}
 								}}
 							/>
-							{currUserData?.id === userProfileData?.id && (
-								<button
-									type="button"
-									className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:cursor-pointer hover:bg-slate-50"
-									onClick={() => {
-										fileInputRef.current?.click();
-										if (fileInputRef.current) {
-											fileInputRef.current.value = "";
-										}
-									}}
-								>
-									Add resume
-								</button>
-							)}
+							{currUserData?.id === userProfileData?.id &&
+								(isAddingResume ? (
+									<div className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:cursor-not-allowed hover:bg-slate-50">
+										Uploading...
+									</div>
+								) : (
+									<button
+										type="button"
+										className={`${isAddingResume ? "hidden" : "rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:cursor-pointer hover:bg-slate-50"}`}
+										onClick={() => {
+											fileInputRef.current?.click();
+											if (fileInputRef.current) {
+												fileInputRef.current.value = "";
+											}
+										}}
+									>
+										Add resume
+									</button>
+								))}
 						</>
 					)}
 
