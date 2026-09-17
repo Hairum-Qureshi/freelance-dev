@@ -8,7 +8,6 @@ export type UserPayload = {
 	profile_picture: string;
 	completed_onboarding: boolean;
 	onboarding_answers: OnboardingAnswers;
-	hiring_title: string;
 	resume_id: string;
 	location: string;
 	deleted: boolean;
