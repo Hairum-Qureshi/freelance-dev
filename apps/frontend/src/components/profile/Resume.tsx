@@ -16,10 +16,11 @@ export default function Resume({
 	setShowResume: (show: boolean) => void;
 }) {
 	const { data: currUserData } = useCurrentUser();
-	const resumeId = currUserData?.resumeId;
-	const pdfUrl = `${import.meta.env.VITE_IMAGE_KIT_URL_ENDPOINT}/profiles/${currUserData?.id}/Resume.pdf`;
+	const { userProfileData } = useUser();
+	const resumeId = userProfileData?.resume_id;
+	const pdfUrl = `${import.meta.env.VITE_IMAGE_KIT_URL_ENDPOINT}/profiles/${userProfileData?.id}/Resume.pdf`;
 	const displayName =
-		`${currUserData?.firstName ?? ""} ${currUserData?.lastName ?? ""}`.trim();
+		`${userProfileData?.first_name ?? ""} ${userProfileData?.last_name ?? ""}`.trim();
 	const { removeResumeMutation } = useUser();
 
 	return (
@@ -69,16 +70,18 @@ export default function Resume({
 
 					<div className="mx-1 w-px self-stretch bg-slate-200" />
 
-					<button
-						type="button"
-						className="inline-flex items-center gap-2 rounded-md border border-rose-200 bg-white px-3 py-2 text-sm font-medium text-rose-600 transition hover:cursor-pointer hover:border-rose-300 hover:bg-rose-50"
-						onClick={() => {
-							removeResumeMutation.mutate();
-						}}
-					>
-						<FaTrashCan aria-hidden="true" />
-						Remove
-					</button>
+					{currUserData?.id === userProfileData?.id && (
+						<button
+							type="button"
+							className="inline-flex items-center gap-2 rounded-md border border-rose-200 bg-white px-3 py-2 text-sm font-medium text-rose-600 transition hover:cursor-pointer hover:border-rose-300 hover:bg-rose-50"
+							onClick={() => {
+								removeResumeMutation.mutate();
+							}}
+						>
+							<FaTrashCan aria-hidden="true" />
+							Remove
+						</button>
+					)}
 				</div>
 			</div>
 
