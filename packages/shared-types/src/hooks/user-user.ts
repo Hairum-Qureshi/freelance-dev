@@ -10,6 +10,7 @@ export interface UseUserHook {
 		unknown
 	>;
 	attachResumeMutation: UseMutationResult<void, Error, { file: File }, unknown>;
-	removeResumeMutation: UseMutationResult<void, Error, void, unknown>;
 	userProfileData: UserPayload;
+	removeResumeMutation: UseMutationResult<void, Error, void, unknown>;
+	isAddingResume: boolean;
 }
