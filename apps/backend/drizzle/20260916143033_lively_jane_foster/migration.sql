@@ -1,0 +1,1 @@
+ALTER TABLE "users" RENAME COLUMN "resume_url" TO "resume_id";
