@@ -8,11 +8,13 @@ export default function useChat() {
 
 	const createChatMutation = useMutation({
 		mutationFn: async ({ message }: { message: string }): Promise<void> => {
+			if (!chatID && !searchParams.get("to")) return;
+
 			await axios.post(
 				`${import.meta.env.VITE_BACKEND_URL}/api/chat/create`,
 				{
-					chatID,
-					to: searchParams.get("to"),
+					chatID: BigInt(chatID as string),
+					to: BigInt(BigInt(searchParams.get("to") as string)),
 					message
 				},
 				{
