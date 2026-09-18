@@ -31,3 +31,12 @@ export const chatsTable = pgTable('chats', {
   created_at: timestamp('created_at').defaultNow(),
   updated_at: timestamp('updated_at').defaultNow(),
 });
+
+export const messagesTable = pgTable('messages', {
+  id: bigint({ mode: 'bigint' }).primaryKey(),
+  chat_id: bigint({ mode: 'bigint' }).notNull(),
+  sender_id: bigint({ mode: 'bigint' }).notNull(),
+  message: text('message').notNull(),
+  created_at: timestamp('created_at').defaultNow(),
+  updated_at: timestamp('updated_at').defaultNow(),
+});
