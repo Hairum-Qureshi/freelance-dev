@@ -262,7 +262,7 @@ export default function Settings() {
 									Location
 									<input
 										type="text"
-										className={`${inputClassName} bg-gray-100 text-gray-500`}
+										className={`${inputClassName} text-gray-500`}
 										defaultValue={currentUser?.location}
 									/>
 								</label>
