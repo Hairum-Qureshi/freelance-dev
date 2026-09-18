@@ -27,15 +27,30 @@ export const usersTable = pgTable('users', {
 
 export const chatsTable = pgTable('chats', {
   id: bigint({ mode: 'bigint' }).primaryKey(),
-  participants: bigint('participants', { mode: 'bigint' }).array(),
+  created_at: timestamp('created_at').defaultNow(),
+  updated_at: timestamp('updated_at').defaultNow(),
+});
+
+export const participantsTable = pgTable('participants', {
+  id: bigint({ mode: 'bigint' }).primaryKey(),
+  chat_id: bigint({ mode: 'bigint' })
+    .notNull()
+    .references(() => chatsTable.id),
+  user_id: bigint({ mode: 'bigint' })
+    .notNull()
+    .references(() => usersTable.id),
   created_at: timestamp('created_at').defaultNow(),
   updated_at: timestamp('updated_at').defaultNow(),
 });
 
 export const messagesTable = pgTable('messages', {
   id: bigint({ mode: 'bigint' }).primaryKey(),
-  chat_id: bigint({ mode: 'bigint' }).notNull(),
-  sender_id: bigint({ mode: 'bigint' }).notNull(),
+  chat_id: bigint({ mode: 'bigint' })
+    .notNull()
+    .references(() => chatsTable.id),
+  sender_id: bigint({ mode: 'bigint' })
+    .notNull()
+    .references(() => usersTable.id),
   message: text('message').notNull(),
   created_at: timestamp('created_at').defaultNow(),
   updated_at: timestamp('updated_at').defaultNow(),
