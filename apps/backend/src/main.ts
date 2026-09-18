@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ConfigService } from '@nestjs/config';
+import { BigIntInterceptor } from './interceptors/bigint.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -21,6 +22,8 @@ async function bootstrap() {
   app.setGlobalPrefix('api', {
     exclude: ['/'],
   });
+
+  app.useGlobalInterceptors(new BigIntInterceptor());
 
   const PORT = configService.get<number>('PORT') ?? 3000;
 
