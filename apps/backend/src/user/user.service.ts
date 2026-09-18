@@ -90,9 +90,6 @@ export class UserService {
 
     if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
 
-    return {
-      ...user,
-      id: user.id.toString(), // need to convert 'id' to string because JSON doesn't support 'bigint'
-    };
+    return user;
   }
 }
