@@ -1,5 +1,6 @@
 export type OnboardingAnswers = {
 	role?: "Hire" | "Work";
+	hirerTitle?: string;
 	budget?: string;
 	hiringFor?: string[];
 	interests?: string[];
