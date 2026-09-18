@@ -4,7 +4,7 @@ import { Inject, HttpException } from '@nestjs/common';
 import type { CreateChatDTO } from '../DTOs/chat.dto';
 import { chatsTable, messagesTable } from 'src/schema';
 import SnowflakeId from 'snowflake-id';
-import { eq } from 'drizzle-orm';
+import { arrayContains, eq } from 'drizzle-orm';
 
 @Injectable()
 export class ChatService {
@@ -49,5 +49,14 @@ export class ChatService {
         updated_at: new Date(),
       })
       .returning();
+  }
+
+  async getAllChats(currentUserId: bigint) {
+    const chats = await this.db
+      .select()
+      .from(chatsTable)
+      .where(arrayContains(chatsTable.participants, [currentUserId]));
+
+    return chats;
   }
 }
