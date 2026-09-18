@@ -27,9 +27,7 @@ export const usersTable = pgTable('users', {
 
 export const chatsTable = pgTable('chats', {
   id: bigint({ mode: 'bigint' }).primaryKey(),
-  participants: bigint('participants', { mode: 'bigint' })
-    .array()
-    .default([1n]),
+  participants: bigint('participants', { mode: 'bigint' }).array(),
   created_at: timestamp('created_at').defaultNow(),
   updated_at: timestamp('updated_at').defaultNow(),
 });
