@@ -24,3 +24,12 @@ export const usersTable = pgTable('users', {
   created_at: timestamp('created_at').defaultNow(),
   updated_at: timestamp('updated_at').defaultNow(),
 });
+
+export const chatTable = pgTable('chats', {
+  id: bigint({ mode: 'bigint' }).primaryKey(),
+  participants: bigint('participants', { mode: 'bigint' })
+    .array()
+    .default([1n]),
+  created_at: timestamp('created_at').defaultNow(),
+  updated_at: timestamp('updated_at').defaultNow(),
+});
