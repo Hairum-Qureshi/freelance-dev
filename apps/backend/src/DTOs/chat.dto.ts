@@ -1,16 +1,15 @@
 import { IsNotEmpty, IsString } from 'class-validator';
-import { IsBigInt } from 'class-validator-extended';
 
 export class CreateChatDTO {
-  @IsBigInt()
+  @IsString()
   @IsNotEmpty()
-  chatID!: bigint;
+  chatID!: string;
 
   @IsString()
   @IsNotEmpty()
   message!: string;
 
-  @IsBigInt()
+  @IsString()
   @IsNotEmpty()
-  to!: bigint;
+  to!: string;
 }
