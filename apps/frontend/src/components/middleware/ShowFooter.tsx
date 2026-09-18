@@ -8,7 +8,7 @@ export default function ShowFooter({
 }) {
 	const location = useLocation();
 	const isFocusedPage =
-		location.pathname === "/inbox" || location.pathname.startsWith("/p/");
+		location.pathname.includes("/inbox") || location.pathname.startsWith("/p/");
 
 	return location.pathname !== "/join" &&
 		location.pathname !== "/onboarding" &&
