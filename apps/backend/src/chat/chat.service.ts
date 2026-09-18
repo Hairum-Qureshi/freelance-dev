@@ -2,26 +2,49 @@ import { Injectable } from '@nestjs/common';
 import type { Database } from 'src/providers/postgres-db';
 import { Inject, HttpException } from '@nestjs/common';
 import type { CreateChatDTO } from '../DTOs/chat.dto';
-import { chatsTable, messagesTable } from 'src/schema';
+import {
+  chatsTable,
+  messagesTable,
+  participantsTable,
+  usersTable,
+} from 'src/schema';
 import SnowflakeId from 'snowflake-id';
-import { arrayContains, eq } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 
 @Injectable()
 export class ChatService {
   constructor(@Inject('NeonDBProvider') private readonly db: Database) {}
+
+  private async hasExistingChat(
+    currentUserId: bigint,
+    recipientId: bigint,
+  ): Promise<boolean> {
+    const currentUserChats = await this.db
+      .select()
+      .from(participantsTable)
+      .where(eq(participantsTable.userId, currentUserId));
+
+    const recipientChats = await this.db
+      .select()
+      .from(participantsTable)
+      .where(eq(participantsTable.userId, recipientId));
+
+    const existingChat = currentUserChats.find((chat) =>
+      recipientChats.some(
+        (recipientChat) => recipientChat.chatId === chat.chatId,
+      ),
+    );
+
+    return !!existingChat;
+  }
 
   async createChat(createChatDTO: CreateChatDTO, currentUserId: bigint) {
     const { chatID, to, message } = createChatDTO;
     const chatId = BigInt(chatID);
     const recipientId = BigInt(to);
 
-    const [existingChat] = await this.db
-      .select()
-      .from(chatsTable)
-      .where(eq(chatsTable.participants, [1n, currentUserId, recipientId]))
-      .limit(1);
-
-    if (existingChat) throw new HttpException('Chat already exists', 400);
+    if (await this.hasExistingChat(currentUserId, recipientId))
+      throw new HttpException('Chat already exists', 400);
 
     const snowflake = new SnowflakeId({
       mid: 42,
@@ -32,31 +55,47 @@ export class ChatService {
       .insert(chatsTable)
       .values({
         id: chatId,
-        participants: [1n, currentUserId, recipientId],
-        created_at: new Date(),
-        updated_at: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
       })
       .returning();
+
+    await this.db.insert(participantsTable).values([
+      {
+        id: snowflake.generate(),
+        chatId: chatId,
+        userId: 1n,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: snowflake.generate(),
+        chatId: chatId,
+        userId: recipientId,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: snowflake.generate(),
+        chatId: chatId,
+        userId: currentUserId,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ]);
 
     await this.db
       .insert(messagesTable)
       .values({
         id: snowflake.generate(),
-        chat_id: chat.id,
-        sender_id: currentUserId,
+        chatId: chat.id,
+        senderId: currentUserId,
         message,
-        created_at: new Date(),
-        updated_at: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
       })
       .returning();
   }
 
-  async getAllChats(currentUserId: bigint) {
-    const chats = await this.db
-      .select()
-      .from(chatsTable)
-      .where(arrayContains(chatsTable.participants, [currentUserId]));
-
-    return chats;
-  }
+  async getAllChats(currentUserId: bigint) {}
 }
