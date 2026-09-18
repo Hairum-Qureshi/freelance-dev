@@ -11,5 +11,5 @@ export class CreateChatDTO {
 
   @IsString()
   @IsNotEmpty()
-  to!: string;
+  to!: bigint;
 }
