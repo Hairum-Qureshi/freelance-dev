@@ -1,6 +1,5 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import geoip from 'geoip-country';
-import { OAuth2Client } from 'google-auth-library';
 import { JwtService } from '@nestjs/jwt';
 import type { UserPayload } from '@repo/shared-types';
 import { HttpService } from '@nestjs/axios';
@@ -15,7 +14,6 @@ import type { Database } from 'src/providers/postgres-db';
 export class AuthService {
   constructor(
     private jwtService: JwtService,
-    @Inject('GoogleOAuthClient') private googleOAuthClient: OAuth2Client,
     private configService: ConfigService,
     @Inject('NeonDBProvider') private readonly db: Database,
     private httpService: HttpService,
