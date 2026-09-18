@@ -9,6 +9,7 @@ import {
   Delete,
   Get,
 } from '@nestjs/common';
+import { BigIntInterceptor } from 'src/interceptors/bigint.interceptor';
 import { UserService } from './user.service';
 import { CurrentUser } from 'src/decorators/currentUser.decorator';
 import type { UserPayload } from '@repo/shared-types';
@@ -21,7 +22,14 @@ import { Param } from '@nestjs/common';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Delete('/remove-resume')
+  @UseGuards(AuthGuard())
+  removeResume(@CurrentUser() currentUser: UserPayload) {
+    return this.userService.removeResume(BigInt(currentUser.id));
+  }
+
   @Get('/:userId/profile')
+  @UseInterceptors(BigIntInterceptor)
   @UseGuards(AuthGuard())
   getUserProfile(@Param('userId') userId: string) {
     return this.userService.getUserProfile(BigInt(userId));
@@ -47,11 +55,5 @@ export class UserController {
     @UploadedFile() resume: Express.Multer.File,
   ) {
     return this.userService.attachResume(BigInt(currentUser.id), resume);
-  }
-
-  @Delete('/remove-resume')
-  @UseGuards(AuthGuard())
-  removeResume(@CurrentUser() currentUser: UserPayload) {
-    return this.userService.removeResume(BigInt(currentUser.id));
   }
 }
