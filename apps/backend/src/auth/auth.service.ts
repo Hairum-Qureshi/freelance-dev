@@ -70,11 +70,11 @@ export class AuthService {
         .insert(usersTable)
         .values({
           id: snowflake.generate(),
-          first_name: given_name,
-          last_name: family_name,
+          firstName: given_name,
+          lastName: family_name,
           email,
-          profile_picture: picture,
-          onboarding_answers: {},
+          profilePicture: picture,
+          onboardingAnswers: {},
           location: geo?.name ?? null,
         })
         .returning();
