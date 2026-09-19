@@ -7,12 +7,13 @@ import {
   jsonb,
 } from 'drizzle-orm/pg-core';
 import type { OnboardingAnswers } from '@repo/shared-types';
+import { relations } from 'drizzle-orm/_relations';
 
 export const usersTable = pgTable('users', {
   id: bigint({ mode: 'bigint' }).primaryKey(),
   firstName: text('first_name').notNull(),
   lastName: text('last_name').notNull(),
-  email: text('email').notNull(),
+  email: text('email').notNull().unique(),
   profilePicture: text('profile_picture').notNull(),
   completedOnboarding: boolean('completed_onboarding').default(false),
   onboardingAnswers: jsonb('onboarding_answers')
@@ -55,3 +56,37 @@ export const messagesTable = pgTable('messages', {
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
+
+// RELATIONS
+
+export const participantsTableRelations = relations(
+  participantsTable,
+  ({ one }) => ({
+    chat: one(chatsTable, {
+      fields: [participantsTable.chatId],
+      references: [chatsTable.id],
+    }),
+
+    user: one(usersTable, {
+      fields: [participantsTable.userId],
+      references: [usersTable.id],
+    }),
+  }),
+);
+
+export const chatsTableRelations = relations(chatsTable, ({ many }) => ({
+  participants: many(participantsTable),
+  messages: many(messagesTable),
+}));
+
+export const messagesTableRelations = relations(messagesTable, ({ one }) => ({
+  chat: one(chatsTable, {
+    fields: [messagesTable.chatId],
+    references: [chatsTable.id],
+  }),
+
+  sender: one(usersTable, {
+    fields: [messagesTable.senderId], // means: the sender relation connects messages.senderId to users.id
+    references: [usersTable.id], // means: which column in the current table (messages) contains the foreign key?
+  }),
+}));
