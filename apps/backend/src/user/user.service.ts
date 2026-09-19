@@ -17,8 +17,8 @@ export class UserService {
     await this.db
       .update(usersTable)
       .set({
-        onboarding_answers: onboardingData,
-        completed_onboarding: true,
+        onboardingAnswers: onboardingData,
+        completedOnboarding: true,
       })
       .where(eq(usersTable.id, userID));
   }
@@ -31,12 +31,12 @@ export class UserService {
       );
 
     const resumeExists = await this.db
-      .select({ resume_id: usersTable.resume_id })
+      .select({ resumeId: usersTable.resumeId })
       .from(usersTable)
       .where(eq(usersTable.id, userID))
       .limit(1);
 
-    if (resumeExists[0]?.resume_id)
+    if (resumeExists[0]?.resumeId)
       throw new HttpException('Resume already exists', HttpStatus.BAD_REQUEST);
 
     const resumeData = await this.imageKit.upload({
@@ -55,26 +55,26 @@ export class UserService {
     await this.db
       .update(usersTable)
       .set({
-        resume_id: resumeData.fileId,
+        resumeId: resumeData.fileId,
       })
       .where(eq(usersTable.id, userID));
   }
 
   async removeResume(userID: bigint) {
     const [resumeExists] = await this.db
-      .select({ resume_id: usersTable.resume_id })
+      .select({ resumeId: usersTable.resumeId })
       .from(usersTable)
       .where(eq(usersTable.id, userID));
 
-    if (!resumeExists?.resume_id)
+    if (!resumeExists?.resumeId)
       throw new HttpException('No resume to remove', HttpStatus.NOT_FOUND);
 
-    await this.imageKit.deleteFile(resumeExists.resume_id);
+    await this.imageKit.deleteFile(resumeExists.resumeId);
 
     await this.db
       .update(usersTable)
       .set({
-        resume_id: null,
+        resumeId: null,
       })
       .where(eq(usersTable.id, userID));
 
