@@ -2,10 +2,17 @@ import ChatFooter from "../components/chat/ChatFooter";
 import ChatHeader from "../components/chat/ChatHeader";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import MainChatContainer from "../components/chat/MainChatContainer";
-// import InboxUserCard from "../components/chat/InboxUserCard";
+import useUser from "../hooks/useUser";
+import { useEffect, useState } from "react";
 
 export default function Inbox() {
-	const showStartChatMessage = true;
+	const { userProfileData } = useUser();
+
+	const [showMessageContainer, setShowMessageContainer] = useState(false);
+
+	useEffect(() => {
+		setShowMessageContainer(!!userProfileData);
+	}, [userProfileData]);
 
 	// if you're a hirer, add a 'Hire' button in the conversation header
 
@@ -39,9 +46,13 @@ export default function Inbox() {
 				</div>
 			</div>
 			<div className="border border-slate-200 h-full w-4/5 flex flex-col">
-				{!showStartChatMessage ? (
+				{showMessageContainer ? (
 					<>
-						<ChatHeader />
+						<ChatHeader
+							profilePicture={userProfileData?.profilePicture ?? ""}
+							name={`${userProfileData?.firstName} ${userProfileData?.lastName ?? ""}`}
+							title={userProfileData?.onboardingAnswers?.hirerTitle ?? "N/A"}
+						/>
 						<MainChatContainer />
 						<ChatFooter />
 					</>

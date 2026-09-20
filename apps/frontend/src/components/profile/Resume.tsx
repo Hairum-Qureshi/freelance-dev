@@ -17,10 +17,10 @@ export default function Resume({
 }) {
 	const { data: currUserData } = useCurrentUser();
 	const { userProfileData } = useUser();
-	const resumeId = userProfileData?.resume_id;
+	const resumeId = userProfileData?.resumeId;
 	const pdfUrl = `${import.meta.env.VITE_IMAGE_KIT_URL_ENDPOINT}/profiles/${userProfileData?.id}/Resume.pdf`;
 	const displayName =
-		`${userProfileData?.first_name ?? ""} ${userProfileData?.last_name ?? ""}`.trim();
+		`${userProfileData?.firstName ?? ""} ${userProfileData?.lastName ?? ""}`.trim();
 	const { removeResumeMutation } = useUser();
 
 	return (

@@ -19,7 +19,6 @@ export class ChatController {
 
   @Post('create')
   @UseGuards(AuthGuard())
-  // TODO - need to add a role guard that ensures only hirers can create a chat with potential clients
   createChat(
     @Body() createChatDTO: CreateChatDTO,
     @CurrentUser() currentUser: UserPayload,

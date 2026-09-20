@@ -1,5 +1,6 @@
 export interface OnboardingData {
 	role: "Hire" | "Work" | null;
+	hirerTitle?: string;
 	budget?: string;
 	hiringFor?: string[];
 	interests?: string[];

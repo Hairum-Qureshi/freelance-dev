@@ -6,6 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { eq } from 'drizzle-orm';
 import { usersTable } from 'src/schema';
 import type { Database } from 'src/providers/postgres-db';
+import type { UserPayload } from '@repo/shared-types';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -32,6 +33,21 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!user) {
       throw new UnauthorizedException('Please log in first');
     }
-    return { ...user, id: String(user.id) };
+    const userPayload: UserPayload = {
+      id: String(user.id),
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      profilePicture: user.profilePicture,
+      completedOnboarding: user.completedOnboarding ?? false,
+      onboardingAnswers: user.onboardingAnswers,
+      resumeId: user.resumeId,
+      location: user.location,
+      deleted: user.deleted ?? false,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
+
+    return userPayload;
   }
 }

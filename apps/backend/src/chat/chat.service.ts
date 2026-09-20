@@ -2,14 +2,9 @@ import { Injectable } from '@nestjs/common';
 import type { Database } from 'src/providers/postgres-db';
 import { Inject, HttpException } from '@nestjs/common';
 import type { CreateChatDTO } from '../DTOs/chat.dto';
-import {
-  chatsTable,
-  messagesTable,
-  participantsTable,
-  usersTable,
-} from 'src/schema';
+import { chatsTable, messagesTable, participantsTable } from 'src/schema';
 import SnowflakeId from 'snowflake-id';
-import { eq } from 'drizzle-orm';
+import { eq, inArray } from 'drizzle-orm';
 
 @Injectable()
 export class ChatService {
@@ -97,5 +92,13 @@ export class ChatService {
       .returning();
   }
 
-  async getAllChats(currentUserId: bigint) {}
+  async getAllChats(currentUserId: bigint) {
+    const chats = await this.db.query.chatsTable.findMany({
+      with: {
+        participants: true,
+        messages: true,
+      },
+    });
+    return chats;
+  }
 }

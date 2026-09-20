@@ -5,6 +5,7 @@ import { OnboardingDTO } from 'src/DTOs/onboarding.dto';
 import { eq } from 'drizzle-orm';
 import { usersTable } from 'src/schema';
 import type { Database } from 'src/providers/postgres-db';
+import type { UserPayload } from '@repo/shared-types';
 
 @Injectable()
 export class UserService {
@@ -90,6 +91,21 @@ export class UserService {
 
     if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
 
-    return user;
+    const userPayload: UserPayload = {
+      id: String(user.id),
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      profilePicture: user.profilePicture,
+      completedOnboarding: user.completedOnboarding ?? false,
+      onboardingAnswers: user.onboardingAnswers,
+      resumeId: user.resumeId,
+      location: user.location,
+      deleted: user.deleted ?? false,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
+
+    return userPayload;
   }
 }

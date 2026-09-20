@@ -263,7 +263,7 @@ export default function Settings() {
 									<input
 										type="text"
 										className={`${inputClassName} text-gray-500`}
-										defaultValue={currentUser?.location}
+										defaultValue={currentUser?.location ?? ""}
 									/>
 								</label>
 

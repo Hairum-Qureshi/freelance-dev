@@ -16,7 +16,7 @@ export default function Profile() {
 	const { data: currUserData } = useCurrentUser();
 	const { userProfileData } = useUser();
 	const [workerTab, setWorkerTab] = useState<"history" | "payments">("history");
-	const onboardingAnswers = userProfileData?.onboarding_answers;
+	const onboardingAnswers = userProfileData?.onboardingAnswers;
 	const technologies = onboardingAnswers?.technologies ?? [];
 	const projectTypes =
 		onboardingAnswers?.seekingProjects ?? onboardingAnswers?.interests ?? [];
@@ -41,14 +41,14 @@ export default function Profile() {
 				<aside className="h-fit rounded-md border border-slate-300 bg-white p-6 shadow-sm lg:min-h-[calc(100vh-3rem)]">
 					<div className="flex flex-col items-center text-center">
 						<img
-							src={userProfileData?.profile_picture}
+							src={userProfileData?.profilePicture}
 							alt="Profile"
 							className="h-32 w-32 rounded-full border border-slate-200 object-cover"
 							referrerPolicy="no-referrer"
 						/>
 
 						<h1 className="mt-5 text-2xl font-semibold tracking-tight text-slate-950">
-							{userProfileData?.first_name} {userProfileData?.last_name}
+							{userProfileData?.firstName} {userProfileData?.lastName}
 						</h1>
 
 						<p className="mt-1 text-sm font-medium text-slate-500">{role}</p>
@@ -116,7 +116,7 @@ export default function Profile() {
 									<div className="flex justify-between gap-3">
 										<dt className="text-slate-500">Resume</dt>
 										<dd className="text-right font-medium text-slate-800">
-											{userProfileData?.resume_id ? (
+											{userProfileData?.resumeId ? (
 												<span className="inline-flex items-center text-emerald-700">
 													Attached
 												</span>
@@ -157,7 +157,7 @@ export default function Profile() {
 				{!showResume ? (
 					<ProfileContent
 						isWorker={isWorker}
-						onboardingAnswers={onboardingAnswers}
+						onboardingAnswers={onboardingAnswers ?? {}}
 						projectTypes={projectTypes}
 						hiringNeeds={hiringNeeds}
 						technologies={technologies}

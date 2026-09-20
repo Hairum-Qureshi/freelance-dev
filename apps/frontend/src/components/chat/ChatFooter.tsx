@@ -1,6 +1,5 @@
 import { IoMdAttach } from "react-icons/io";
 import { BsFillSendFill } from "react-icons/bs";
-import Attachment from "./Attachment";
 import { useState } from "react";
 import useChat from "../../hooks/useChat";
 

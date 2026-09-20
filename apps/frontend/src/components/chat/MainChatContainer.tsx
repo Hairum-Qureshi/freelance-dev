@@ -1,11 +1,7 @@
-import ChatBubble from "./ChatBubble";
-import ChatImageBubble from "./ChatImageBubble";
-import ChatFileBubble from "./ChatFileBubble";
-
 export default function MainChatContainer() {
 	return (
 		<div className="flex-1 min-h-0 overflow-y-auto">
-			<ChatBubble
+			{/* <ChatBubble
 				text={
 					"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsum dolorum fugiat veniam ex pariatur quae eum temporibus mollitia impedit dolores quaerat molestias, aliquam illum libero praesentium autem inventore, officia eos. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestias perferendis repellat illum praesentium pariatur tempora! Nobis, odit velit illum magni quam fugit error. Asperiores ducimus exercitationem aperiam eos sequi voluptates."
 				}
@@ -65,7 +61,7 @@ export default function MainChatContainer() {
 				text="Here is a file for you."
 				you={false}
 				lastMessage
-			/>
+			/> */}
 		</div>
 	);
 }

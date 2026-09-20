@@ -2,15 +2,15 @@ import type { OnboardingAnswers } from "./onboarding-answers.js";
 
 export type UserPayload = {
 	id: string;
-	first_name: string;
-	last_name: string;
+	firstName: string;
+	lastName: string;
 	email: string;
-	profile_picture: string;
-	completed_onboarding: boolean;
-	onboarding_answers: OnboardingAnswers;
-	resume_id: string;
-	location: string;
+	profilePicture: string;
+	completedOnboarding: boolean;
+	onboardingAnswers: OnboardingAnswers;
+	resumeId: string | null;
+	location: string | null;
 	deleted: boolean;
-	created_at: Date;
-	updated_at: Date;
+	createdAt: Date | string | null;
+	updatedAt: Date | string | null;
 };
