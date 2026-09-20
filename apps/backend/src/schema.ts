@@ -6,15 +6,16 @@ import {
   boolean,
   jsonb,
   uniqueIndex,
+  varchar,
 } from 'drizzle-orm/pg-core';
 import type { OnboardingAnswers } from '@repo/shared-types';
-import { relations } from 'drizzle-orm/_relations';
+import { relations } from 'drizzle-orm';
 
 export const usersTable = pgTable('users', {
   id: bigint({ mode: 'bigint' }).primaryKey(),
   firstName: text('first_name').notNull(),
   lastName: text('last_name').notNull(),
-  email: text('email').notNull().unique(),
+  email: varchar({ length: 50 }).notNull().unique(),
   profilePicture: text('profile_picture').notNull(),
   completedOnboarding: boolean('completed_onboarding').default(false),
   onboardingAnswers: jsonb('onboarding_answers')
@@ -68,3 +69,38 @@ export const messagesTable = pgTable('messages', {
 });
 
 // RELATIONS
+
+export const participantsRelations = relations(
+  participantsTable,
+  ({ one }) => ({
+    user: one(usersTable, {
+      fields: [participantsTable.userId],
+      references: [usersTable.id],
+    }),
+    chat: one(chatsTable, {
+      fields: [participantsTable.chatId],
+      references: [chatsTable.id],
+    }),
+  }),
+);
+
+export const messagesRelations = relations(messagesTable, ({ one }) => ({
+  sender: one(usersTable, {
+    fields: [messagesTable.senderId],
+    references: [usersTable.id],
+  }),
+  chat: one(chatsTable, {
+    fields: [messagesTable.chatId],
+    references: [chatsTable.id],
+  }),
+}));
+
+export const usersRelations = relations(usersTable, ({ many }) => ({
+  participants: many(participantsTable),
+  messages: many(messagesTable),
+}));
+
+export const chatsRelations = relations(chatsTable, ({ many }) => ({
+  participants: many(participantsTable),
+  messages: many(messagesTable),
+}));
