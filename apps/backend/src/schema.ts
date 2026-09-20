@@ -5,6 +5,7 @@ import {
   timestamp,
   boolean,
   jsonb,
+  uniqueIndex,
 } from 'drizzle-orm/pg-core';
 import type { OnboardingAnswers } from '@repo/shared-types';
 import { relations } from 'drizzle-orm/_relations';
@@ -32,17 +33,26 @@ export const chatsTable = pgTable('chats', {
   updatedAt: timestamp('updated_at').defaultNow(),
 });
 
-export const participantsTable = pgTable('participants', {
-  id: bigint({ mode: 'bigint' }).primaryKey(),
-  chatId: bigint({ mode: 'bigint' })
-    .notNull()
-    .references(() => chatsTable.id),
-  userId: bigint({ mode: 'bigint' })
-    .notNull()
-    .references(() => usersTable.id),
-  createdAt: timestamp('created_at').defaultNow(),
-  updatedAt: timestamp('updated_at').defaultNow(),
-});
+export const participantsTable = pgTable(
+  'participants',
+  {
+    id: bigint({ mode: 'bigint' }).primaryKey(),
+    chatId: bigint({ mode: 'bigint' })
+      .notNull()
+      .references(() => chatsTable.id),
+    userId: bigint({ mode: 'bigint' })
+      .notNull()
+      .references(() => usersTable.id),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at').defaultNow(),
+  },
+  (table) => ({
+    uniqueChatUser: uniqueIndex('participants_chat_user_unique').on(
+      table.chatId,
+      table.userId,
+    ),
+  }),
+);
 
 export const messagesTable = pgTable('messages', {
   id: bigint({ mode: 'bigint' }).primaryKey(),
@@ -58,35 +68,3 @@ export const messagesTable = pgTable('messages', {
 });
 
 // RELATIONS
-
-export const participantsTableRelations = relations(
-  participantsTable,
-  ({ one }) => ({
-    chat: one(chatsTable, {
-      fields: [participantsTable.chatId],
-      references: [chatsTable.id],
-    }),
-
-    user: one(usersTable, {
-      fields: [participantsTable.userId],
-      references: [usersTable.id],
-    }),
-  }),
-);
-
-export const chatsTableRelations = relations(chatsTable, ({ many }) => ({
-  participants: many(participantsTable),
-  messages: many(messagesTable),
-}));
-
-export const messagesTableRelations = relations(messagesTable, ({ one }) => ({
-  chat: one(chatsTable, {
-    fields: [messagesTable.chatId],
-    references: [chatsTable.id],
-  }),
-
-  sender: one(usersTable, {
-    fields: [messagesTable.senderId], // means: the sender relation connects messages.senderId to users.id
-    references: [usersTable.id], // means: which column in the current table (messages) contains the foreign key?
-  }),
-}));
