@@ -1,7 +1,6 @@
 import {
   pgTable,
   text,
-  bigint,
   timestamp,
   boolean,
   jsonb,
@@ -12,7 +11,7 @@ import type { OnboardingAnswers } from '@repo/shared-types';
 import { relations } from 'drizzle-orm';
 
 export const usersTable = pgTable('users', {
-  id: bigint({ mode: 'bigint' }).primaryKey(),
+  id: text().primaryKey(),
   firstName: text('first_name').notNull(),
   lastName: text('last_name').notNull(),
   email: varchar({ length: 50 }).notNull().unique(),
@@ -29,7 +28,7 @@ export const usersTable = pgTable('users', {
 });
 
 export const chatsTable = pgTable('chats', {
-  id: bigint({ mode: 'bigint' }).primaryKey(),
+  id: text().primaryKey(),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
@@ -37,11 +36,11 @@ export const chatsTable = pgTable('chats', {
 export const participantsTable = pgTable(
   'participants',
   {
-    id: bigint({ mode: 'bigint' }).primaryKey(),
-    chatId: bigint({ mode: 'bigint' })
+    id: text().primaryKey(),
+    chatId: text()
       .notNull()
       .references(() => chatsTable.id),
-    userId: bigint({ mode: 'bigint' })
+    userId: text()
       .notNull()
       .references(() => usersTable.id),
     createdAt: timestamp('created_at').defaultNow(),
@@ -56,11 +55,11 @@ export const participantsTable = pgTable(
 );
 
 export const messagesTable = pgTable('messages', {
-  id: bigint({ mode: 'bigint' }).primaryKey(),
-  chatId: bigint({ mode: 'bigint' })
+  id: text().primaryKey(),
+  chatId: text()
     .notNull()
     .references(() => chatsTable.id),
-  senderId: bigint({ mode: 'bigint' })
+  senderId: text()
     .notNull()
     .references(() => usersTable.id),
   message: text('message').notNull(),
