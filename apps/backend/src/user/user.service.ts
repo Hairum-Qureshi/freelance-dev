@@ -14,7 +14,7 @@ export class UserService {
     @Inject('ImageKitProvider') private readonly imageKit: ImageKit,
   ) {}
 
-  async submitOnboardingAnswers(userID: bigint, onboardingData: OnboardingDTO) {
+  async submitOnboardingAnswers(userID: string, onboardingData: OnboardingDTO) {
     await this.db
       .update(usersTable)
       .set({
@@ -24,7 +24,7 @@ export class UserService {
       .where(eq(usersTable.id, userID));
   }
 
-  async attachResume(userID: bigint, resume: Express.Multer.File) {
+  async attachResume(userID: string, resume: Express.Multer.File) {
     if (!resume)
       throw new HttpException(
         'No resume file provided',
@@ -61,7 +61,7 @@ export class UserService {
       .where(eq(usersTable.id, userID));
   }
 
-  async removeResume(userID: bigint) {
+  async removeResume(userID: string) {
     const [resumeExists] = await this.db
       .select({ resumeId: usersTable.resumeId })
       .from(usersTable)
@@ -82,7 +82,7 @@ export class UserService {
     return { success: true };
   }
 
-  async getUserProfile(userId: bigint) {
+  async getUserProfile(userId: string) {
     const [user] = await this.db
       .select()
       .from(usersTable)
