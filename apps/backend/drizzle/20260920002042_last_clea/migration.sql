@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "participants_chat_user_unique" ON "participants" ("chatId","userId");
