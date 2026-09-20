@@ -22,6 +22,7 @@ async function bootstrap() {
     exclude: ['/'],
   });
 
+
   const PORT = configService.get<number>('PORT') ?? 3000;
 
   await app.listen(PORT);
