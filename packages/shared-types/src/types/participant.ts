@@ -1,6 +1,6 @@
 export type Participant = {
 	id: string;
-	userId: string;
+	profilePicture: string;
 	createdAt: Date;
 	updatedAt: Date;
 };
