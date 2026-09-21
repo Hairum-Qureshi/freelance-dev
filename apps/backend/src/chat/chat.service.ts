@@ -4,7 +4,7 @@ import { Inject, HttpException } from '@nestjs/common';
 import type { CreateChatDTO } from '../DTOs/chat.dto';
 import { chatsTable, messagesTable, participantsTable } from 'src/schema';
 import SnowflakeId from 'snowflake-id';
-import { and, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 
 @Injectable()
 export class ChatService {
@@ -101,6 +101,7 @@ export class ChatService {
               ),
             ),
         ),
+      orderBy: desc(chatsTable.createdAt),
       columns: {
         id: true,
         createdAt: false,
