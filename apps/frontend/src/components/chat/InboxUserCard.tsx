@@ -1,25 +1,56 @@
 import type { Participant } from "@repo/shared-types";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 
 export default function InboxUserCard({
 	selected,
 	chatId,
-	participants
+	participants,
+	setSelectedChat
 }: {
 	selected: boolean;
 	chatId: string;
 	participants: { user: Participant }[];
+	setSelectedChat: (chat: {
+		id: string;
+		firstName: string;
+		lastName: string;
+		profilePicture: string;
+		hirerTitle: string;
+	}) => void;
 }) {
 	const { data: currUser } = useCurrentUser();
+	const { chatID } = useParams();
 
 	const participant = participants.find(
 		p => p.user.id !== currUser?.id && p.user.id !== "1"
 	)?.user;
 
+	useEffect(() => {
+		if (chatID) {
+			setSelectedChat({
+				id: chatID,
+				firstName: participant?.firstName ?? "",
+				lastName: participant?.lastName ?? "",
+				profilePicture: participant?.profilePicture ?? "",
+				hirerTitle: participant?.onboardingAnswers?.hirerTitle ?? ""
+			});
+		}
+	}, [chatID]);
+
 	return (
 		<Link to={`/inbox/c/${chatId}`}>
 			<div
+				onClick={() =>
+					setSelectedChat({
+						id: chatId,
+						firstName: participant?.firstName ?? "",
+						lastName: participant?.lastName ?? "",
+						profilePicture: participant?.profilePicture ?? "",
+						hirerTitle: participant?.onboardingAnswers?.hirerTitle ?? ""
+					})
+				}
 				className={`p-3 border-t border-b border-slate-200 cursor-pointer hover:bg-slate-100 ${selected ? "bg-slate-200" : ""}`}
 			>
 				<div className="flex items-center">
@@ -27,6 +58,7 @@ export default function InboxUserCard({
 						<img
 							src={participant?.profilePicture}
 							alt="User Avatar"
+							referrerPolicy="no-referrer"
 							className="h-10 w-10 rounded-full"
 						/>
 					</div>
