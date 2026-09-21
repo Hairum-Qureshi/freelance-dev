@@ -1,6 +1,7 @@
 import { useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import type { ChatPayload } from "@repo/shared-types";
 
 export default function useChat() {
 	const { chatID } = useParams();
@@ -23,5 +24,18 @@ export default function useChat() {
 		onSuccess: () => {}
 	});
 
-	return { createChatMutation };
+	const { data: currUserChats } = useQuery({
+		queryKey: ["chats"],
+		queryFn: async () => {
+			const response = await axios.get<ChatPayload[]>(
+				`${import.meta.env.VITE_BACKEND_URL}/api/chat/all`,
+				{
+					withCredentials: true
+				}
+			);
+			return response.data;
+		}
+	});
+
+	return { createChatMutation, currUserChats };
 }
