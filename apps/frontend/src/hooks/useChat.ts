@@ -1,9 +1,10 @@
 import { useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ChatPayload } from "@repo/shared-types";
 
 export default function useChat() {
+	const queryClient = useQueryClient();
 	const { chatID } = useParams();
 	const [searchParams] = useSearchParams();
 
@@ -21,7 +22,13 @@ export default function useChat() {
 				}
 			);
 		},
-		onSuccess: () => {}
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["chats"]
+			});
+
+			window.history.replaceState({}, "", `/inbox/c/${chatID}`);
+		}
 	});
 
 	const { data: currUserChats } = useQuery({
