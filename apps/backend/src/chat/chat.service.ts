@@ -4,43 +4,40 @@ import { Inject, HttpException } from '@nestjs/common';
 import type { CreateChatDTO } from '../DTOs/chat.dto';
 import { chatsTable, messagesTable, participantsTable } from 'src/schema';
 import SnowflakeId from 'snowflake-id';
-import { eq, inArray } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 
 @Injectable()
 export class ChatService {
   constructor(@Inject('NeonDBProvider') private readonly db: Database) {}
 
-  // private async hasExistingChat(
-  //   currentUserId: bigint,
-  //   recipientId: bigint,
-  // ): Promise<boolean> {
-  //   const currentUserChats = await this.db
-  //     .select()
-  //     .from(participantsTable)
-  //     .where(eq(participantsTable.userId, currentUserId));
+  private async hasExistingChat(
+    currentUserId: string,
+    recipientId: string,
+  ): Promise<boolean> {
+    const allCurrUserChats = await this.db
+      .select()
+      .from(participantsTable)
+      .where(eq(participantsTable.userId, currentUserId));
 
-  //   const recipientChats = await this.db
-  //     .select()
-  //     .from(participantsTable)
-  //     .where(eq(participantsTable.userId, recipientId));
+    const recipientChats = await this.db
+      .select()
+      .from(participantsTable)
+      .where(eq(participantsTable.userId, recipientId));
 
-  //   const existingChat = currentUserChats.find((chat) =>
-  //     recipientChats.some(
-  //       (recipientChat) => recipientChat.chatId === chat.chatId,
-  //     ),
-  //   );
-
-  //   return !!existingChat;
-  // }
+    return allCurrUserChats.some((currUserChat) =>
+      recipientChats.some(
+        (recipientChat) => recipientChat.chatId === currUserChat.chatId,
+      ),
+    );
+  }
 
   async createChat(createChatDTO: CreateChatDTO, currentUserId: string) {
     const { chatID, to, message } = createChatDTO;
     const chatId = chatID;
     const recipientId = to;
 
-    // TODO - fix this method
-    // if (await this.hasExistingChat(currentUserId, recipientId))
-    //   throw new HttpException('Chat already exists', 400);
+    if (await this.hasExistingChat(currentUserId, recipientId))
+      throw new HttpException('Chat already exists', 400);
 
     const snowflake = new SnowflakeId({
       mid: 42,
@@ -92,9 +89,59 @@ export class ChatService {
 
   async getAllChats(currentUserId: string) {
     const chats = await this.db.query.chatsTable.findMany({
+      where: (chats, { exists }) =>
+        exists(
+          this.db
+            .select()
+            .from(participantsTable)
+            .where(
+              and(
+                eq(participantsTable.chatId, chats.id),
+                eq(participantsTable.userId, currentUserId),
+              ),
+            ),
+        ),
+      columns: {
+        id: true,
+        createdAt: false,
+        updatedAt: false,
+      },
       with: {
-        participants: true,
-        messages: true,
+        participants: {
+          columns: {
+            id: false,
+            chatId: false,
+            userId: false,
+            createdAt: false,
+            updatedAt: false,
+          },
+          with: {
+            user: {
+              columns: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                profilePicture: true,
+              },
+            },
+          },
+        },
+        messages: {
+          columns: {
+            chatId: false,
+            senderId: false,
+          },
+          with: {
+            sender: {
+              columns: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                profilePicture: true,
+              },
+            },
+          },
+        },
       },
     });
     return chats;
