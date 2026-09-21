@@ -122,6 +122,7 @@ export class ChatService {
                 firstName: true,
                 lastName: true,
                 profilePicture: true,
+                onboardingAnswers: true,
               },
             },
           },
