@@ -7,3 +7,6 @@ export type {
 } from "./hooks/use-google-auth.js";
 export type { AuthRequest } from "./types/auth-request.js";
 export type { UseUserHook } from "./hooks/user-user.js";
+export type { Message } from "./types/message.js";
+export type { ChatPayload } from "./types/chat-payload.js";
+export type { Participant } from "./types/participant.js";
