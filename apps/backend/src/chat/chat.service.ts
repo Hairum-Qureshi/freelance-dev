@@ -127,22 +127,6 @@ export class ChatService {
             },
           },
         },
-        messages: {
-          columns: {
-            chatId: false,
-            senderId: false,
-          },
-          with: {
-            sender: {
-              columns: {
-                id: true,
-                firstName: true,
-                lastName: true,
-                profilePicture: true,
-              },
-            },
-          },
-        },
       },
     });
     return chats;
