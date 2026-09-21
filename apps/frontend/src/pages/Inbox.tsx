@@ -4,19 +4,21 @@ import { HiMagnifyingGlass } from "react-icons/hi2";
 import MainChatContainer from "../components/chat/MainChatContainer";
 import useUser from "../hooks/useUser";
 import useChat from "../hooks/useChat";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import InboxUserCard from "../components/chat/InboxUserCard";
 
 export default function Inbox() {
 	const { userProfileData } = useUser();
 
-	const [showMessageContainer, setShowMessageContainer] = useState(false);
-
 	const { currUserChats } = useChat();
 
-	useEffect(() => {
-		setShowMessageContainer(!!userProfileData);
-	}, [userProfileData]);
+	const [selectedChat, setSelectedChat] = useState<{
+		id: string;
+		firstName: string;
+		lastName: string;
+		profilePicture: string;
+		hirerTitle: string;
+	} | null>(null);
 
 	// if you're a hirer, add a 'Hire' button in the conversation header
 
@@ -44,9 +46,10 @@ export default function Inbox() {
 						currUserChats.map(chat => (
 							<InboxUserCard
 								key={chat.id}
-								selected={false}
+								selected={selectedChat?.id === chat.id}
 								chatId={chat.id}
 								participants={chat.participants}
+								setSelectedChat={setSelectedChat}
 							/>
 						))
 					) : (
@@ -63,12 +66,26 @@ export default function Inbox() {
 				</div>
 			</div>
 			<div className="border border-slate-200 h-full w-4/5 flex flex-col">
-				{showMessageContainer ? (
+				{userProfileData || selectedChat ? (
 					<>
 						<ChatHeader
-							profilePicture={userProfileData?.profilePicture ?? ""}
-							name={`${userProfileData?.firstName} ${userProfileData?.lastName ?? ""}`}
-							title={userProfileData?.onboardingAnswers?.hirerTitle ?? "N/A"}
+							profilePicture={
+								userProfileData
+									? userProfileData.profilePicture
+									: (selectedChat?.profilePicture ?? "")
+							}
+							name={
+								userProfileData
+									? `${userProfileData.firstName} ${userProfileData.lastName ?? ""}`
+									: selectedChat
+										? `${selectedChat.firstName} ${selectedChat.lastName ?? ""}`
+										: ""
+							}
+							title={
+								userProfileData
+									? (userProfileData.onboardingAnswers?.hirerTitle ?? "N/A")
+									: (selectedChat?.hirerTitle ?? "N/A")
+							}
 						/>
 						<MainChatContainer />
 						<ChatFooter />
