@@ -3,12 +3,16 @@ import ChatHeader from "../components/chat/ChatHeader";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import MainChatContainer from "../components/chat/MainChatContainer";
 import useUser from "../hooks/useUser";
+import useChat from "../hooks/useChat";
 import { useEffect, useState } from "react";
+import InboxUserCard from "../components/chat/InboxUserCard";
 
 export default function Inbox() {
 	const { userProfileData } = useUser();
 
 	const [showMessageContainer, setShowMessageContainer] = useState(false);
+
+	const { currUserChats } = useChat();
 
 	useEffect(() => {
 		setShowMessageContainer(!!userProfileData);
@@ -31,18 +35,31 @@ export default function Inbox() {
 				</div>
 				<div className="p-3 flex text-sm">
 					<h3 className="uppercase font-semibold text-gray-400">Messages</h3>
-					<h3 className="ml-auto text-gray-400">0</h3>
+					<h3 className="ml-auto text-gray-400">
+						{currUserChats?.length ?? 0}
+					</h3>
 				</div>
 				<div>
+					{currUserChats?.length ? (
+						currUserChats.map(chat => (
+							<InboxUserCard
+								key={chat.id}
+								selected={false}
+								chatId={chat.id}
+								participants={chat.participants}
+							/>
+						))
+					) : (
+						<p className="text-center text-gray-400 m-5">
+							You currently have no conversations
+						</p>
+					)}
 					{/* <InboxUserCard selected />
 					<InboxUserCard selected={false} />
 					<InboxUserCard selected={false} />
 					<InboxUserCard selected={false} />
 					<InboxUserCard selected={false} />
 					<InboxUserCard selected={false} /> */}
-					<p className="text-center text-gray-400 m-5">
-						You currently have no conversations
-					</p>
 				</div>
 			</div>
 			<div className="border border-slate-200 h-full w-4/5 flex flex-col">
