@@ -1,4 +1,4 @@
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ChatPayload } from "@repo/shared-types";
@@ -7,6 +7,7 @@ export default function useChat() {
 	const queryClient = useQueryClient();
 	const { chatID } = useParams();
 	const [searchParams] = useSearchParams();
+	const navigate = useNavigate();
 
 	const createChatMutation = useMutation({
 		mutationFn: async ({ message }: { message: string }): Promise<void> => {
@@ -27,7 +28,7 @@ export default function useChat() {
 				queryKey: ["chats"]
 			});
 
-			window.history.replaceState({}, "", `/inbox/c/${chatID}`);
+			navigate(`/inbox/c/${chatID}`);
 		}
 	});
 
