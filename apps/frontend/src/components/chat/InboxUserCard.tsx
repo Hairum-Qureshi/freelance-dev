@@ -7,7 +7,8 @@ export default function InboxUserCard({
 	selected,
 	chatId,
 	participants,
-	setSelectedChat
+	setSelectedChat,
+	selectedChat
 }: {
 	selected: boolean;
 	chatId: string;
@@ -19,6 +20,13 @@ export default function InboxUserCard({
 		profilePicture: string;
 		hirerTitle: string;
 	}) => void;
+	selectedChat: {
+		id: string;
+		firstName: string;
+		lastName: string;
+		profilePicture: string;
+		hirerTitle: string;
+	} | null;
 }) {
 	const { data: currUser } = useCurrentUser();
 	const { chatID } = useParams();
@@ -28,16 +36,14 @@ export default function InboxUserCard({
 	)?.user;
 
 	useEffect(() => {
-		if (chatID) {
-			setSelectedChat({
-				id: chatID,
-				firstName: participant?.firstName ?? "",
-				lastName: participant?.lastName ?? "",
-				profilePicture: participant?.profilePicture ?? "",
-				hirerTitle: participant?.onboardingAnswers?.hirerTitle ?? ""
-			});
-		}
-	}, [chatID]);
+		setSelectedChat({
+			id: chatID as string,
+			firstName: participant?.firstName ?? "",
+			lastName: participant?.lastName ?? "",
+			profilePicture: participant?.profilePicture ?? "",
+			hirerTitle: participant?.onboardingAnswers?.hirerTitle ?? ""
+		});
+	}, []);
 
 	return (
 		<Link to={`/inbox/c/${chatId}`}>
