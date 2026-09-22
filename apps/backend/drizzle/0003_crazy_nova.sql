@@ -1,0 +1,1 @@
+ALTER TABLE "attachments" ALTER COLUMN "file_type" SET DATA TYPE "public"."file_type";
