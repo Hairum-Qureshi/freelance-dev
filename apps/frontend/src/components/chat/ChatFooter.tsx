@@ -1,11 +1,13 @@
 import { IoMdAttach } from "react-icons/io";
 import { BsFillSendFill } from "react-icons/bs";
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import useChat from "../../hooks/useChat";
 
 export default function ChatFooter() {
 	const [message, setMessage] = useState("");
-	const { createChatMutation } = useChat();
+	const { createChatMutation, createMessageMutation } = useChat();
+	const [searchParams] = useSearchParams();
 
 	return (
 		<div className="flex min-h-24 shrink-0 flex-col border-t border-slate-200 bg-white">
@@ -39,7 +41,12 @@ export default function ChatFooter() {
 								return;
 							}
 
-							createChatMutation.mutate({ message });
+							if (searchParams.get("to")) {
+								createChatMutation.mutate({ message });
+							} else {
+								createMessageMutation.mutate({ message });
+							}
+
 							setMessage("");
 						}}
 					>
