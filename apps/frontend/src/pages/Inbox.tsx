@@ -1,16 +1,19 @@
 import ChatFooter from "../components/chat/ChatFooter";
+import { useLocation } from "react-router-dom";
 import ChatHeader from "../components/chat/ChatHeader";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import MainChatContainer from "../components/chat/MainChatContainer";
 import useUser from "../hooks/useUser";
 import useChat from "../hooks/useChat";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InboxUserCard from "../components/chat/InboxUserCard";
 
 export default function Inbox() {
 	const { userProfileData } = useUser();
 
 	const { currUserChats } = useChat();
+
+	const location = useLocation();
 
 	const [selectedChat, setSelectedChat] = useState<{
 		id: string;
@@ -19,6 +22,10 @@ export default function Inbox() {
 		profilePicture: string;
 		hirerTitle: string;
 	} | null>(null);
+
+	useEffect(() => {
+		if (location.pathname === "/inbox") setSelectedChat(null);
+	}, [location]);
 
 	// if you're a hirer, add a 'Hire' button in the conversation header
 
@@ -50,6 +57,7 @@ export default function Inbox() {
 								chatId={chat.id}
 								participants={chat.participants}
 								setSelectedChat={setSelectedChat}
+								selectedChat={selectedChat}
 							/>
 						))
 					) : (
@@ -57,12 +65,6 @@ export default function Inbox() {
 							You currently have no conversations
 						</p>
 					)}
-					{/* <InboxUserCard selected />
-					<InboxUserCard selected={false} />
-					<InboxUserCard selected={false} />
-					<InboxUserCard selected={false} />
-					<InboxUserCard selected={false} />
-					<InboxUserCard selected={false} /> */}
 				</div>
 			</div>
 			<div className="border border-slate-200 h-full w-4/5 flex flex-col">
