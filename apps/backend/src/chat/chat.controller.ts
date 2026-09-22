@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Body, Get } from '@nestjs/common';
+import { Controller, Post, UseGuards, Body, Get, Param } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateChatDTO } from '../DTOs/chat.dto';
 import { ChatService } from './chat.service';
@@ -22,5 +22,22 @@ export class ChatController {
   @UseGuards(AuthGuard())
   getAllChats(@CurrentUser() currentUser: UserPayload) {
     return this.chatService.getAllChats(currentUser.id);
+  }
+
+  @Get(':chatId')
+  @UseGuards(AuthGuard())
+  getChatById(@Param('chatId') chatId: string) {
+    // TODO - will need to create a guard checking if the user is even in this chat
+    return this.chatService.getChatById(chatId);
+  }
+
+  @Post(':chatId/message')
+  @UseGuards(AuthGuard())
+  addMessage(
+    @CurrentUser() currentUser: UserPayload,
+    @Param('chatId') chatId: string,
+    @Body('message') message: string,
+  ) {
+    return this.chatService.addMessage(chatId, currentUser.id, message);
   }
 }
