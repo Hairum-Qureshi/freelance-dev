@@ -6,6 +6,7 @@ import {
   jsonb,
   uniqueIndex,
   varchar,
+  pgEnum,
 } from 'drizzle-orm/pg-core';
 import type { OnboardingAnswers } from '@repo/shared-types';
 import { relations } from 'drizzle-orm';
@@ -67,6 +68,19 @@ export const messagesTable = pgTable('messages', {
   updatedAt: timestamp('updated_at').defaultNow(),
 });
 
+export const fileTypesEnum = pgEnum('file_type', ['image', 'pdf']);
+export const attachmentsTable = pgTable('attachments', {
+  id: text().primaryKey(),
+  messageId: text()
+    .notNull()
+    .references(() => messagesTable.id),
+  fileName: text('file_name').notNull(),
+  fileId: text('file_id').notNull(),
+  fileType: fileTypesEnum('file_type').notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
 // RELATIONS
 
 export const participantsRelations = relations(
@@ -102,4 +116,11 @@ export const usersRelations = relations(usersTable, ({ many }) => ({
 export const chatsRelations = relations(chatsTable, ({ many }) => ({
   participants: many(participantsTable),
   messages: many(messagesTable),
+}));
+
+export const attachmentsRelations = relations(attachmentsTable, ({ one }) => ({
+  message: one(messagesTable, {
+    fields: [attachmentsTable.messageId],
+    references: [messagesTable.id],
+  }),
 }));
