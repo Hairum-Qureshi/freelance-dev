@@ -1,6 +1,5 @@
-import { Injectable } from '@nestjs/common';
 import type { Database } from 'src/providers/postgres-db';
-import { Inject, HttpException } from '@nestjs/common';
+import { Inject, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import type { CreateChatDTO } from '../DTOs/chat.dto';
 import { chatsTable, messagesTable, participantsTable } from 'src/schema';
 import SnowflakeId from 'snowflake-id';
@@ -131,5 +130,46 @@ export class ChatService {
       },
     });
     return chats;
+  }
+
+  async getChatById(chatId: string) {
+    const messages = await this.db.query.messagesTable.findMany({
+      where: (messages, { eq }) => eq(messages.chatId, chatId),
+      with: {
+        sender: {
+          columns: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            profilePicture: true,
+            onboardingAnswers: true,
+          },
+        },
+      },
+    });
+
+    return messages;
+  }
+
+  async addMessage(chatId: string, currentUserId: string, message: string) {
+    if (!message.trim())
+      throw new HttpException(
+        'Message cannot be empty',
+        HttpStatus.BAD_REQUEST,
+      );
+
+    const snowflake = new SnowflakeId({
+      mid: 42,
+      offset: (2019 - 1970) * 31536000 * 1000,
+    });
+
+    await this.db.insert(messagesTable).values({
+      id: snowflake.generate().toString(),
+      chatId,
+      senderId: currentUserId,
+      message,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
   }
 }
