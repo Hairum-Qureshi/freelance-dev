@@ -1,6 +1,73 @@
+import useChat from "../../hooks/useChat";
+import { useCurrentUser } from "../../hooks/useCurrentUser";
+import ChatBubble from "./ChatBubble";
+import ChatImageBubble from "./ChatImageBubble";
+import ChatFileBubble from "./ChatFileBubble";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(relativeTime);
+dayjs.extend(utc);
+
 export default function MainChatContainer() {
+	const { chatMessages } = useChat();
+	const { data: currUserData } = useCurrentUser();
+
 	return (
 		<div className="flex-1 min-h-0 overflow-y-auto">
+			{chatMessages?.map(message => {
+				const imageAttachments = message.attachments.filter(
+					attachment => attachment.fileType === "image"
+				);
+				const you = message.senderId === currUserData?.id;
+
+				if (message.attachments.length) {
+					return (
+						<div key={message.id}>
+							{imageAttachments.length > 0 && (
+								<ChatImageBubble
+									text={message.message}
+									attachments={imageAttachments}
+									profilePicture={message.sender.profilePicture}
+									you={you}
+									lastMessage={false}
+									postedAt={dayjs.utc(message.createdAt).fromNow()}
+								/>
+							)}
+							{message.attachments
+								.filter(attachment => attachment.fileType === "pdf")
+								.map(attachment => (
+									<ChatFileBubble
+										key={attachment.id}
+										file={{
+											id: attachment.id,
+											name: attachment.fileName,
+											size: "",
+											type: "application/pdf",
+											url: attachment.url
+										}}
+										text={imageAttachments.length ? undefined : message.message}
+										you={you}
+										lastMessage={false}
+										postedAt={dayjs.utc(message.createdAt).fromNow()}
+									/>
+								))}
+						</div>
+					);
+				}
+
+				return (
+					<ChatBubble
+						key={message.id}
+						text={message.message}
+						you={you}
+						lastMessage={false}
+						profilePicture={message.sender.profilePicture}
+						postedAt={dayjs.utc(message.createdAt).fromNow()}
+					/>
+				);
+			})}
 			{/* <ChatBubble
 				text={
 					"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsum dolorum fugiat veniam ex pariatur quae eum temporibus mollitia impedit dolores quaerat molestias, aliquam illum libero praesentium autem inventore, officia eos. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestias perferendis repellat illum praesentium pariatur tempora! Nobis, odit velit illum magni quam fugit error. Asperiores ducimus exercitationem aperiam eos sequi voluptates."
