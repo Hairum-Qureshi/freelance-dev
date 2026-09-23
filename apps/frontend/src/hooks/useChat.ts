@@ -78,6 +78,10 @@ export default function useChat() {
 			queryClient.invalidateQueries({
 				queryKey: ["messages", chatID]
 			});
+
+			queryClient.invalidateQueries({
+				queryKey: ["chats"]
+			});
 		}
 	});
 
