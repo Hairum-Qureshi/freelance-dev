@@ -97,7 +97,7 @@ export const participantsRelations = relations(
   }),
 );
 
-export const messagesRelations = relations(messagesTable, ({ one }) => ({
+export const messagesRelations = relations(messagesTable, ({ one, many }) => ({
   sender: one(usersTable, {
     fields: [messagesTable.senderId],
     references: [usersTable.id],
@@ -106,6 +106,7 @@ export const messagesRelations = relations(messagesTable, ({ one }) => ({
     fields: [messagesTable.chatId],
     references: [chatsTable.id],
   }),
+  attachments: many(attachmentsTable),
 }));
 
 export const usersRelations = relations(usersTable, ({ many }) => ({
@@ -116,11 +117,4 @@ export const usersRelations = relations(usersTable, ({ many }) => ({
 export const chatsRelations = relations(chatsTable, ({ many }) => ({
   participants: many(participantsTable),
   messages: many(messagesTable),
-}));
-
-export const attachmentsRelations = relations(attachmentsTable, ({ one }) => ({
-  message: one(messagesTable, {
-    fields: [attachmentsTable.messageId],
-    references: [messagesTable.id],
-  }),
 }));
