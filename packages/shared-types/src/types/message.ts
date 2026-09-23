@@ -1,4 +1,5 @@
 import { OnboardingAnswers } from "./onboarding-answers";
+import { Attachment } from "./attachment";
 
 export type Message = {
 	id: string;
@@ -13,4 +14,5 @@ export type Message = {
 		profilePicture: string;
 		onboardingAnswers: OnboardingAnswers;
 	};
+	attachments: Attachment[];
 };
