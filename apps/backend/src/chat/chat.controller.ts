@@ -21,7 +21,7 @@ export class ChatController {
 
   // TODO - need to block users from sending/starting a chat with the ADMIN user
 
-  @Post(':chatId/message')
+  @Post('create')
   @UseGuards(AuthGuard())
   @UseInterceptors(FilesInterceptor('attachments', 5))
   createChat(
