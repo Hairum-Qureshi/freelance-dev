@@ -1,6 +1,6 @@
 import { IoMdAttach } from "react-icons/io";
 import { BsFillSendFill } from "react-icons/bs";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import useChat from "../../hooks/useChat";
 import Attachment from "./Attachment";
@@ -18,6 +18,13 @@ export default function ChatFooter() {
 			setAttachedFiles([...attachedFiles, ...Array.from(e.target.files)]);
 		}
 	}
+
+	useEffect(() => {
+		if (attachedFiles.length > 5) {
+			alert("You can only attach up to 5 files.");
+			setAttachedFiles(attachedFiles.slice(0, 5));
+		}
+	}, [attachedFiles]);
 
 	return (
 		<div className="flex min-h-24 shrink-0 flex-col border-t border-slate-200 bg-white">
@@ -68,18 +75,19 @@ export default function ChatFooter() {
 						type="button"
 						className="flex h-9 w-9 items-center justify-center rounded-md bg-black text-white transition-colors hover:cursor-pointer hover:bg-slate-800"
 						onClick={() => {
-							if (!message.trim()) {
+							if (!attachedFiles.length && !message.trim()) {
 								alert("Please enter a message before sending.");
 								return;
 							}
 
 							if (searchParams.get("to")) {
-								createChatMutation.mutate({ message });
+								createChatMutation.mutate({ message, attachedFiles });
 							} else {
-								createMessageMutation.mutate({ message });
+								createMessageMutation.mutate({ message, attachedFiles });
 							}
 
 							setMessage("");
+							setAttachedFiles([]);
 						}}
 					>
 						<BsFillSendFill className="text-base" />
