@@ -32,6 +32,7 @@ export const chatsTable = pgTable('chats', {
   id: text().primaryKey(),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
+  latestMessageId: text('latest_message_id').references(() => messagesTable.id),
 });
 
 export const participantsTable = pgTable(
@@ -75,7 +76,7 @@ export const attachmentsTable = pgTable('attachments', {
     .notNull()
     .references(() => messagesTable.id),
   fileName: text('file_name').notNull(),
-  fileId: text('file_id').notNull(),
+  url: text('url').notNull(),
   fileType: fileTypesEnum('file_type').notNull(),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
@@ -114,9 +115,13 @@ export const usersRelations = relations(usersTable, ({ many }) => ({
   messages: many(messagesTable),
 }));
 
-export const chatsRelations = relations(chatsTable, ({ many }) => ({
+export const chatsRelations = relations(chatsTable, ({ many, one }) => ({
   participants: many(participantsTable),
   messages: many(messagesTable),
+  latestMessage: one(messagesTable, {
+    fields: [chatsTable.latestMessageId],
+    references: [messagesTable.id],
+  }),
 }));
 
 export const attachmentsRelations = relations(attachmentsTable, ({ one }) => ({
