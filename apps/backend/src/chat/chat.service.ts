@@ -116,9 +116,17 @@ export class ChatService {
       orderBy: desc(chatsTable.createdAt),
       columns: {
         id: true,
-        latestMessageId: true,
+        latestMessage: true,
       },
       with: {
+        latestMessage: {
+          columns: {
+            id: true,
+            message: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
         participants: {
           columns: {
             id: false,
