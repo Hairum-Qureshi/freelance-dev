@@ -181,7 +181,7 @@ export class ChatService {
     message: string,
     attachments?: Express.Multer.File[],
   ) {
-    if (!message.trim())
+    if (!message.trim() && !attachments?.length)
       throw new HttpException(
         'Message cannot be empty',
         HttpStatus.BAD_REQUEST,
