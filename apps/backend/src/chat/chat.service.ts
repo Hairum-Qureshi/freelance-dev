@@ -1,13 +1,22 @@
 import type { Database } from 'src/providers/postgres-db';
+import type ImageKit from 'imagekit';
 import { Inject, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import type { CreateChatDTO } from '../DTOs/chat.dto';
-import { chatsTable, messagesTable, participantsTable } from 'src/schema';
+import {
+  attachmentsTable,
+  chatsTable,
+  messagesTable,
+  participantsTable,
+} from 'src/schema';
 import SnowflakeId from 'snowflake-id';
 import { and, desc, eq } from 'drizzle-orm';
 
 @Injectable()
 export class ChatService {
-  constructor(@Inject('NeonDBProvider') private readonly db: Database) {}
+  constructor(
+    @Inject('NeonDBProvider') private readonly db: Database,
+    @Inject('ImageKitProvider') private readonly imageKit: ImageKit,
+  ) {}
 
   private async hasExistingChat(
     currentUserId: string,
@@ -30,7 +39,11 @@ export class ChatService {
     );
   }
 
-  async createChat(createChatDTO: CreateChatDTO, currentUserId: string) {
+  async createChat(
+    createChatDTO: CreateChatDTO,
+    currentUserId: string,
+    attachments?: Express.Multer.File[],
+  ) {
     const { chatID, to, message } = createChatDTO;
     const chatId = chatID;
     const recipientId = to;
@@ -145,13 +158,29 @@ export class ChatService {
             onboardingAnswers: true,
           },
         },
+        attachments: {
+          columns: {
+            id: true,
+            messageId: false,
+            fileName: true,
+            fileId: true,
+            fileType: true,
+            createdAt: false,
+            updatedAt: false,
+          },
+        },
       },
     });
 
     return messages;
   }
 
-  async addMessage(chatId: string, currentUserId: string, message: string) {
+  async addMessage(
+    chatId: string,
+    currentUserId: string,
+    message: string,
+    attachments?: Express.Multer.File[],
+  ) {
     if (!message.trim())
       throw new HttpException(
         'Message cannot be empty',
@@ -163,13 +192,50 @@ export class ChatService {
       offset: (2019 - 1970) * 31536000 * 1000,
     });
 
+    const messageId = snowflake.generate().toString();
+
     await this.db.insert(messagesTable).values({
-      id: snowflake.generate().toString(),
+      id: messageId,
       chatId,
       senderId: currentUserId,
       message,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
+
+    // TODO - add this logic inside of the method when creating a chat
+    // TODO - make messages on the frontend handle attachments
+
+    if (attachments?.length) {
+      for (const attachment of attachments) {
+        const fileType =
+          attachment.mimetype === 'application/pdf' ? 'pdf' : 'image';
+        const fileName = attachment.originalname;
+
+        const uploadedFile = await this.imageKit.upload({
+          file: attachment.buffer,
+          folder: `/chats/${chatId}`,
+          fileName: fileName,
+        });
+
+        const fileId = uploadedFile.fileId;
+
+        if (!fileId)
+          throw new HttpException(
+            'Failed to upload attachment',
+            HttpStatus.INTERNAL_SERVER_ERROR,
+          );
+
+        await this.db.insert(attachmentsTable).values({
+          id: snowflake.generate().toString(),
+          messageId,
+          fileName,
+          fileId,
+          fileType,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+      }
+    }
   }
 }
