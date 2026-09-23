@@ -3,17 +3,25 @@ import { TbChecks } from "react-icons/tb";
 export default function ChatBubble({
 	text,
 	you,
-	lastMessage
+	lastMessage,
+	profilePicture,
+	postedAt
 }: {
 	text: string;
 	you: boolean;
 	lastMessage: boolean;
+	profilePicture?: string;
+	postedAt: string;
 }) {
 	return (
 		<div className={`flex items-start gap-2.5 p-5 ${you ? "justify-end" : ""}`}>
 			<img
 				className={`w-10 h-10 rounded-full ${you ? "order-2" : ""}`}
-				src="https://i.pinimg.com/236x/1d/ec/e2/1dece2c8357bdd7cee3b15036344faf5.jpg?nii=t"
+				referrerPolicy="no-referrer"
+				src={
+					profilePicture ??
+					"https://i.pinimg.com/236x/1d/ec/e2/1dece2c8357bdd7cee3b15036344faf5.jpg?nii=t"
+				}
 			/>
 
 			<div className="max-w-7/12">
@@ -30,7 +38,7 @@ export default function ChatBubble({
 					)}
 
 					<span className={`${you && "ml-auto"} text-xs text-gray-400`}>
-						10:29 PM
+						{postedAt}
 					</span>
 				</div>
 			</div>
