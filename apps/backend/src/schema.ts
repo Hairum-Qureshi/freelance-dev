@@ -118,3 +118,10 @@ export const chatsRelations = relations(chatsTable, ({ many }) => ({
   participants: many(participantsTable),
   messages: many(messagesTable),
 }));
+
+export const attachmentsRelations = relations(attachmentsTable, ({ one }) => ({
+  message: one(messagesTable, {
+    fields: [attachmentsTable.messageId],
+    references: [messagesTable.id],
+  }),
+}));
