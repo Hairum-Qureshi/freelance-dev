@@ -10,3 +10,4 @@ export type { UseUserHook } from "./hooks/user-user.js";
 export type { Message } from "./types/message.js";
 export type { ChatPayload } from "./types/chat-payload.js";
 export type { Participant } from "./types/participant.js";
+export type { Attachment } from "./types/attachment.js";
