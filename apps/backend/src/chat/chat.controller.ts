@@ -1,4 +1,12 @@
-import { Controller, Post, UseGuards, Body, Get, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UseGuards,
+  Body,
+  Get,
+  Param,
+  UploadedFiles,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateChatDTO } from '../DTOs/chat.dto';
 import { ChatService } from './chat.service';
@@ -13,13 +21,19 @@ export class ChatController {
 
   // TODO - need to block users from sending/starting a chat with the ADMIN user
 
-  @Post('create')
+  @Post(':chatId/message')
   @UseGuards(AuthGuard())
+  @UseInterceptors(FilesInterceptor('attachments', 5))
   createChat(
     @Body() createChatDTO: CreateChatDTO,
     @CurrentUser() currentUser: UserPayload,
+    @UploadedFiles() attachments?: Express.Multer.File[],
   ) {
-    return this.chatService.createChat(createChatDTO, currentUser.id);
+    return this.chatService.createChat(
+      createChatDTO,
+      currentUser.id,
+      attachments,
+    );
   }
 
   @Get('all')
@@ -42,7 +56,7 @@ export class ChatController {
     @CurrentUser() currentUser: UserPayload,
     @Param('chatId') chatId: string,
     @Body('message') message: string,
-    @Body('attachments') attachments?: Express.Multer.File[],
+    @UploadedFiles() attachments?: Express.Multer.File[],
   ) {
     return this.chatService.addMessage(
       chatId,
