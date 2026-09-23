@@ -50,6 +50,13 @@
       "when": 1790049134260,
       "tag": "0006_lowly_thanos",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1790135227808,
+      "tag": "0007_magical_deathstrike",
+      "breakpoints": true
     }
   ]
 }
