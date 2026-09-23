@@ -10,14 +10,27 @@ export default function useChat() {
 	const navigate = useNavigate();
 
 	const createChatMutation = useMutation({
-		mutationFn: async ({ message }: { message: string }): Promise<void> => {
+		mutationFn: async ({
+			message,
+			attachedFiles
+		}: {
+			message: string;
+			attachedFiles: File[];
+		}): Promise<void> => {
+			if (!message.trim()) {
+				alert("Please enter a message before sending.");
+				return;
+			}
+
+			const formData = new FormData();
+			formData.append("chatID", chatID ?? "");
+			formData.append("to", searchParams.get("to") ?? "");
+			formData.append("message", message);
+			attachedFiles.forEach(file => formData.append("attachments", file));
+
 			await axios.post(
 				`${import.meta.env.VITE_BACKEND_URL}/api/chat/create`,
-				{
-					chatID,
-					to: searchParams.get("to"),
-					message
-				},
+				formData,
 				{
 					withCredentials: true
 				}
@@ -37,17 +50,25 @@ export default function useChat() {
 	});
 
 	const createMessageMutation = useMutation({
-		mutationFn: async ({ message }: { message: string }): Promise<void> => {
-			if (!message.trim()) {
-				alert("Message cannot be empty");
+		mutationFn: async ({
+			message,
+			attachedFiles
+		}: {
+			message: string;
+			attachedFiles: File[];
+		}): Promise<void> => {
+			if (!message.trim() && attachedFiles.length === 0) {
+				alert("Please enter a message or attach a file before sending.");
 				return;
 			}
 
+			const formData = new FormData();
+			formData.append("message", message);
+			attachedFiles.forEach(file => formData.append("attachments", file));
+
 			await axios.post(
 				`${import.meta.env.VITE_BACKEND_URL}/api/chat/${chatID}/message`,
-				{
-					message
-				},
+				formData,
 				{
 					withCredentials: true
 				}
