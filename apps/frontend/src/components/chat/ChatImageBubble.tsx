@@ -1,31 +1,33 @@
 import { TbChecks } from "react-icons/tb";
-
-type Image = {
-	id: string;
-	url: string;
-	alt?: string;
-};
+import type { Attachment } from "@repo/shared-types";
 
 export default function ChatImageBubble({
-	images,
 	text,
+	attachments,
+	profilePicture,
 	you,
-	lastMessage
+	lastMessage,
+	postedAt
 }: {
-	images: Image[];
+	attachments: Attachment[];
 	text?: string;
+	profilePicture: string;
 	you: boolean;
 	lastMessage: boolean;
+	postedAt: string;
 }) {
-	const visibleImages = images.slice(0, 4);
-	const remainingImages = images.length - 4;
+	const visibleImages = attachments.slice(0, 4);
+	const remainingImages = attachments.length - 4;
+
+	// TODO - replace 'seen' with actual read receipt logic
 
 	return (
 		<div className={`flex items-start gap-2.5 p-5 ${you ? "justify-end" : ""}`}>
 			<img
 				className={`h-10 w-10 rounded-full ${you ? "order-2" : ""}`}
-				src="https://i.pinimg.com/236x/1d/ec/e2/1dece2c8357bdd7cee3b15036344faf5.jpg?nii=t"
-				alt=""
+				src={profilePicture}
+				referrerPolicy="no-referrer"
+				alt="Profile Picture"
 			/>
 
 			<div className="max-w-7/12">
@@ -36,13 +38,13 @@ export default function ChatImageBubble({
 					{/* Images */}
 					<div
 						className={`grid gap-1 px-1 pb-1 ${
-							images.length === 1 ? "grid-cols-1" : "grid-cols-2"
+							attachments.length === 1 ? "grid-cols-1" : "grid-cols-2"
 						}`}
 					>
 						{visibleImages.map((image, index) => {
 							const isLast = index === visibleImages.length - 1;
 
-							const showRemaining = images.length > 4 && isLast;
+							const showRemaining = attachments.length > 4 && isLast;
 
 							return (
 								<button
@@ -52,7 +54,7 @@ export default function ChatImageBubble({
 								>
 									<img
 										src={image.url}
-										alt={image.alt ?? ""}
+										alt="Uploaded Image"
 										className="h-full w-full object-cover"
 									/>
 
@@ -78,7 +80,7 @@ export default function ChatImageBubble({
 					)}
 
 					<span className={`text-xs text-gray-400 ${you ? "ml-auto" : ""}`}>
-						10:29 PM
+						{postedAt}
 					</span>
 				</div>
 			</div>
