@@ -1,6 +1,6 @@
 export type Attachment = {
 	id: string;
 	fileName: string;
-	fileId: string;
+	url: string;
 	fileType: "image" | "pdf";
 };
