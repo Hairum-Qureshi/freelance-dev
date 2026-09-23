@@ -202,6 +202,11 @@ export class ChatService {
       updatedAt: new Date(),
     });
 
+    await this.db
+      .update(chatsTable)
+      .set({ latestMessageId: messageId })
+      .where(eq(chatsTable.id, chatId));
+
     // TODO - add this logic inside of the method when creating a chat
     // TODO - make messages on the frontend handle attachments
 
