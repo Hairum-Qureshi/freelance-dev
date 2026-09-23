@@ -1,13 +1,6 @@
 import { TbChecks, TbDownload } from "react-icons/tb";
 import { FiFile, FiFileText, FiImage } from "react-icons/fi";
-
-type FileAttachment = {
-	id: string;
-	name: string;
-	size: string;
-	type: string;
-	url: string;
-};
+import type { FileAttachment } from "@repo/shared-types";
 
 function getFileIcon(type: string) {
 	if (type.startsWith("image/")) {
@@ -29,19 +22,24 @@ export default function ChatFileBubble({
 	file,
 	text,
 	you,
-	lastMessage
+	lastMessage,
+	postedAt,
+	profilePicture,
 }: {
 	file: FileAttachment;
 	text?: string;
 	you: boolean;
 	lastMessage: boolean;
+	postedAt: string;
+	profilePicture: string;
 }) {
 	return (
 		<div className={`flex items-start gap-2.5 p-5 ${you ? "justify-end" : ""}`}>
 			<img
 				className={`h-10 w-10 rounded-full ${you ? "order-2" : ""}`}
-				src="https://i.pinimg.com/236x/1d/ec/e2/1dece2c8357bdd7cee3b15036344faf5.jpg?nii=t"
-				alt=""
+				src={profilePicture}
+				alt="User profile picture"
+				referrerPolicy="no-referrer"
 			/>
 
 			<div className="max-w-7/12">
@@ -80,7 +78,7 @@ export default function ChatFileBubble({
 					)}
 
 					<span className={`text-xs text-gray-400 ${you ? "ml-auto" : ""}`}>
-						10:29 PM
+						{postedAt}
 					</span>
 				</div>
 			</div>
