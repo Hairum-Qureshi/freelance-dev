@@ -1,19 +1,14 @@
 import { TbChecks, TbDownload } from "react-icons/tb";
 import { FiFile, FiFileText, FiImage } from "react-icons/fi";
 import type { FileAttachment } from "@repo/shared-types";
+import { saveAs } from "file-saver";
 
 function getFileIcon(type: string) {
 	if (type.startsWith("image/")) {
 		return <FiImage className="text-2xl" />;
 	}
 
-	if (
-		type === "application/pdf" ||
-		type.includes("word") ||
-		type.includes("text")
-	) {
-		return <FiFileText className="text-2xl" />;
-	}
+	if (type === "application/pdf") return <FiFileText className="text-2xl" />;
 
 	return <FiFile className="text-2xl" />;
 }
@@ -24,7 +19,7 @@ export default function ChatFileBubble({
 	you,
 	lastMessage,
 	postedAt,
-	profilePicture,
+	profilePicture
 }: {
 	file: FileAttachment;
 	text?: string;
@@ -64,7 +59,14 @@ export default function ChatFileBubble({
 							<p className="mt-0.5 text-xs text-slate-400">{file.size}</p>
 						</div>
 
-						<TbDownload className="shrink-0 text-xl text-slate-400" />
+						<TbDownload
+							className="shrink-0 text-xl text-slate-400"
+							onClick={e => {
+								e.stopPropagation();
+								e.preventDefault();
+								saveAs(file.url, file.name);
+							}}
+						/>
 					</a>
 				</div>
 
