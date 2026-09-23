@@ -57,6 +57,13 @@
       "when": 1790135227808,
       "tag": "0007_magical_deathstrike",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1790175640911,
+      "tag": "0008_goofy_inhumans",
+      "breakpoints": true
     }
   ]
 }
