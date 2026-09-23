@@ -8,7 +8,7 @@ export default function InboxUserCard({
 	chatId,
 	participants,
 	setSelectedChat,
-	selectedChat
+	latestMessage
 }: {
 	selected: boolean;
 	chatId: string;
@@ -20,13 +20,7 @@ export default function InboxUserCard({
 		profilePicture: string;
 		hirerTitle: string;
 	}) => void;
-	selectedChat: {
-		id: string;
-		firstName: string;
-		lastName: string;
-		profilePicture: string;
-		hirerTitle: string;
-	} | null;
+	latestMessage: string;
 }) {
 	const { data: currUser } = useCurrentUser();
 	const { chatID } = useParams();
@@ -70,7 +64,9 @@ export default function InboxUserCard({
 					</div>
 					<div className="flex-1">
 						<h4 className="font-semibold">{`${participant?.firstName} ${participant?.lastName ?? ""}`}</h4>
-						<p className="text-sm text-gray-500">Last message preview...</p>
+						<p className="text-sm text-slate-500 truncate w-5/6">
+							{latestMessage}
+						</p>
 					</div>
 				</div>
 			</div>
