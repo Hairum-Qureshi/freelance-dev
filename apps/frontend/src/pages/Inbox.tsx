@@ -13,6 +13,8 @@ export default function Inbox() {
 
 	const { currUserChats } = useChat();
 
+	// TODO - add autoscroll to bottom of inbox for latest message
+
 	const location = useLocation();
 
 	const [selectedChat, setSelectedChat] = useState<{
@@ -57,7 +59,7 @@ export default function Inbox() {
 								chatId={chat.id}
 								participants={chat.participants}
 								setSelectedChat={setSelectedChat}
-								selectedChat={selectedChat}
+								latestMessage={chat.latestMessage.message}
 							/>
 						))
 					) : (
