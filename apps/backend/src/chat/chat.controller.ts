@@ -46,7 +46,7 @@ export class ChatController {
   @UseGuards(AuthGuard())
   getChatById(@Param('chatId') chatId: string) {
     // TODO - will need to create a guard checking if the user is even in this chat
-    return this.chatService.getChatById(chatId);
+    return this.chatService.getChatMessagesById(chatId);
   }
 
   @Post(':chatId/message')

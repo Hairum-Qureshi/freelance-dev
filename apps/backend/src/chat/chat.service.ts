@@ -144,7 +144,7 @@ export class ChatService {
     return chats;
   }
 
-  async getChatById(chatId: string) {
+  async getChatMessagesById(chatId: string) {
     const messages = await this.db.query.messagesTable.findMany({
       where: (messages, { eq }) => eq(messages.chatId, chatId),
       with: {
