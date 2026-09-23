@@ -163,7 +163,7 @@ export class ChatService {
             id: true,
             messageId: false,
             fileName: true,
-            fileId: true,
+            url: true,
             fileType: true,
             createdAt: false,
             updatedAt: false,
@@ -218,9 +218,9 @@ export class ChatService {
           fileName: fileName,
         });
 
-        const fileId = uploadedFile.fileId;
+        const url = uploadedFile.url;
 
-        if (!fileId)
+        if (!url)
           throw new HttpException(
             'Failed to upload attachment',
             HttpStatus.INTERNAL_SERVER_ERROR,
@@ -230,7 +230,7 @@ export class ChatService {
           id: snowflake.generate().toString(),
           messageId,
           fileName,
-          fileId,
+          url,
           fileType,
           createdAt: new Date(),
           updatedAt: new Date(),
