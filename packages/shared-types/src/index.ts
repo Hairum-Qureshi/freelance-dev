@@ -1,6 +1,7 @@
 export type { OnboardingData } from "./types/onboarding-data.js";
 export type { OnboardingAnswers } from "./types/onboarding-answers.js";
 export type { UserPayload } from "./types/user.js";
+export type { UserRole } from "./types/user-role.js";
 export type {
 	GoogleSignInResponse,
 	UseGoogleAuthHook
