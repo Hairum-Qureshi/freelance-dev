@@ -12,12 +12,15 @@ import {
 import type { OnboardingAnswers } from '@repo/shared-types';
 import { relations } from 'drizzle-orm';
 
+export const userRoleEnum = pgEnum('user_role', ['hirer', 'freelancer']);
+
 export const usersTable = pgTable('users', {
   id: text().primaryKey(),
   firstName: text('first_name').notNull(),
   lastName: text('last_name').notNull(),
   email: varchar({ length: 50 }).notNull().unique(),
   profilePicture: text('profile_picture').notNull(),
+  role: userRoleEnum('role'),
   completedOnboarding: boolean('completed_onboarding').default(false),
   onboardingAnswers: jsonb('onboarding_answers')
     .$type<OnboardingAnswers>()

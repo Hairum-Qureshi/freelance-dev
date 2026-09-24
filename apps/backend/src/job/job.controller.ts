@@ -15,6 +15,7 @@ export class JobController {
     @Body() jobPostingDTO: JobPostingDTO,
     @CurrentUser() currentUser: UserPayload,
   ) {
+    // TODO - add guard to prevent only users with a hirer role to create job postings
     return this.jobService.createJob(jobPostingDTO, currentUser.id);
   }
 }

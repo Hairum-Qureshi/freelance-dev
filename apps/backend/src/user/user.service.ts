@@ -19,6 +19,7 @@ export class UserService {
       .update(usersTable)
       .set({
         onboardingAnswers: onboardingData,
+        role: onboardingData.role,
         completedOnboarding: true,
       })
       .where(eq(usersTable.id, userID));
@@ -92,11 +93,12 @@ export class UserService {
     if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
 
     const userPayload: UserPayload = {
-      id: String(user.id),
+      id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
       profilePicture: user.profilePicture,
+      role: user.role,
       completedOnboarding: user.completedOnboarding ?? false,
       onboardingAnswers: user.onboardingAnswers,
       resumeId: user.resumeId,
