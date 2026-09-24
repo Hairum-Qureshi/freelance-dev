@@ -4,9 +4,15 @@ import { MdOutlineCircle } from "react-icons/md";
 import { GiPlainCircle } from "react-icons/gi";
 
 export default function SlideShow({
-	setShowSlideshowOverlay
+	setShowSlideshowOverlay,
+	images,
+	clickedImageIndex,
+	setClickedImageIndex
 }: {
 	setShowSlideshowOverlay: (show: boolean) => void;
+	images: string[];
+	clickedImageIndex: number;
+	setClickedImageIndex: (index: number) => void;
 }) {
 	return (
 		<div
@@ -14,26 +20,48 @@ export default function SlideShow({
 			onClick={() => setShowSlideshowOverlay(false)}
 		>
 			<div
-				className="border border-white flex justify-center items-center w-3/4 h-3/4"
+				className="relative flex justify-center items-center w-3/4 h-3/4"
 				onClick={e => e.stopPropagation()}
 			>
-				<button className="absolute left-2 text-white text-3xl m-10 hover:cursor-pointer">
+				<button
+					className="absolute -left-5 text-white text-3xl m-10 hover:cursor-pointer"
+					onClick={() =>
+						setClickedImageIndex(
+							clickedImageIndex - 1 < 0
+								? images.length - 1
+								: clickedImageIndex - 1
+						)
+					}
+				>
 					<FaArrowLeft />
 				</button>
-				<button className="absolute right-2 text-white text-3xl m-10 hover:cursor-pointer">
+				<button
+					className="absolute -right-4 text-white text-3xl m-10 hover:cursor-pointer"
+					onClick={() =>
+						setClickedImageIndex(
+							clickedImageIndex + 1 === images.length
+								? 0
+								: clickedImageIndex + 1
+						)
+					}
+				>
 					<FaArrowRight />
 				</button>
 				<img
-					src=""
+					src={images[clickedImageIndex]}
 					alt="Slideshow Image"
-					className="max-w-full max-h-full object-cover"
+					className="w-full h-full object-contain object-center"
 				/>
 				<div className="flex absolute bottom-0 mb-10 items-center justify-center space-x-2">
-					<MdOutlineCircle className="text-white text-base" />
-					<GiPlainCircle className="text-white text-base" />
-					<GiPlainCircle className="text-white text-base" />
-					<GiPlainCircle className="text-white text-base" />
-					<GiPlainCircle className="text-white text-base" />
+					{new Array(images.length)
+						.fill(0)
+						.map((_, index) =>
+							index === clickedImageIndex ? (
+								<MdOutlineCircle key={index} className="text-white text-base" />
+							) : (
+								<GiPlainCircle key={index} className="text-white text-base" />
+							)
+						)}
 				</div>
 			</div>
 		</div>
