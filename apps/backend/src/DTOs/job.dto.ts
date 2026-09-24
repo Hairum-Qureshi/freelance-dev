@@ -62,8 +62,8 @@ export class JobPostingDTO {
 
   @IsString()
   @IsNotEmpty()
-  @MinLength(10)
-  @MaxLength(500)
+  @MinLength(20)
+  @MaxLength(1000)
   deliverables!: string;
 
   @IsNumber()
