@@ -31,11 +31,7 @@ export class ChatController {
     if (createChatDTO.to === '1')
       throw new HttpException('Cannot create chat with admin user', 400);
 
-    return this.chatService.createChat(
-      createChatDTO,
-      currentUser.id,
-      attachments,
-    );
+    return this.chatService.createChat(createChatDTO, currentUser, attachments);
   }
 
   @Get('all')
