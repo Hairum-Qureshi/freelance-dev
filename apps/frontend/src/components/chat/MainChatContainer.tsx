@@ -14,7 +14,6 @@ dayjs.extend(utc);
 
 // TODO - need to handle last message
 // TODO - need to handle read status
-// TODO - need to handle image slideshow when clicking on message images that are more than 4 images
 
 export default function MainChatContainer() {
 	const { chatMessages } = useChat();
@@ -54,25 +53,26 @@ export default function MainChatContainer() {
 									setClickedImageIndex={setClickedImageIndex}
 								/>
 							)}
-							{message.attachments
-								.filter(attachment => attachment.fileType === "pdf")
-								.map(attachment => (
-									<ChatFileBubble
-										key={attachment.id}
-										file={{
+							{message.attachments.filter(
+								attachment => attachment.fileType === "pdf"
+							).length > 0 && (
+								<ChatFileBubble
+									files={message.attachments
+										.filter(attachment => attachment.fileType === "pdf")
+										.map(attachment => ({
 											id: attachment.id,
 											name: attachment.fileName,
 											size: "",
 											type: "application/pdf",
 											url: attachment.url
-										}}
-										text={imageAttachments.length ? undefined : message.message}
-										you={you}
-										lastMessage={false}
-										postedAt={dayjs.utc(message.createdAt).fromNow()}
-										profilePicture={message.sender.profilePicture}
-									/>
-								))}
+										}))}
+									text={imageAttachments.length ? undefined : message.message}
+									you={you}
+									lastMessage={false}
+									postedAt={dayjs.utc(message.createdAt).fromNow()}
+									profilePicture={message.sender.profilePicture}
+								/>
+							)}
 						</div>
 					);
 				}

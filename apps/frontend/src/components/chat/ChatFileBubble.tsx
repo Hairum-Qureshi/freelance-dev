@@ -2,6 +2,7 @@ import { TbChecks, TbDownload } from "react-icons/tb";
 import { FiFile, FiFileText, FiImage } from "react-icons/fi";
 import type { FileAttachment } from "@repo/shared-types";
 import { saveAs } from "file-saver";
+import { Link } from "react-router-dom";
 
 function getFileIcon(type: string) {
 	if (type.startsWith("image/")) {
@@ -14,14 +15,14 @@ function getFileIcon(type: string) {
 }
 
 export default function ChatFileBubble({
-	file,
+	files,
 	text,
 	you,
 	lastMessage,
 	postedAt,
 	profilePicture
 }: {
-	file: FileAttachment;
+	files: FileAttachment[];
 	text?: string;
 	you: boolean;
 	lastMessage: boolean;
@@ -43,31 +44,35 @@ export default function ChatFileBubble({
 					{text && <p className="p-3 text-sm text-white">{text}</p>}
 
 					{/* File */}
-					<a
-						href={file.url}
-						target="_blank"
-						rel="noopener noreferrer"
-						className="flex min-w-72 items-center gap-3 p-3 text-white transition-colors hover:bg-slate-800"
-					>
-						<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-white text-black">
-							{getFileIcon(file.type)}
-						</div>
+					{files.length &&
+						files.map(file => (
+							<Link
+								key={file.id}
+								to={file.url}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="flex min-w-72 items-center gap-3 p-3 text-white transition-colors hover:bg-slate-800"
+							>
+								<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-white text-black">
+									{getFileIcon(file.type)}
+								</div>
 
-						<div className="min-w-0 flex-1">
-							<p className="truncate text-sm font-medium">{file.name}</p>
+								<div className="min-w-0 flex-1">
+									<p className="truncate text-sm font-medium">{file.name}</p>
 
-							<p className="mt-0.5 text-xs text-slate-400">{file.size}</p>
-						</div>
+									<p className="mt-0.5 text-xs text-slate-400">{file.size}</p>
+								</div>
 
-						<TbDownload
-							className="shrink-0 text-xl text-slate-400"
-							onClick={e => {
-								e.stopPropagation();
-								e.preventDefault();
-								saveAs(file.url, file.name);
-							}}
-						/>
-					</a>
+								<TbDownload
+									className="shrink-0 text-xl text-slate-400"
+									onClick={e => {
+										e.stopPropagation();
+										e.preventDefault();
+										saveAs(file.url, file.name);
+									}}
+								/>
+							</Link>
+						))}
 				</div>
 
 				{/* Metadata */}
