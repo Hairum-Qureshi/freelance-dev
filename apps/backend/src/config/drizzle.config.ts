@@ -1,7 +1,7 @@
 import { defineConfig } from 'drizzle-kit';
 
 if (!process.env.NEON_DB_URL) {
-  throw new Error('NEON_DB_URL is not set in the .env file');
+  throw new Error('MIGRATION_DATABASE_URL is not set in the .env file');
 }
 
 export default defineConfig({
