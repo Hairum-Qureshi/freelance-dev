@@ -1,8 +1,10 @@
 import {
   IsArray,
   IsNotEmpty,
+  IsNumber,
   IsString,
   MaxLength,
+  Min,
   MinLength,
 } from 'class-validator';
 
@@ -41,7 +43,11 @@ export class JobPostingDTO {
 
   @IsString()
   @IsNotEmpty()
-  budget!: string;
+  workLocation!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  region!: string;
 
   @IsString()
   @IsNotEmpty()
@@ -59,15 +65,17 @@ export class JobPostingDTO {
   @MaxLength(500)
   deliverables!: string;
 
-  @IsString()
+  @IsNumber()
+  @Min(5)
   @IsNotEmpty()
-  budgetMin!: string;
+  budgetMin!: number;
 
-  @IsString()
+  @IsNumber()
+  @Min(5)
   @IsNotEmpty()
-  budgetMax!: string;
+  budgetMax!: number;
 
   @IsArray()
   @IsNotEmpty()
-  skillsRequired!: string[];
+  skills!: string[];
 }
