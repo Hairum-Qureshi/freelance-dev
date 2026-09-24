@@ -1,3 +1,4 @@
+import { useState } from "react";
 import useChat from "../../hooks/useChat";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
 import ChatBubble from "./ChatBubble";
@@ -6,6 +7,7 @@ import ChatFileBubble from "./ChatFileBubble";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import utc from "dayjs/plugin/utc";
+import SlideShow from "../SlideShow";
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
@@ -17,8 +19,11 @@ dayjs.extend(utc);
 export default function MainChatContainer() {
 	const { chatMessages } = useChat();
 	const { data: currUserData } = useCurrentUser();
+	const [showSlideshowOverlay, setShowSlideshowOverlay] = useState(false);
 
-	return (
+	return showSlideshowOverlay ? (
+		<SlideShow setShowSlideshowOverlay={setShowSlideshowOverlay} />
+	) : (
 		<div className="flex-1 min-h-0 overflow-y-auto">
 			{chatMessages?.map(message => {
 				const imageAttachments = message.attachments.filter(
@@ -37,6 +42,7 @@ export default function MainChatContainer() {
 									you={you}
 									lastMessage={false}
 									postedAt={dayjs.utc(message.createdAt).fromNow()}
+									setShowSlideshowOverlay={setShowSlideshowOverlay}
 								/>
 							)}
 							{message.attachments
