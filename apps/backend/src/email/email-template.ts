@@ -113,7 +113,7 @@ export const EMAIL_TEMPLATE = `<table
                       font-weight: 700;
                     "
                   >
-                    {{initials}}
+                    {{ initials }}
                   </div>
                 </td>
                 <td valign="middle" style="padding-left: 12px;">
