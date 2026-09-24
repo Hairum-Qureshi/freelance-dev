@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JobPostingDTO } from 'src/DTOs/job.dto';
 import { JobService } from './job.service';
@@ -17,5 +17,10 @@ export class JobController {
   ) {
     // TODO - add guard to prevent only users with a hirer role to create job postings
     return this.jobService.createJob(jobPostingDTO, currentUser.id);
+  }
+
+  @Get('all')
+  async getAllJobs() {
+    return this.jobService.getAllJobs();
   }
 }
