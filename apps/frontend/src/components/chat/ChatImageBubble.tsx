@@ -8,7 +8,9 @@ export default function ChatImageBubble({
 	you,
 	lastMessage,
 	postedAt,
-	setShowSlideshowOverlay
+	setShowSlideshowOverlay,
+	setSlideshowImages,
+	setClickedImageIndex
 }: {
 	attachments: Attachment[];
 	text?: string;
@@ -17,6 +19,8 @@ export default function ChatImageBubble({
 	lastMessage: boolean;
 	postedAt: string;
 	setShowSlideshowOverlay: (show: boolean) => void;
+	setSlideshowImages: (images: string[]) => void;
+	setClickedImageIndex: (index: number) => void;
 }) {
 	const visibleImages = attachments.slice(0, 4);
 	const remainingImages = attachments.length - 4;
@@ -53,7 +57,11 @@ export default function ChatImageBubble({
 									key={image.id}
 									type="button"
 									className="relative aspect-square overflow-hidden"
-									onClick={() => setShowSlideshowOverlay(true)}
+									onClick={() => {
+										setSlideshowImages(attachments.map(att => att.url));
+										setClickedImageIndex(index);
+										setShowSlideshowOverlay(true);
+									}}
 								>
 									<img
 										src={image.url}
