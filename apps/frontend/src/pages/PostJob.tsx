@@ -1,4 +1,8 @@
+import { useState } from "react";
+
 export default function PostJob() {
+	const [skills, setSkills] = useState<string[]>([]);
+
 	return (
 		<div className="min-h-screen bg-white px-4 py-8 sm:px-6 lg:px-8">
 			<div className="mx-auto max-w-4xl">
@@ -57,11 +61,15 @@ export default function PostJob() {
 									className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-black outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
 								>
 									<option value="">Select a project type</option>
-									<option value="web-development">Web development</option>
-									<option value="design">Design</option>
-									<option value="content">Content writing</option>
-									<option value="admin-support">Admin support</option>
-									<option value="other">Other</option>
+									<option value="website">Website / Web App</option>
+									<option value="ecommerce">E-commerce</option>
+									<option value="mobile-app">Mobile App</option>
+									<option value="api-backend">API / Backend</option>
+									<option value="database">Database / Data</option>
+									<option value="bug-fix">Bug Fix / Troubleshooting</option>
+									<option value="feature">New Feature</option>
+									<option value="redesign">Website Redesign</option>
+									<option value="maintenance">Maintenance / Updates</option>
 								</select>
 							</div>
 						</div>
@@ -79,11 +87,19 @@ export default function PostJob() {
 									className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-black outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
 								>
 									<option value="">Choose the type of help</option>
-									<option value="designer">Designer</option>
-									<option value="developer">Developer</option>
-									<option value="writer">Writer</option>
-									<option value="marketer">Marketer</option>
-									<option value="other">Something else</option>
+									<option value="frontend-developer">Frontend Developer</option>
+									<option value="backend-developer">Backend Developer</option>
+									<option value="fullstack-developer">
+										Full-Stack Developer
+									</option>
+									<option value="mobile-developer">Mobile Developer</option>
+									<option value="designer">UI/UX Designer</option>
+									<option value="graphic-designer">Graphic Designer</option>
+									<option value="wordpress-developer">
+										WordPress Developer
+									</option>
+									<option value="qa-tester">QA / Software Tester</option>
+									<option value="data-analyst">Data Analyst</option>
 								</select>
 							</div>
 
@@ -92,19 +108,18 @@ export default function PostJob() {
 									htmlFor="experienceLevel"
 									className="mb-2 block text-sm font-semibold text-gray-800"
 								>
-									Experience level
+									What experience level are you looking for?
 								</label>
 								<select
 									id="experienceLevel"
 									className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-black outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
 								>
 									<option value="">Select experience level</option>
-									<option value="entry">Entry level</option>
-									<option value="mid">Mid level</option>
-									<option value="senior">Senior level</option>
+									<option value="beginner">Beginner / Learning</option>
+									<option value="entry">Entry Level</option>
+									<option value="intermediate">Intermediate</option>
 								</select>
 							</div>
-
 							<div>
 								<label
 									htmlFor="jobType"
@@ -118,31 +133,70 @@ export default function PostJob() {
 								>
 									<option value="">Select job type</option>
 									<option value="freelance">One-time</option>
-									<option value="freelance">Remote</option>
+									<option value="remote">Remote</option>
 									<option value="contract">Contract</option>
 									<option value="full-time">Full-time</option>
 									<option value="part-time">Part-time</option>
 								</select>
 							</div>
-
 							<div>
 								<label
-									htmlFor="location"
+									htmlFor="paymentType"
 									className="mb-2 block text-sm font-semibold text-gray-800"
 								>
-									Location
+									Payment type
 								</label>
 								<select
-									id="location"
+									id="paymentType"
 									className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-black outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
 								>
-									<option value="">Select location</option>
-									<option value="remote">Remote</option>
-									<option value="on-site">On-site</option>
-									<option value="hybrid">Hybrid</option>
+									<option value="">Select payment type</option>
+									<option value="fixed-price">Fixed price</option>
+									<option value="hourly">Hourly rate</option>
 								</select>
 							</div>
-
+							<div className="md:col-span-2 rounded-xl border border-gray-200 bg-gray-50/60 p-3">
+								<div className="grid gap-3 sm:grid-cols-2">
+									<div>
+										<label
+											htmlFor="location"
+											className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-gray-600"
+										>
+											Work location
+										</label>
+										<select
+											id="location"
+											className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-black outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
+										>
+											<option value="">Select location</option>
+											<option value="remote">Remote</option>
+											<option value="on-site">On-site</option>
+											<option value="hybrid">Hybrid</option>
+										</select>
+									</div>
+									<div>
+										<label
+											htmlFor="region"
+											className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-gray-600"
+										>
+											Region
+										</label>
+										<select
+											id="region"
+											className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-black outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
+										>
+											<option value="">Select region</option>
+											<option value="north-america">North America</option>
+											<option value="latin-america">Latin America</option>
+											<option value="europe">Europe</option>
+											<option value="middle-east-africa">
+												Middle East &amp; Africa
+											</option>
+											<option value="asia-pacific">Asia-Pacific</option>
+										</select>
+									</div>
+								</div>
+							</div>
 							<div className="md:col-span-2">
 								<label
 									htmlFor="timeline"
@@ -224,7 +278,6 @@ export default function PostJob() {
 								</div>
 							</div>
 						</div>
-
 						<div>
 							<label
 								htmlFor="skills"
@@ -232,12 +285,50 @@ export default function PostJob() {
 							>
 								Skills or experience needed
 							</label>
-							<input
+							<div>
+								<p className="mb-2 text-xs text-gray-500">
+									Use a comma to separate multiple skills.
+								</p>
+								<input
+									id="skills"
+									type="text"
+									placeholder="e.g. React, WordPress, SEO, branding, UX design"
+									value={skills.join(", ")}
+									onChange={e =>
+										setSkills(
+											e.target.value.split(",").map(skill => skill.trim())
+										)
+									}
+									className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-black placeholder:text-gray-500 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
+								/>
+								{skills.length && (
+									<div className="mt-2 flex flex-wrap gap-2">
+										{skills.map(
+											(skill, index) =>
+												skill && (
+													<span
+														key={index}
+														className="rounded-full bg-gray-200 px-3 py-1 text-sm text-gray-700"
+													>
+														{skill}
+													</span>
+												)
+										)}
+									</div>
+								)}
+							</div>
+							{/* <input
 								id="skills"
 								type="text"
 								placeholder="e.g. React, WordPress, SEO, branding, UX design"
+								value={skills.join(", ")}
+								onChange={e =>
+									setSkills(
+										e.target.value.split(",").map(skill => skill.trim())
+									)
+								}
 								className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-black placeholder:text-gray-500 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
-							/>
+							/> */}
 							<p className="mt-2 text-xs text-gray-500">
 								Add the main skills you want the freelancer to have.
 							</p>
