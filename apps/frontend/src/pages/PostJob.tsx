@@ -301,7 +301,7 @@ export default function PostJob() {
 									}
 									className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-black placeholder:text-gray-500 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
 								/>
-								{skills.length && (
+								{skills.length ? (
 									<div className="mt-2 flex flex-wrap gap-2">
 										{skills.map(
 											(skill, index) =>
@@ -315,7 +315,7 @@ export default function PostJob() {
 												)
 										)}
 									</div>
-								)}
+								) : null}
 							</div>
 							{/* <input
 								id="skills"
