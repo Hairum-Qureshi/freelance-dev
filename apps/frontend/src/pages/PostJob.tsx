@@ -1,7 +1,24 @@
 import { useState } from "react";
+import useJob from "../hooks/useJob";
 
 export default function PostJob() {
+	const [jobTitle, setJobTitle] = useState("");
+	const [businessName, setBusinessName] = useState("");
+	const [projectType, setProjectType] = useState("");
+	const [lookingFor, setLookingFor] = useState("");
+	const [experienceLevel, setExperienceLevel] = useState("");
+	const [jobType, setJobType] = useState("");
+	const [paymentType, setPaymentType] = useState("");
+	const [workLocation, setWorkLocation] = useState("");
+	const [region, setRegion] = useState("");
+	const [timeline, setTimeline] = useState("");
+	const [projectDetails, setProjectDetails] = useState("");
+	const [deliverables, setDeliverables] = useState("");
+	const [budgetMin, setBudgetMin] = useState("");
+	const [budgetMax, setBudgetMax] = useState("");
 	const [skills, setSkills] = useState<string[]>([]);
+
+	const { postJobListingMutation } = useJob();
 
 	return (
 		<div className="min-h-screen bg-white px-4 py-8 sm:px-6 lg:px-8">
@@ -17,19 +34,43 @@ export default function PostJob() {
 				</div>
 
 				<div className="rounded-2xl border border-gray-300 bg-white p-5 shadow-[0_10px_30px_rgba(0,0,0,0.04)] sm:p-8 my-10">
-					<form className="space-y-6">
+					<form
+						className="space-y-6"
+						onSubmit={e => {
+							e.preventDefault();
+							postJobListingMutation.mutate({
+								jobTitle,
+								businessName,
+								projectType,
+								lookingFor,
+								experienceLevel,
+								jobType,
+								paymentType,
+								workLocation,
+								region,
+								timeline,
+								projectDetails,
+								deliverables,
+								budgetMin,
+								budgetMax,
+								skills
+							});
+						}}
+					>
 						<div className="grid gap-5 md:grid-cols-2">
 							<div className="md:col-span-2">
 								<label
 									htmlFor="title"
 									className="mb-2 block text-sm font-semibold text-gray-800"
 								>
-									Job title
+									Job title <span className="text-red-600">*</span>
 								</label>
 								<input
 									id="title"
 									type="text"
 									placeholder="e.g. Design a simple website for my cafe"
+									value={jobTitle}
+									onChange={e => setJobTitle(e.target.value)}
 									className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-black placeholder:text-gray-500 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
 								/>
 							</div>
@@ -39,12 +80,14 @@ export default function PostJob() {
 									htmlFor="company"
 									className="mb-2 block text-sm font-semibold text-gray-800"
 								>
-									Your business name
+									Your business name <span className="text-red-600">*</span>
 								</label>
 								<input
 									id="company"
 									type="text"
 									placeholder="e.g. Brightlane Studio"
+									value={businessName}
+									onChange={e => setBusinessName(e.target.value)}
 									className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-black placeholder:text-gray-500 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
 								/>
 							</div>
@@ -54,10 +97,12 @@ export default function PostJob() {
 									htmlFor="category"
 									className="mb-2 block text-sm font-semibold text-gray-800"
 								>
-									Project type
+									Project type <span className="text-red-600">*</span>
 								</label>
 								<select
 									id="category"
+									value={projectType}
+									onChange={e => setProjectType(e.target.value)}
 									className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-black outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
 								>
 									<option value="">Select a project type</option>
@@ -80,10 +125,12 @@ export default function PostJob() {
 									htmlFor="need"
 									className="mb-2 block text-sm font-semibold text-gray-800"
 								>
-									Looking for
+									Looking for <span className="text-red-600">*</span>
 								</label>
 								<select
 									id="need"
+									value={lookingFor}
+									onChange={e => setLookingFor(e.target.value)}
 									className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-black outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
 								>
 									<option value="">Choose the type of help</option>
@@ -108,10 +155,13 @@ export default function PostJob() {
 									htmlFor="experienceLevel"
 									className="mb-2 block text-sm font-semibold text-gray-800"
 								>
-									What experience level are you looking for?
+									What experience level are you looking for?{" "}
+									<span className="text-red-600">*</span>
 								</label>
 								<select
 									id="experienceLevel"
+									value={experienceLevel}
+									onChange={e => setExperienceLevel(e.target.value)}
 									className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-black outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
 								>
 									<option value="">Select experience level</option>
@@ -125,10 +175,12 @@ export default function PostJob() {
 									htmlFor="jobType"
 									className="mb-2 block text-sm font-semibold text-gray-800"
 								>
-									Job type
+									Job type <span className="text-red-600">*</span>
 								</label>
 								<select
 									id="jobType"
+									value={jobType}
+									onChange={e => setJobType(e.target.value)}
 									className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-black outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
 								>
 									<option value="">Select job type</option>
@@ -144,10 +196,12 @@ export default function PostJob() {
 									htmlFor="paymentType"
 									className="mb-2 block text-sm font-semibold text-gray-800"
 								>
-									Payment type
+									Payment type <span className="text-red-600">*</span>
 								</label>
 								<select
 									id="paymentType"
+									value={paymentType}
+									onChange={e => setPaymentType(e.target.value)}
 									className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-black outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
 								>
 									<option value="">Select payment type</option>
@@ -162,10 +216,12 @@ export default function PostJob() {
 											htmlFor="location"
 											className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-gray-600"
 										>
-											Work location
+											Work location <span className="text-red-600">*</span>
 										</label>
 										<select
 											id="location"
+											value={workLocation}
+											onChange={e => setWorkLocation(e.target.value)}
 											className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-black outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
 										>
 											<option value="">Select location</option>
@@ -179,10 +235,12 @@ export default function PostJob() {
 											htmlFor="region"
 											className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-gray-600"
 										>
-											Region
+											Region <span className="text-red-600">*</span>
 										</label>
 										<select
 											id="region"
+											value={region}
+											onChange={e => setRegion(e.target.value)}
 											className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-black outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
 										>
 											<option value="">Select region</option>
@@ -202,10 +260,12 @@ export default function PostJob() {
 									htmlFor="timeline"
 									className="mb-2 block text-sm font-semibold text-gray-800"
 								>
-									Timeline
+									Timeline <span className="text-red-600">*</span>
 								</label>
 								<select
 									id="timeline"
+									value={timeline}
+									onChange={e => setTimeline(e.target.value)}
 									className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-black outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
 								>
 									<option value="">When do you need it done?</option>
@@ -223,14 +283,25 @@ export default function PostJob() {
 								htmlFor="description"
 								className="mb-2 block text-sm font-semibold text-gray-800"
 							>
-								Project details
+								Project details <span className="text-red-600">*</span>
 							</label>
 							<textarea
 								id="description"
 								rows={6}
 								placeholder="Tell freelancers what you need, what success looks like, and any important details."
+								value={projectDetails}
+								onChange={e => setProjectDetails(e.target.value)}
 								className="w-full resize-none rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-black placeholder:text-gray-500 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
+								maxLength={1000}
 							/>
+							<p className="mt-1 w-full text-xs text-gray-500 text-right">
+								<span
+									className={`${projectDetails.length >= 900 ? "text-red-600" : projectDetails.length >= 800 ? "text-yellow-600" : ""}`}
+								>
+									{projectDetails.length}
+								</span>{" "}
+								/ 1000 Characters
+							</p>
 						</div>
 
 						<div>
@@ -238,43 +309,73 @@ export default function PostJob() {
 								htmlFor="deliverables"
 								className="mb-2 block text-sm font-semibold text-gray-800"
 							>
-								Deliverables
+								Deliverables <span className="text-red-600">*</span>
 							</label>
 							<textarea
 								id="deliverables"
 								rows={4}
 								placeholder="Examples: final website design, copy for 3 landing pages, social media graphics, weekly reporting..."
+								value={deliverables}
+								onChange={e => setDeliverables(e.target.value)}
 								className="w-full resize-none rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-black placeholder:text-gray-500 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
+								maxLength={1000}
 							/>
+							<p className="mt-1 w-full text-xs text-gray-500 text-right">
+								<span
+									className={`${deliverables.length >= 900 ? "text-red-600" : deliverables.length >= 800 ? "text-yellow-600" : ""}`}
+								>
+									{deliverables.length}
+								</span>{" "}
+								/ 1000 Characters
+							</p>
 						</div>
 
 						<div>
 							<label className="mb-2 block text-sm font-semibold text-gray-800">
-								Budget range
+								Budget range <span className="text-red-600">*</span>
 							</label>
+
 							<div className="grid gap-4 sm:grid-cols-2">
-								<div className="relative">
-									<span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-gray-500">
-										$
-									</span>
-									<input
-										type="number"
-										placeholder="Minimum"
-										min={5}
-										className="w-full rounded-xl border border-gray-300 bg-white py-3 pl-8 pr-4 text-sm text-black placeholder:text-gray-500 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
-									/>
+								<div>
+									<div className="relative">
+										<span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-gray-500">
+											$
+										</span>
+										<input
+											type="number"
+											placeholder="Minimum"
+											min={5}
+											max={5000}
+											value={budgetMin}
+											onChange={e => setBudgetMin(e.target.value)}
+											className="w-full rounded-xl border border-gray-300 bg-white py-3 pl-8 pr-4 text-sm text-black placeholder:text-gray-500 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
+										/>
+									</div>
+
+									<p className="mt-1 text-xs text-gray-500">
+										Note: minimum budget is $5
+									</p>
 								</div>
 
-								<div className="relative">
-									<span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-gray-500">
-										$
-									</span>
-									<input
-										type="number"
-										placeholder="Maximum"
-										min={5}
-										className="w-full rounded-xl border border-gray-300 bg-white py-3 pl-8 pr-4 text-sm text-black placeholder:text-gray-500 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
-									/>
+								<div>
+									<div className="relative">
+										<span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-gray-500">
+											$
+										</span>
+										<input
+											type="number"
+											placeholder="Maximum"
+											min={5}
+											max={5000}
+											value={budgetMax}
+											onChange={e => setBudgetMax(e.target.value)}
+											className="w-full rounded-xl border border-gray-300 bg-white py-3 pl-8 pr-4 text-sm text-black placeholder:text-gray-500 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
+										/>
+									</div>
+
+									<p className="mt-1 text-xs text-gray-500">
+										Note: maximum budget is $5000
+									</p>
 								</div>
 							</div>
 						</div>
@@ -283,7 +384,8 @@ export default function PostJob() {
 								htmlFor="skills"
 								className="mb-2 block text-sm font-semibold text-gray-800"
 							>
-								Skills or experience needed
+								Skills or experience needed{" "}
+								<span className="text-red-600">*</span>
 							</label>
 							<div>
 								<p className="mb-2 text-xs text-gray-500">
@@ -317,18 +419,6 @@ export default function PostJob() {
 									</div>
 								) : null}
 							</div>
-							{/* <input
-								id="skills"
-								type="text"
-								placeholder="e.g. React, WordPress, SEO, branding, UX design"
-								value={skills.join(", ")}
-								onChange={e =>
-									setSkills(
-										e.target.value.split(",").map(skill => skill.trim())
-									)
-								}
-								className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-black placeholder:text-gray-500 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
-							/> */}
 							<p className="mt-2 text-xs text-gray-500">
 								Add the main skills you want the freelancer to have.
 							</p>
