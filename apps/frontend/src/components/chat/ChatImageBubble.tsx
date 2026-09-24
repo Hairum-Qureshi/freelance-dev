@@ -56,7 +56,7 @@ export default function ChatImageBubble({
 								<button
 									key={image.id}
 									type="button"
-									className="relative aspect-square overflow-hidden"
+									className="relative aspect-square overflow-hidden hover:cursor-pointer"
 									onClick={() => {
 										setSlideshowImages(attachments.map(att => att.url));
 										setClickedImageIndex(index);
