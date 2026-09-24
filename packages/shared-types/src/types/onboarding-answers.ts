@@ -1,5 +1,7 @@
+import type { UserRole } from "./user-role.js";
+
 export type OnboardingAnswers = {
-	role?: "Hire" | "Work";
+	role?: UserRole;
 	hirerTitle?: string;
 	budget?: string;
 	hiringFor?: string[];
