@@ -64,6 +64,27 @@
       "when": 1790175640911,
       "tag": "0008_goofy_inhumans",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1790270308025,
+      "tag": "0009_swift_prowler",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1790271585093,
+      "tag": "0010_salty_albert_cleary",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1790272229846,
+      "tag": "0011_handy_the_liberteens",
+      "breakpoints": true
     }
   ]
 }
