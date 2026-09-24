@@ -7,6 +7,7 @@ import {
   uniqueIndex,
   varchar,
   pgEnum,
+  integer,
 } from 'drizzle-orm/pg-core';
 import type { OnboardingAnswers } from '@repo/shared-types';
 import { relations } from 'drizzle-orm';
@@ -78,6 +79,100 @@ export const attachmentsTable = pgTable('attachments', {
   fileName: text('file_name').notNull(),
   url: text('url').notNull(),
   fileType: fileTypesEnum('file_type').notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+export const projectTypeEnum = pgEnum('project_type', [
+  'website/web app',
+  'e-commerce',
+  'mobile app',
+  'api/backend',
+  'database/data',
+  'bug fix/troubleshooting',
+  'new feature',
+  'website redesign',
+  'maintenance/updates',
+]);
+
+export const lookingForEnum = pgEnum('looking_for', [
+  'frontend developer',
+  'backend developer',
+  'full-stack developer',
+  'mobile developer',
+  'ui/ux designer',
+  'graphic designer',
+  'wordpress developer',
+  'qa/software tester',
+  'data analyst',
+]);
+
+export const experienceLevelEnum = pgEnum('experience_level', [
+  'beginner/learning',
+  'entry',
+  'intermediate',
+]);
+
+export const jobTypeEnum = pgEnum('job_type', [
+  'one-time',
+  'remote',
+  'contract',
+  'full-time',
+  'part-time',
+]);
+
+export const paymentTypeEnum = pgEnum('payment_type', [
+  'fixed-price',
+  'hourly',
+]);
+
+export const workLocationEnum = pgEnum('work_location', [
+  'remote',
+  'onsite',
+  'hybrid',
+]);
+
+export const regionEnum = pgEnum('region', [
+  'north america',
+  'south america',
+  'europe',
+  'asia',
+  'africa',
+  'australia',
+  'antarctica',
+]);
+
+export const timelineEnum = pgEnum('timeline', [
+  'as soon as possible',
+  'within 1-2 weeks',
+  'within a month',
+  'within 2-3 months',
+  'flexible timeline',
+]);
+
+export const jobPostsTable = pgTable('jobs', {
+  id: text().primaryKey(),
+  jobTitle: text('job_title').notNull(),
+  businessName: text('business_name').notNull(),
+  projectType: projectTypeEnum('project_type').notNull(),
+  lookingFor: lookingForEnum('looking_for').notNull(),
+  experienceLevel: experienceLevelEnum('experience_level').notNull(),
+  jobType: jobTypeEnum('job_type').notNull(),
+  paymentType: paymentTypeEnum('payment_type').notNull(),
+  workLocation: workLocationEnum('work_location').notNull(),
+  region: regionEnum('region').notNull(),
+  timeline: timelineEnum('timeline').notNull(),
+  projectDetails: text('project_details').notNull(),
+  deliverables: text('deliverables').notNull(),
+  budgetMin: integer('budget_min').notNull(),
+  budgetMax: integer('budget_max').notNull(),
+  tags: text('tags')
+    .array()
+    .notNull()
+    .$default(() => []),
+  posterId: text('poster_id')
+    .notNull()
+    .references(() => usersTable.id),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
