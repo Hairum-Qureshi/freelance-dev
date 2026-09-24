@@ -60,7 +60,7 @@ export default function Inbox() {
 								chatId={chat.id}
 								participants={chat.participants}
 								setSelectedChat={setSelectedChat}
-								latestMessage={!chat.latestMessage.message ? "Attached file" : chat.latestMessage.message}
+								latestMessage={!chat.latestMessage.message ? "Attached file(s)" : chat.latestMessage.message}
 							/>
 						))
 					) : (
