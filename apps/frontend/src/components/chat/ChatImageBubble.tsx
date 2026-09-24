@@ -55,7 +55,7 @@ export default function ChatImageBubble({
 									<img
 										src={image.url}
 										alt="Uploaded Image"
-										className="h-full w-full object-cover"
+										className="h-full w-full object-cover pt-1"
 									/>
 
 									{showRemaining && (
