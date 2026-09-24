@@ -1,21 +1,27 @@
 import type { Database } from 'src/providers/postgres-db';
 import type ImageKit from 'imagekit';
 import { Inject, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { EmailService } from '../email/email.service';
 import type { CreateChatDTO } from '../DTOs/chat.dto';
 import {
   attachmentsTable,
   chatsTable,
   messagesTable,
   participantsTable,
+  usersTable,
 } from 'src/schema';
 import SnowflakeId from 'snowflake-id';
 import { and, desc, eq } from 'drizzle-orm';
+import { Message, UserPayload } from '@repo/shared-types';
 
 @Injectable()
 export class ChatService {
   constructor(
     @Inject('NeonDBProvider') private readonly db: Database,
     @Inject('ImageKitProvider') private readonly imageKit: ImageKit,
+    private readonly emailService: EmailService,
+    private readonly configService: ConfigService,
   ) {}
 
   private async hasExistingChat(
@@ -78,14 +84,14 @@ export class ChatService {
 
   async createChat(
     createChatDTO: CreateChatDTO,
-    currentUserId: string,
+    currUser: UserPayload,
     attachments?: Express.Multer.File[],
   ) {
     const { chatID, to, message } = createChatDTO;
     const chatId = chatID;
     const recipientId = to;
 
-    if (await this.hasExistingChat(currentUserId, recipientId))
+    if (await this.hasExistingChat(currUser.id, recipientId))
       throw new HttpException('Chat already exists', 400);
 
     const snowflake = new SnowflakeId({
@@ -120,23 +126,27 @@ export class ChatService {
       {
         id: snowflake.generate().toString(),
         chatId,
-        userId: currentUserId,
+        userId: currUser.id,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
     ]);
 
-    const createdMessage = await this.db
+    const createdMessage = (await this.db
       .insert(messagesTable)
       .values({
         id: snowflake.generate().toString(),
         chatId,
-        senderId: currentUserId,
+        senderId: currUser.id,
         message,
         createdAt: new Date(),
         updatedAt: new Date(),
       })
-      .returning();
+      .returning()) as Message[];
+
+    if (!createdMessage.length) {
+      throw new HttpException('Failed to create message', 500);
+    }
 
     await this.db
       .update(chatsTable)
@@ -151,6 +161,20 @@ export class ChatService {
         createdMessage[0].id,
       );
     }
+
+    const [recipient] = await this.db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.id, recipientId));
+
+    await this.emailService.sendNewContactMessageNotifEmail(
+      recipient.email,
+      `${currUser.firstName} ${currUser.lastName}`,
+      createdMessage[0].createdAt.toISOString() ?? '-',
+      message,
+      `${currUser.firstName[0]}${currUser.lastName[0]}`,
+      `${this.configService.getOrThrow<string>('FRONTEND_URL')}/inbox/c/${chatId}`,
+    );
   }
 
   async getAllChats(currentUserId: string) {
