@@ -1,4 +1,5 @@
 import type { OnboardingAnswers } from "./onboarding-answers.js";
+import type { UserRole } from "./user-role.js";
 
 export type UserPayload = {
 	id: string;
@@ -6,6 +7,7 @@ export type UserPayload = {
 	lastName: string;
 	email: string;
 	profilePicture: string;
+	role: UserRole | null;
 	completedOnboarding: boolean;
 	onboardingAnswers: OnboardingAnswers;
 	resumeId: string | null;
