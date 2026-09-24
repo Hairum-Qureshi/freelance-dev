@@ -6,6 +6,7 @@ import {
   Get,
   Param,
   UploadedFiles,
+  HttpException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateChatDTO } from '../DTOs/chat.dto';
@@ -19,8 +20,6 @@ import { UseInterceptors } from '@nestjs/common';
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 
-  // TODO - need to block users from sending/starting a chat with the ADMIN user
-
   @Post('create')
   @UseGuards(AuthGuard())
   @UseInterceptors(FilesInterceptor('attachments', 5))
@@ -29,6 +28,9 @@ export class ChatController {
     @CurrentUser() currentUser: UserPayload,
     @UploadedFiles() attachments?: Express.Multer.File[],
   ) {
+    if (createChatDTO.to === '1')
+      throw new HttpException('Cannot create chat with admin user', 400);
+
     return this.chatService.createChat(
       createChatDTO,
       currentUser.id,
