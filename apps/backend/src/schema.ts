@@ -166,7 +166,7 @@ export const jobPostsTable = pgTable('jobs', {
   deliverables: text('deliverables').notNull(),
   budgetMin: integer('budget_min').notNull(),
   budgetMax: integer('budget_max').notNull(),
-  tags: text('tags')
+  skills: text('skills')
     .array()
     .notNull()
     .$default(() => []),
@@ -223,5 +223,12 @@ export const attachmentsRelations = relations(attachmentsTable, ({ one }) => ({
   message: one(messagesTable, {
     fields: [attachmentsTable.messageId],
     references: [messagesTable.id],
+  }),
+}));
+
+export const jobPostsRelations = relations(jobPostsTable, ({ one }) => ({
+  poster: one(usersTable, {
+    fields: [jobPostsTable.posterId],
+    references: [usersTable.id],
   }),
 }));
