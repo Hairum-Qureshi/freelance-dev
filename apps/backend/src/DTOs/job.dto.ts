@@ -3,6 +3,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsString,
+  Max,
   MaxLength,
   Min,
   MinLength,
@@ -67,11 +68,13 @@ export class JobPostingDTO {
 
   @IsNumber()
   @Min(5)
+  @Max(5000)
   @IsNotEmpty()
   budgetMin!: number;
 
   @IsNumber()
   @Min(5)
+  @Max(5000)
   @IsNotEmpty()
   budgetMax!: number;
 
