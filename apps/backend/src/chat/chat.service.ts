@@ -39,6 +39,43 @@ export class ChatService {
     );
   }
 
+  private async uploadAttachments(
+    attachments: Express.Multer.File[],
+    snowflake: SnowflakeId,
+    chatId: string,
+    messageId: string,
+  ) {
+    for (const attachment of attachments) {
+      const fileType =
+        attachment.mimetype === 'application/pdf' ? 'pdf' : 'image';
+      const fileName = attachment.originalname;
+
+      const uploadedFile = await this.imageKit.upload({
+        file: attachment.buffer,
+        folder: `/chats/${chatId}`,
+        fileName: fileName,
+      });
+
+      const url = uploadedFile.url;
+
+      if (!url)
+        throw new HttpException(
+          'Failed to upload attachment',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+
+      await this.db.insert(attachmentsTable).values({
+        id: snowflake.generate().toString(),
+        messageId,
+        fileName,
+        url,
+        fileType,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+    }
+  }
+
   async createChat(
     createChatDTO: CreateChatDTO,
     currentUserId: string,
@@ -89,14 +126,31 @@ export class ChatService {
       },
     ]);
 
-    await this.db.insert(messagesTable).values({
-      id: snowflake.generate().toString(),
-      chatId,
-      senderId: currentUserId,
-      message,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
+    const createdMessage = await this.db
+      .insert(messagesTable)
+      .values({
+        id: snowflake.generate().toString(),
+        chatId,
+        senderId: currentUserId,
+        message,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .returning();
+
+    await this.db
+      .update(chatsTable)
+      .set({ latestMessageId: createdMessage[0].id })
+      .where(eq(chatsTable.id, chatId));
+
+    if (attachments && attachments.length > 0) {
+      await this.uploadAttachments(
+        attachments,
+        snowflake,
+        chatId,
+        createdMessage[0].id,
+      );
+    }
   }
 
   async getAllChats(currentUserId: string) {
@@ -187,7 +241,7 @@ export class ChatService {
     currentUserId: string,
     message: string,
     attachments?: Express.Multer.File[],
-  ) {
+  ): Promise<void> {
     if (!message.trim() && !attachments?.length)
       throw new HttpException(
         'Message cannot be empty',
@@ -215,39 +269,7 @@ export class ChatService {
       .set({ latestMessageId: messageId })
       .where(eq(chatsTable.id, chatId));
 
-    // TODO - add this logic inside of the method when creating a chat
-    // TODO - make messages on the frontend handle attachments
-
-    if (attachments?.length) {
-      for (const attachment of attachments) {
-        const fileType =
-          attachment.mimetype === 'application/pdf' ? 'pdf' : 'image';
-        const fileName = attachment.originalname;
-
-        const uploadedFile = await this.imageKit.upload({
-          file: attachment.buffer,
-          folder: `/chats/${chatId}`,
-          fileName: fileName,
-        });
-
-        const url = uploadedFile.url;
-
-        if (!url)
-          throw new HttpException(
-            'Failed to upload attachment',
-            HttpStatus.INTERNAL_SERVER_ERROR,
-          );
-
-        await this.db.insert(attachmentsTable).values({
-          id: snowflake.generate().toString(),
-          messageId,
-          fileName,
-          url,
-          fileType,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        });
-      }
-    }
+    if (attachments?.length)
+      await this.uploadAttachments(attachments, snowflake, chatId, messageId);
   }
 }
