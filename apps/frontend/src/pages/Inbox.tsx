@@ -14,6 +14,7 @@ export default function Inbox() {
 	const { currUserChats } = useChat();
 
 	// TODO - add autoscroll to bottom of inbox for latest message
+	// TODO - add an ability to remove a chat from the list of chats
 
 	const location = useLocation();
 
@@ -59,7 +60,7 @@ export default function Inbox() {
 								chatId={chat.id}
 								participants={chat.participants}
 								setSelectedChat={setSelectedChat}
-								latestMessage={chat.latestMessage.message}
+								latestMessage={!chat.latestMessage.message ? "Attached file" : chat.latestMessage.message}
 							/>
 						))
 					) : (
