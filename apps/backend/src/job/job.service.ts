@@ -32,24 +32,45 @@ export class JobService {
       skills,
     } = jobPosting;
 
-    await this.db.insert(jobPostsTable).values({
-      id: snowflake.generate().toString(),
-      jobTitle,
-      businessName,
-      projectType,
-      lookingFor,
-      experienceLevel,
-      jobType,
-      paymentType,
-      workLocation,
-      region,
-      timeline,
-      projectDetails,
-      deliverables,
-      budgetMin,
-      budgetMax,
-      skills,
-      posterId,
-    } as typeof jobPostsTable.$inferInsert);
+    const [jobListing] = await this.db
+      .insert(jobPostsTable)
+      .values({
+        id: snowflake.generate().toString(),
+        jobTitle,
+        businessName,
+        projectType,
+        lookingFor,
+        experienceLevel,
+        jobType,
+        paymentType,
+        workLocation,
+        region,
+        timeline,
+        projectDetails,
+        deliverables,
+        budgetMin,
+        budgetMax,
+        skills,
+        posterId,
+      })
+      .returning();
+
+    return jobListing;
+  }
+
+  async getAllJobs() {
+    return this.db.query.jobPostsTable.findMany({
+      with: {
+        poster: {
+          columns: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            profilePicture: true,
+            email: true,
+          },
+        },
+      },
+    });
   }
 }
