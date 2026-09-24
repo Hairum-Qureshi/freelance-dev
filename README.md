@@ -163,6 +163,12 @@ GOOGLE_OAUTH_CLIENT_ID=your_google_oauth_client_id_here
 GOOGLE_OAUTH_CLIENT_SECRET=your_google_oauth_client_secret_here
 
 NEON_DB_URL=your_neon_db_url_here
+IMAGE_KIT_PUBLIC_KEY=your_image_kit_public_key_here
+IMAGE_KIT_PRIVATE_KEY=your_image_kit_private_key_here
+IMAGE_KIT_URL_ENDPOINT=your_image_kit_url_endpoint_here
+
+RESEND_API_KEY=your_resend_api_key_here
+EMAIL_FROM="noreply@yourapp.com"
 ```
 
 ### Frontend
@@ -176,11 +182,47 @@ The frontend should contain the backend URL and Google OAuth client ID:
 ```env
 VITE_BACKEND_URL=http://localhost:3000
 VITE_GOOGLE_OAUTH_CLIENT_ID=your_google_oauth_client_id_here
+VITE_IMAGE_KIT_URL_ENDPOINT=your_image_kit_url_endpoint_here
 ```
 
 Because Vite exposes variables prefixed with `VITE_` to browser code:
 
 **Never put the Google OAuth client secret in the frontend `.env` file.**
+
+---
+
+# Resend Email Setup
+
+The backend uses [Resend](https://resend.com/) to send email. You need a Resend API key and a verified sender address before email features can be used.
+
+## 1. Create a Resend Account
+
+Create an account at [Resend](https://resend.com/), then open the Resend dashboard.
+
+## 2. Verify a Sending Domain
+
+In the Resend dashboard, open **Domains** and add the domain you want to send email from. Add the DNS records Resend provides to your domain's DNS settings, then wait for the domain to be verified.
+
+For local development, use an email address and domain allowed by your Resend account. The address in `EMAIL_FROM` must be a valid sender for the verified domain.
+
+## 3. Create an API Key
+
+In the Resend dashboard:
+
+1. Open **API Keys**.
+2. Select **Create API Key**.
+3. Give the key a descriptive name, such as `freelance-dev-local`.
+4. Choose the required permission or default full access for local development.
+5. Copy the key when it is displayed. Resend only shows the complete key once.
+
+Add the key and sender address to `apps/backend/.env`:
+
+```env
+RESEND_API_KEY=your_resend_api_key_here
+EMAIL_FROM="noreply@your-verified-domain.com"
+```
+
+Keep `RESEND_API_KEY` private. Do not add it to the frontend `.env` file, commit it to source control, or expose it through a `VITE_` variable.
 
 ---
 
