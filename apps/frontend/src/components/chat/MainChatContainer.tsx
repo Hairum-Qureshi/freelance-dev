@@ -20,9 +20,16 @@ export default function MainChatContainer() {
 	const { chatMessages } = useChat();
 	const { data: currUserData } = useCurrentUser();
 	const [showSlideshowOverlay, setShowSlideshowOverlay] = useState(false);
+	const [slideshowImages, setSlideshowImages] = useState<string[]>([]);
+	const [clickedImageIndex, setClickedImageIndex] = useState<number>(0);
 
 	return showSlideshowOverlay ? (
-		<SlideShow setShowSlideshowOverlay={setShowSlideshowOverlay} />
+		<SlideShow
+			setShowSlideshowOverlay={setShowSlideshowOverlay}
+			images={slideshowImages}
+			clickedImageIndex={clickedImageIndex}
+			setClickedImageIndex={setClickedImageIndex}
+		/>
 	) : (
 		<div className="flex-1 min-h-0 overflow-y-auto">
 			{chatMessages?.map(message => {
@@ -43,6 +50,8 @@ export default function MainChatContainer() {
 									lastMessage={false}
 									postedAt={dayjs.utc(message.createdAt).fromNow()}
 									setShowSlideshowOverlay={setShowSlideshowOverlay}
+									setSlideshowImages={setSlideshowImages}
+									setClickedImageIndex={setClickedImageIndex}
 								/>
 							)}
 							{message.attachments
