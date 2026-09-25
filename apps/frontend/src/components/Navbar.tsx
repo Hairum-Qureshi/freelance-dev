@@ -46,9 +46,15 @@ export default function Navbar() {
 					Listings
 				</Link>
 
-				{currUserData?.onboardingAnswers?.role === "Hire" && (
+				{currUserData?.role === "hirer" && (
 					<Link to="/post-job" className="hover:underline">
 						Post a Job
+					</Link>
+				)}
+
+				{currUserData?.role === "hirer" && (
+					<Link to="/applicants/all" className="hover:underline">
+						All Applicants
 					</Link>
 				)}
 
