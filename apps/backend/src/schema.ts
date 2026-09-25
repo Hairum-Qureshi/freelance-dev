@@ -8,6 +8,7 @@ import {
   varchar,
   pgEnum,
   integer,
+  decimal,
 } from 'drizzle-orm/pg-core';
 import type { OnboardingAnswers } from '@repo/shared-types';
 import { relations } from 'drizzle-orm';
@@ -87,37 +88,37 @@ export const attachmentsTable = pgTable('attachments', {
 });
 
 export const projectTypeEnum = pgEnum('project_type', [
-  'website/web app',
-  'e-commerce',
-  'mobile app',
-  'api/backend',
-  'database/data',
-  'bug fix/troubleshooting',
-  'new feature',
-  'website redesign',
-  'maintenance/updates',
+  'website',
+  'ecommerce',
+  'mobile-app',
+  'api-backend',
+  'database',
+  'bug-fix',
+  'feature',
+  'redesign',
+  'maintenance',
 ]);
 
 export const lookingForEnum = pgEnum('looking_for', [
-  'frontend developer',
-  'backend developer',
-  'full-stack developer',
-  'mobile developer',
-  'ui/ux designer',
-  'graphic designer',
-  'wordpress developer',
-  'qa/software tester',
-  'data analyst',
+  'frontend-developer',
+  'backend-developer',
+  'fullstack-developer',
+  'mobile-developer',
+  'designer',
+  'graphic-designer',
+  'wordpress-developer',
+  'qa-tester',
+  'data-analyst',
 ]);
 
 export const experienceLevelEnum = pgEnum('experience_level', [
-  'beginner/learning',
+  'beginner',
   'entry',
   'intermediate',
 ]);
 
 export const jobTypeEnum = pgEnum('job_type', [
-  'one-time',
+  'freelance',
   'remote',
   'contract',
   'full-time',
@@ -131,26 +132,24 @@ export const paymentTypeEnum = pgEnum('payment_type', [
 
 export const workLocationEnum = pgEnum('work_location', [
   'remote',
-  'onsite',
+  'on-site',
   'hybrid',
 ]);
 
 export const regionEnum = pgEnum('region', [
-  'north america',
-  'south america',
+  'north-america',
+  'latin-america',
   'europe',
-  'asia',
-  'africa',
-  'australia',
-  'antarctica',
+  'middle-east-africa',
+  'asia-pacific',
 ]);
 
 export const timelineEnum = pgEnum('timeline', [
-  'as soon as possible',
-  'within 1-2 weeks',
-  'within a month',
-  'within 2-3 months',
-  'flexible timeline',
+  'asap',
+  '1-2-weeks',
+  '1-month',
+  '2-3-months',
+  'flexible',
 ]);
 
 export const jobPostsTable = pgTable('jobs', {
@@ -176,6 +175,20 @@ export const jobPostsTable = pgTable('jobs', {
   posterId: text('poster_id')
     .notNull()
     .references(() => usersTable.id),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+export const ratingsTable = pgTable('ratings', {
+  id: text().primaryKey(),
+  jobId: text('job_id')
+    .notNull()
+    .references(() => jobPostsTable.id),
+  posterId: text('user_id')
+    .notNull()
+    .references(() => usersTable.id),
+  rating: decimal({ precision: 2, scale: 1 }).notNull(),
+  comment: text('comment'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
@@ -211,6 +224,7 @@ export const messagesRelations = relations(messagesTable, ({ one, many }) => ({
 export const usersRelations = relations(usersTable, ({ many }) => ({
   participants: many(participantsTable),
   messages: many(messagesTable),
+  ratings: many(ratingsTable),
 }));
 
 export const chatsRelations = relations(chatsTable, ({ many, one }) => ({
@@ -232,6 +246,17 @@ export const attachmentsRelations = relations(attachmentsTable, ({ one }) => ({
 export const jobPostsRelations = relations(jobPostsTable, ({ one }) => ({
   poster: one(usersTable, {
     fields: [jobPostsTable.posterId],
+    references: [usersTable.id],
+  }),
+}));
+
+export const ratingsRelations = relations(ratingsTable, ({ one }) => ({
+  job: one(jobPostsTable, {
+    fields: [ratingsTable.jobId],
+    references: [jobPostsTable.id],
+  }),
+  poster: one(usersTable, {
+    fields: [ratingsTable.posterId],
     references: [usersTable.id],
   }),
 }));
