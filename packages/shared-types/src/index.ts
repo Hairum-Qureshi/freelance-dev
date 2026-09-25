@@ -14,3 +14,4 @@ export type { Participant } from "./types/participant.js";
 export type { Attachment } from "./types/attachment.js";
 export type { FileAttachment } from "./types/file-attachment.js";
 export type { JobPayload } from "./types/job-payload.js";
+export type { ApplicationPayload } from "./types/application-payload.js";
