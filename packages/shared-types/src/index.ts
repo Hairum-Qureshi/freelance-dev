@@ -13,3 +13,4 @@ export type { ChatPayload } from "./types/chat-payload.js";
 export type { Participant } from "./types/participant.js";
 export type { Attachment } from "./types/attachment.js";
 export type { FileAttachment } from "./types/file-attachment.js";
+export type { JobPayload } from "./types/job-payload.js";
