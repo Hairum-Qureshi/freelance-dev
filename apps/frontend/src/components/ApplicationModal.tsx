@@ -68,7 +68,8 @@ export default function ApplicationModal({
 					<button
 						type="button"
 						className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:cursor-pointer"
-						onClick={() => {
+						onClick={e => {
+							e.stopPropagation();
 							if (confirm("Are you sure you want to cancel your application?"))
 								setShowModal(false);
 						}}
@@ -79,7 +80,10 @@ export default function ApplicationModal({
 					<button
 						type="button"
 						className="rounded-lg bg-black px-5 py-2 text-sm font-medium text-white transition hover:bg-gray-800 hover:cursor-pointer"
-						onClick={() => setShowModal(false)}
+						onClick={e => {
+							e.stopPropagation();
+							setShowModal(false);
+						}}
 					>
 						Submit Application
 					</button>
