@@ -229,7 +229,7 @@ export default function AdCard({ job }: { job: JobPayload }) {
 						currUserData?.id !== job.posterId && (
 							/* Apply */
 							<button
-								className="whitespace-nowrap rounded-lg bg-black px-4 py-2 text-sm font-medium text-white transition-all hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 active:scale-[0.98]"
+								className="whitespace-nowrap rounded-lg bg-black px-4 py-2 text-sm font-medium text-white transition-all hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 active:scale-[0.98] hover:cursor-pointer"
 								onClick={() => setShowModal(true)}
 							>
 								Apply
