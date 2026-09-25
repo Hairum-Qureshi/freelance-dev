@@ -37,7 +37,27 @@ export class JobController {
     @Param('jobId') jobId: string,
     @CurrentUser() currentUser: UserPayload,
     @Body('proposal') proposal: string,
+    @Body('posterId') posterId: string,
   ) {
-    return this.jobService.applyToJob(jobId, currentUser.id, proposal);
+    return this.jobService.applyToJob(
+      jobId,
+      currentUser.id,
+      proposal,
+      posterId,
+    );
+  }
+
+  @Get('applications/all')
+  @UseGuards(AuthGuard())
+  async getAllSubmittedApplications(@CurrentUser() currentUser: UserPayload) {
+    return this.jobService.viewAllUserApplications({
+      currentUserId: currentUser.id,
+    });
+  }
+
+  @Get('applications/:jobId')
+  @UseGuards(AuthGuard())
+  async getApplicationsForJob(@Param('jobId') jobId: string) {
+    // return this.jobService.getApplicationsForJob(jobId);
   }
 }
