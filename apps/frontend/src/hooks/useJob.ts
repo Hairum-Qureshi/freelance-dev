@@ -38,7 +38,7 @@ export default function useJob() {
 			budgetMin: string;
 			budgetMax: string;
 			skills: string[];
-		}): Promise<void> => {
+		}): Promise<{ jobID: string }> => {
 			const allFieldsFilled = [
 				jobTitle,
 				businessName,
@@ -57,46 +57,40 @@ export default function useJob() {
 			];
 
 			if (allFieldsFilled.some(field => !field.trim())) {
-				alert("All fields must be filled");
-				return;
+				throw new Error("All fields must be filled");
 			}
 
 			if (skills.length === 0) {
-				alert("At least one skill must be specified");
-				return;
+				throw new Error("At least one skill must be specified");
 			}
 
 			if (parseFloat(budgetMin) > parseFloat(budgetMax)) {
-				alert("Minimum budget cannot be greater than maximum budget");
-				return;
+				throw new Error("Minimum budget cannot be greater than maximum budget");
 			}
 
 			if (parseFloat(budgetMin) < 0) {
-				alert("Minimum budget cannot be negative");
-				return;
+				throw new Error("Minimum budget cannot be negative");
 			}
 
 			if (parseFloat(budgetMax) < 0) {
-				alert("Maximum budget cannot be negative");
-				return;
+				throw new Error("Maximum budget cannot be negative");
 			}
 
 			if (jobTitle.length < 10 || jobTitle.length > 100) {
-				alert("Job title must be between 10 and 100 characters");
-				return;
+				throw new Error("Job title must be between 10 and 100 characters");
 			}
 
 			if (projectDetails.length < 20 || projectDetails.length > 1000) {
-				alert("Project details must be between 20 and 1000 characters");
-				return;
+				throw new Error(
+					"Project details must be between 20 and 1000 characters"
+				);
 			}
 
 			if (deliverables.length < 20 || deliverables.length > 1000) {
-				alert("Deliverables must be between 20 and 1000 characters");
-				return;
+				throw new Error("Deliverables must be between 20 and 1000 characters");
 			}
 
-			await axios.post(
+			const response = await axios.post(
 				`${import.meta.env.VITE_BACKEND_URL}/api/job/create`,
 				{
 					jobTitle,
@@ -119,16 +113,11 @@ export default function useJob() {
 					withCredentials: true
 				}
 			);
+
+			return response.data;
 		},
-		onSuccess: listingID => {
-			console.log(">>>>", listingID);
-			// queryClient.invalidateQueries({
-			// 	queryKey: ["chats"]
-			// });
-			// queryClient.invalidateQueries({
-			// 	queryKey: ["messages", chatID]
-			// });
-			// navigate(`/inbox/c/${chatID}`);
+		onSuccess: (response: { jobID: string }) => {
+			if (response.jobID) navigate(`/listing/${response.jobID}`);
 		}
 	});
 
