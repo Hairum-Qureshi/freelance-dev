@@ -296,4 +296,26 @@ export class ChatService {
     if (attachments?.length)
       await this.uploadAttachments(attachments, snowflake, chatId, messageId);
   }
+
+  async getChatParticipants(chatId: string) {
+    const participants = await this.db.query.participantsTable.findMany({
+      where: (chatParticipants, { eq }) => eq(chatParticipants.chatId, chatId),
+      with: {
+        user: {
+          columns: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            profilePicture: true,
+            onboardingAnswers: true,
+          },
+        },
+      },
+    });
+
+    // EXCLUDES the admin user with userId '1'
+    return participants.length
+      ? participants.filter((participant) => participant.userId !== '1')
+      : [];
+  }
 }
