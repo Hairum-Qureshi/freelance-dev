@@ -4,7 +4,6 @@ import { applicationsTable } from 'src/schema';
 import SnowflakeId from 'snowflake-id';
 import { JobPostingDTO } from 'src/DTOs/job.dto';
 import { jobPostsTable } from 'src/schema';
-import { eq, and } from 'drizzle-orm/sql/expressions/conditions';
 
 @Injectable()
 export class JobService {
@@ -129,18 +128,7 @@ export class JobService {
 
   async viewAllUserApplications({ currentUserId }: { currentUserId: string }) {
     return this.db.query.applicationsTable.findMany({
-      where: (applications, { exists }) =>
-        exists(
-          this.db
-            .select()
-            .from(jobPostsTable)
-            .where(
-              and(
-                eq(jobPostsTable.id, applications.jobId),
-                eq(jobPostsTable.posterId, currentUserId),
-              ),
-            ),
-        ),
+      where: (applications, { eq }) => eq(applications.posterId, currentUserId),
       with: {
         applicant: {
           columns: {
