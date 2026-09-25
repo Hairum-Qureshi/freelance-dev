@@ -212,6 +212,9 @@ export const applicationsTable = pgTable(
     status: applicationStatus('status')
       .notNull()
       .$default(() => 'pending'),
+    posterId: text('poster_id')
+      .notNull()
+      .references(() => usersTable.id),
     createdAt: timestamp('created_at').defaultNow(),
     updatedAt: timestamp('updated_at').defaultNow(),
   },
