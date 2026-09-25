@@ -1,8 +1,10 @@
 import type { ChatPayload, JobPayload } from "@repo/shared-types";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { simpleflake } from "simpleflakes";
 import useChat from "../hooks/useChat";
 import { useCurrentUser } from "../hooks/useCurrentUser";
+import { FaRegEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 export default function AdCard({ job }: { job: JobPayload }) {
 	const postedDate = new Date(job.createdAt).toLocaleDateString();
@@ -10,6 +12,7 @@ export default function AdCard({ job }: { job: JobPayload }) {
 	const navigate = useNavigate();
 	const { currUserChats } = useChat();
 	const { data: currUserData } = useCurrentUser();
+	const location = useLocation();
 
 	const hasChatWithPoster =
 		currUserChats?.filter((chat: ChatPayload) =>
@@ -182,33 +185,41 @@ export default function AdCard({ job }: { job: JobPayload }) {
 
 				<div className="flex flex-wrap justify-end gap-2">
 					{/* View Posting */}
-					<button
-						className="whitespace-nowrap rounded-lg bg-black px-4 py-2 text-sm font-medium text-white transition-all hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 active:scale-[0.98] hover:cursor-pointer"
-						onClick={() => navigate(`/listing/${job.id}`)}
-					>
-						View Posting
-					</button>
+					{!location.pathname.includes("listing") && (
+						<button
+							className="whitespace-nowrap rounded-lg bg-black px-4 py-2 text-sm font-medium text-white transition-all hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 active:scale-[0.98] hover:cursor-pointer"
+							onClick={() => navigate(`/listing/${job.id}`)}
+						>
+							View Posting
+						</button>
+					)}
 
 					{currUserData?.id === job.posterId && (
-						<>
+						<div className="mx-2 flex space-x-2">
 							{/* Edit Posting */}
-							<button className="whitespace-nowrap rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-800 transition-colors hover:border-gray-400 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 active:scale-[0.98] hover:cursor-pointer">
-								Edit Posting
+							<button
+								aria-label="Edit posting"
+								className="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-300 bg-white text-xl text-gray-700 transition-colors hover:border-gray-400 hover:bg-gray-50 hover:text-black focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 active:scale-95 hover:cursor-pointer"
+							>
+								<FaRegEdit />
 							</button>
 
 							{/* Delete Posting */}
-							<button className="whitespace-nowrap rounded-lg border border-red-200 bg-white px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 active:scale-[0.98] hover:cursor-pointer">
-								Delete Posting
+							<button
+								aria-label="Delete posting"
+								className="flex h-10 w-10 items-center justify-center rounded-lg border border-red-200 bg-white text-xl text-red-600 transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 active:scale-95 hover:cursor-pointer"
+							>
+								<MdDelete />
 							</button>
 
 							{/* View Applicants */}
 							<button
-								className="whitespace-nowrap rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-800 transition-colors hover:border-gray-400 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 active:scale-[0.98] "
+								className="whitespace-nowrap rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-800 transition-colors hover:border-gray-400 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 active:scale-[0.98] hover:cursor-pointer"
 								onClick={() => navigate(`/applicants/${job.id}/all`)}
 							>
 								View Applicants
 							</button>
-						</>
+						</div>
 					)}
 
 					{currUserData?.role === "freelancer" &&
