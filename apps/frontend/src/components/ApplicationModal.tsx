@@ -1,4 +1,3 @@
-import { IoMdClose } from "react-icons/io";
 import { useState } from "react";
 
 export default function ApplicationModal({
@@ -21,15 +20,6 @@ export default function ApplicationModal({
 							Tell the client briefly why you're a good fit.
 						</p>
 					</div>
-
-					<button
-						type="button"
-						className="rounded-md p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900"
-						onClick={() => setShowModal(false)}
-						aria-label="Close application modal"
-					>
-						<IoMdClose className="text-xl" />
-					</button>
 				</div>
 
 				{/* Content */}
