@@ -195,7 +195,10 @@ export default function AdCard({ job }: { job: JobPayload }) {
 							<button className="rounded-lg bg-red-700 px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-red-600">
 								Delete Posting
 							</button>
-							<button className="rounded-lg bg-slate-700 px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-slate-600">
+							<button
+								className="rounded-lg bg-slate-700 px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-slate-600"
+								onClick={() => navigate(`/applicants/${job.id}/all`)}
+							>
 								View Applicants
 							</button>
 						</>
