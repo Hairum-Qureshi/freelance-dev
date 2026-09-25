@@ -20,6 +20,8 @@ import Listings from "../pages/Listings";
 import Listing from "../pages/Listing";
 import TermsOfService from "../pages/TermsOfService";
 import PrivacyPolicy from "../pages/PrivacyPolicy";
+import Applicants from "../pages/Applicants";
+import JobApplicants from "../pages/JobApplicants";
 
 export default function App() {
 	return (
@@ -42,7 +44,10 @@ export default function App() {
 					<Route path="/inbox/c/:chatID" element={<Inbox />} />
 					<Route path="/listings" element={<Listings />} />
 					<Route path="/listing/:jobID" element={<Listing />} />
+					{/* <Route path="/listing/:edit" element={<EditJob />} /> */}
 					<Route path="/privacy-policy" element={<PrivacyPolicy />} />
+					<Route path="/applicants/all" element={<Applicants />} />
+					<Route path="/applicants/:jobID/all" element={<JobApplicants />} />
 					<Route path="/terms-of-service" element={<TermsOfService />} />
 					<Route
 						path="/onboarding"
