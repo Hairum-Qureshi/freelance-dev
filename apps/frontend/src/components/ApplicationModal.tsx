@@ -71,15 +71,18 @@ export default function ApplicationModal({
 				<div className="flex justify-end gap-3 border-t border-gray-200 px-6 py-4">
 					<button
 						type="button"
-						className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
-						onClick={() => setShowModal(false)}
+						className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:cursor-pointer"
+						onClick={() => {
+							if (confirm("Are you sure you want to cancel your application?"))
+								setShowModal(false);
+						}}
 					>
 						Cancel
 					</button>
 
 					<button
 						type="button"
-						className="rounded-lg bg-black px-5 py-2 text-sm font-medium text-white transition hover:bg-gray-800"
+						className="rounded-lg bg-black px-5 py-2 text-sm font-medium text-white transition hover:bg-gray-800 hover:cursor-pointer"
 						onClick={() => setShowModal(false)}
 					>
 						Submit Application
