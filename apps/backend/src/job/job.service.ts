@@ -55,11 +55,28 @@ export class JobService {
       })
       .returning();
 
-    return jobListing;
+    return { jobID: jobListing.id };
   }
 
   async getAllJobs() {
     return this.db.query.jobPostsTable.findMany({
+      with: {
+        poster: {
+          columns: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            profilePicture: true,
+            email: true,
+          },
+        },
+      },
+    });
+  }
+
+  async getJobData(jobId: string) {
+    return this.db.query.jobPostsTable.findFirst({
+      where: (jobPosts, { eq }) => eq(jobPosts.id, jobId),
       with: {
         poster: {
           columns: {
