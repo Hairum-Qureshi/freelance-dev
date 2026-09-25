@@ -5,7 +5,7 @@ import useApplication from "../hooks/useApplication";
 import type { ChatPayload, JobPayload } from "@repo/shared-types";
 import useChat from "../hooks/useChat";
 import { simpleflake } from "simpleflakes";
-import SidePanel from "../components/SidePanel";
+import JobDetailsSidePanel from "../components/JobDetailsSidePanel";
 
 export default function Applications() {
 	const [status, setStatus] = useState("all");
@@ -32,7 +32,7 @@ export default function Applications() {
 	return (
 		<div className="min-h-screen bg-white px-4 py-8 relative">
 			{selectedJob && (
-				<SidePanel
+				<JobDetailsSidePanel
 					selectedJob={selectedJob}
 					setSelectedJob={setSelectedJob}
 					setShowJobPanel={setShowJobPanel}
