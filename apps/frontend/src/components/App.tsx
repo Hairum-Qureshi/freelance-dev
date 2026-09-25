@@ -41,7 +41,7 @@ export default function App() {
 					<Route path="/inbox" element={<Inbox />} />
 					<Route path="/inbox/c/:chatID" element={<Inbox />} />
 					<Route path="/listings" element={<Listings />} />
-					<Route path="/listing/:listingID" element={<Listing />} />
+					<Route path="/listing/:jobID" element={<Listing />} />
 					<Route path="/privacy-policy" element={<PrivacyPolicy />} />
 					<Route path="/terms-of-service" element={<TermsOfService />} />
 					<Route
