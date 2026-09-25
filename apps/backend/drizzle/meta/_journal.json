@@ -113,6 +113,13 @@
       "when": 1790296232981,
       "tag": "0015_long_weapon_omega",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1790309916189,
+      "tag": "0016_marvelous_psylocke",
+      "breakpoints": true
     }
   ]
 }
