@@ -1,4 +1,5 @@
 import { useState } from "react";
+import useJob from "../hooks/useJob";
 
 export default function ApplicationModal({
 	setShowModal
@@ -6,6 +7,7 @@ export default function ApplicationModal({
 	setShowModal: (show: boolean) => void;
 }) {
 	const [applicationReason, setApplicationReason] = useState("");
+	const { applyToJobMutation } = useJob();
 
 	return (
 		<div
@@ -46,6 +48,7 @@ export default function ApplicationModal({
 							maxLength={600}
 							value={applicationReason}
 							onChange={e => setApplicationReason(e.target.value)}
+							onClick={e => e.stopPropagation()}
 						/>
 						<p className="text-xs text-gray-500 w-full flex justify-end">
 							{applicationReason.length}/600 characters
@@ -82,6 +85,7 @@ export default function ApplicationModal({
 						className="rounded-lg bg-black px-5 py-2 text-sm font-medium text-white transition hover:bg-gray-800 hover:cursor-pointer"
 						onClick={e => {
 							e.stopPropagation();
+							applyToJobMutation.mutate(applicationReason);
 							setShowModal(false);
 						}}
 					>
