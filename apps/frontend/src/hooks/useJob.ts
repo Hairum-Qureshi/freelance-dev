@@ -1,9 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
+import type { JobPayload } from "@repo/shared-types";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function useJob() {
 	const navigate = useNavigate();
+	const { jobID } = useParams();
 
 	const postJobListingMutation = useMutation({
 		mutationFn: async ({
@@ -121,5 +123,33 @@ export default function useJob() {
 		}
 	});
 
-	return { postJobListingMutation };
+	const { data: allJobs } = useQuery({
+		queryKey: ["jobs"],
+		queryFn: async () => {
+			const response = await axios.get<JobPayload[]>(
+				`${import.meta.env.VITE_BACKEND_URL}/api/job/all`,
+				{
+					withCredentials: true
+				}
+			);
+			return response.data;
+		}
+	});
+
+	const { data: job } = useQuery({
+		queryKey: ["job", jobID],
+		queryFn: async () => {
+			if (!jobID) return;
+
+			const response = await axios.get<JobPayload>(
+				`${import.meta.env.VITE_BACKEND_URL}/api/job/${jobID}`,
+				{
+					withCredentials: true
+				}
+			);
+			return response.data;
+		}
+	});
+
+	return { postJobListingMutation, allJobs, job };
 }
