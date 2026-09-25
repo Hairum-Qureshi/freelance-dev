@@ -185,7 +185,7 @@ export default function AdCard({ job }: { job: JobPayload }) {
 
 				<div className="flex flex-wrap justify-end gap-2">
 					{/* View Posting */}
-					{!location.pathname.includes("listing") && (
+					{!location.pathname.split("/").includes("listing") && (
 						<button
 							className="whitespace-nowrap rounded-lg bg-black px-4 py-2 text-sm font-medium text-white transition-all hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 active:scale-[0.98] hover:cursor-pointer"
 							onClick={() => navigate(`/listing/${job.id}`)}
