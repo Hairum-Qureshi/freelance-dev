@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import useApplication from "../hooks/useApplication";
 import type { ChatPayload } from "@repo/shared-types";
@@ -175,21 +175,21 @@ export default function Applications() {
 											</td>
 
 											<td className="whitespace-nowrap px-6 py-4">
-												<a
-													href={`/jobs/${application.jobId}`}
+												<Link
+													to={`/jobs/${application.jobId}`}
 													className="rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-100"
 												>
 													View Job
-												</a>
+												</Link>
 											</td>
 
 											<td className="whitespace-nowrap px-6 py-4">
-												<a
-													href={`/applications/${application.id}`}
+												<Link
+													to={`/applications/${application.id}`}
 													className="rounded-md border border-slate-900 bg-slate-900 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-slate-700"
 												>
-													View
-												</a>
+													View Application
+												</Link>
 											</td>
 										</tr>
 									</tbody>
