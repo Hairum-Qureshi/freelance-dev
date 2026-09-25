@@ -73,6 +73,10 @@ export default function PostJob() {
 									onChange={e => setJobTitle(e.target.value)}
 									className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-black placeholder:text-gray-500 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
 								/>
+								<p className="text-xs text-gray-500">
+									Title must be at least 10 characters long and no more than 100
+									characters.
+								</p>
 							</div>
 
 							<div>
