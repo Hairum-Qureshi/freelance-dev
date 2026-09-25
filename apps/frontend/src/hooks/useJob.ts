@@ -21,8 +21,8 @@ export default function useJob() {
 			timeline,
 			projectDetails,
 			deliverables,
-			budgetMin,
-			budgetMax,
+			salaryMin,
+			salaryMax,
 			skills
 		}: {
 			jobTitle: string;
@@ -37,8 +37,8 @@ export default function useJob() {
 			timeline: string;
 			projectDetails: string;
 			deliverables: string;
-			budgetMin: string;
-			budgetMax: string;
+			salaryMin: string;
+			salaryMax: string;
 			skills: string[];
 		}): Promise<{ jobID: string }> => {
 			const allFieldsFilled = [
@@ -54,8 +54,8 @@ export default function useJob() {
 				timeline,
 				projectDetails,
 				deliverables,
-				budgetMin,
-				budgetMax
+				salaryMin,
+				salaryMax
 			];
 
 			if (allFieldsFilled.some(field => !field.trim())) {
@@ -66,15 +66,15 @@ export default function useJob() {
 				throw new Error("At least one skill must be specified");
 			}
 
-			if (parseInt(budgetMin) > parseInt(budgetMax)) {
+			if (parseInt(salaryMin) > parseInt(salaryMax)) {
 				throw new Error("Minimum budget cannot be greater than maximum budget");
 			}
 
-			if (parseInt(budgetMin) < 0) {
+			if (parseInt(salaryMin) < 0) {
 				throw new Error("Minimum budget cannot be negative");
 			}
 
-			if (parseInt(budgetMax) < 0) {
+			if (parseInt(salaryMax) < 0) {
 				throw new Error("Maximum budget cannot be negative");
 			}
 
@@ -107,8 +107,8 @@ export default function useJob() {
 					timeline,
 					projectDetails,
 					deliverables,
-					budgetMin: parseInt(budgetMin),
-					budgetMax: parseInt(budgetMax),
+					salaryMin: parseInt(salaryMin),
+					salaryMax: parseInt(salaryMax),
 					skills: Array.from(new Set(skills))
 				},
 				{

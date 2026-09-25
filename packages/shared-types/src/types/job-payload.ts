@@ -12,8 +12,8 @@ export type JobPayload = {
 	timeline: string;
 	projectDetails: string;
 	deliverables: string;
-	budgetMin: number;
-	budgetMax: number;
+	salaryMin: number;
+	salaryMax: number;
 	skills: string[];
 	posterId: string;
 	poster: {

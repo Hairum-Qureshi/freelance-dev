@@ -166,8 +166,8 @@ export const jobPostsTable = pgTable('jobs', {
   timeline: timelineEnum('timeline').notNull(),
   projectDetails: text('project_details').notNull(),
   deliverables: text('deliverables').notNull(),
-  budgetMin: integer('budget_min').notNull(),
-  budgetMax: integer('budget_max').notNull(),
+  salaryMin: integer('budget_min').notNull(),
+  salaryMax: integer('budget_max').notNull(),
   skills: text('skills')
     .array()
     .notNull()

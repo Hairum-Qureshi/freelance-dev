@@ -25,12 +25,13 @@ export default function Onboarding() {
 				{
 					text: "Hire",
 					nextText: 2,
-					onClick: () => setOnboardData({ ...onboardingData, role: "Hire" })
+					onClick: () => setOnboardData({ ...onboardingData, role: "hirer" })
 				},
 				{
 					text: "Work",
 					nextText: 4,
-					onClick: () => setOnboardData({ ...onboardingData, role: "Work" })
+					onClick: () =>
+						setOnboardData({ ...onboardingData, role: "freelancer" })
 				}
 			]
 		},

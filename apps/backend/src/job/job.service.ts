@@ -27,8 +27,8 @@ export class JobService {
       timeline,
       projectDetails,
       deliverables,
-      budgetMin,
-      budgetMax,
+      salaryMin,
+      salaryMax,
       skills,
     } = jobPosting;
 
@@ -48,8 +48,8 @@ export class JobService {
         timeline,
         projectDetails,
         deliverables,
-        budgetMin,
-        budgetMax,
+        salaryMin,
+        salaryMax,
         skills,
         posterId,
       })

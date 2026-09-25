@@ -14,8 +14,8 @@ export default function PostJob() {
 	const [timeline, setTimeline] = useState("");
 	const [projectDetails, setProjectDetails] = useState("");
 	const [deliverables, setDeliverables] = useState("");
-	const [budgetMin, setBudgetMin] = useState("");
-	const [budgetMax, setBudgetMax] = useState("");
+	const [salaryMin, setSalaryMin] = useState("");
+	const [salaryMax, setSalaryMax] = useState("");
 	const [skills, setSkills] = useState<string[]>([]);
 
 	const { postJobListingMutation } = useJob();
@@ -53,8 +53,8 @@ export default function PostJob() {
 								timeline,
 								projectDetails,
 								deliverables,
-								budgetMin,
-								budgetMax,
+								salaryMin,
+								salaryMax,
 								skills
 							});
 						}}
@@ -352,8 +352,8 @@ export default function PostJob() {
 											placeholder="Minimum"
 											min={5}
 											max={5000}
-											value={budgetMin}
-											onChange={e => setBudgetMin(e.target.value)}
+											value={salaryMin}
+											onChange={e => setSalaryMin(e.target.value)}
 											className="w-full rounded-xl border border-gray-300 bg-white py-3 pl-8 pr-4 text-sm text-black placeholder:text-gray-500 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
 										/>
 									</div>
@@ -373,8 +373,8 @@ export default function PostJob() {
 											placeholder="Maximum"
 											min={5}
 											max={5000}
-											value={budgetMax}
-											onChange={e => setBudgetMax(e.target.value)}
+											value={salaryMax}
+											onChange={e => setSalaryMax(e.target.value)}
 											className="w-full rounded-xl border border-gray-300 bg-white py-3 pl-8 pr-4 text-sm text-black placeholder:text-gray-500 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
 										/>
 									</div>

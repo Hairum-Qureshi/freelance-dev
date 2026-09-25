@@ -17,7 +17,7 @@ export default function Settings() {
 	const onboardingAnswers = currentUser?.onboardingAnswers;
 	const skills = onboardingAnswers?.technologies ?? [];
 
-	const isWorker = onboardingAnswers?.role === "Work";
+	const isWorker = currentUser?.role === "freelancer";
 
 	const inputClassName =
 		"mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm";
@@ -61,7 +61,9 @@ export default function Settings() {
 			...onboardingAnswers,
 
 			role:
-				(formData.get("role") as "Hire" | "Work") ?? onboardingAnswers?.role,
+				(formData.get("role") as "hirer" | "freelancer") ??
+				currentUser?.role ??
+				null,
 
 			hirerTitle: String(
 				formData.get("hirerTitle") ?? onboardingAnswers?.hirerTitle ?? ""
@@ -386,7 +388,7 @@ export default function Settings() {
 										<input
 											type="radio"
 											name="role"
-											value="Work"
+											value="freelancer"
 											defaultChecked={isWorker}
 										/>
 
@@ -405,7 +407,7 @@ export default function Settings() {
 										<input
 											type="radio"
 											name="role"
-											value="Hire"
+											value="hirer"
 											defaultChecked={!isWorker}
 										/>
 
