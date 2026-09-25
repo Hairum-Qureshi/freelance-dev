@@ -140,8 +140,9 @@ export default function AdCard({ job }: { job: JobPayload }) {
 								know before getting started.
 							</p>
 						</div>
+
 						<button
-							className="shrink-0 rounded-lg bg-black px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-gray-800"
+							className="shrink-0 rounded-lg border border-black bg-white px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 active:scale-[0.98] hover:cursor-pointer"
 							onClick={() =>
 								hasChatWithPoster.length
 									? navigate(`/inbox/c/${hasChatWithPoster[0].id}`)
@@ -179,9 +180,10 @@ export default function AdCard({ job }: { job: JobPayload }) {
 					</div>
 				</div>
 
-				<div className="flex gap-2">
+				<div className="flex flex-wrap justify-end gap-2">
+					{/* View Posting */}
 					<button
-						className="rounded-lg bg-black px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-gray-800"
+						className="whitespace-nowrap rounded-lg bg-black px-4 py-2 text-sm font-medium text-white transition-all hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 active:scale-[0.98] hover:cursor-pointer"
 						onClick={() => navigate(`/listing/${job.id}`)}
 					>
 						View Posting
@@ -189,14 +191,19 @@ export default function AdCard({ job }: { job: JobPayload }) {
 
 					{currUserData?.id === job.posterId && (
 						<>
-							<button className="rounded-lg bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-blue-600">
+							{/* Edit Posting */}
+							<button className="whitespace-nowrap rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-800 transition-colors hover:border-gray-400 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 active:scale-[0.98] hover:cursor-pointer">
 								Edit Posting
 							</button>
-							<button className="rounded-lg bg-red-700 px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-red-600">
+
+							{/* Delete Posting */}
+							<button className="whitespace-nowrap rounded-lg border border-red-200 bg-white px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 active:scale-[0.98] hover:cursor-pointer">
 								Delete Posting
 							</button>
+
+							{/* View Applicants */}
 							<button
-								className="rounded-lg bg-slate-700 px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-slate-600"
+								className="whitespace-nowrap rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-800 transition-colors hover:border-gray-400 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 active:scale-[0.98] "
 								onClick={() => navigate(`/applicants/${job.id}/all`)}
 							>
 								View Applicants
@@ -206,7 +213,8 @@ export default function AdCard({ job }: { job: JobPayload }) {
 
 					{currUserData?.role === "freelancer" &&
 						currUserData?.id !== job.posterId && (
-							<button className="rounded-lg bg-green-700 px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-green-600">
+							/* Apply */
+							<button className="whitespace-nowrap rounded-lg bg-black px-4 py-2 text-sm font-medium text-white transition-all hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 active:scale-[0.98]">
 								Apply
 							</button>
 						)}
