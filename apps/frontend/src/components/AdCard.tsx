@@ -126,31 +126,33 @@ export default function AdCard({ job }: { job: JobPayload }) {
 			</div>
 
 			{/* Contact Section */}
-			<div className="mt-6 rounded-lg border border-gray-200 bg-gray-50 p-4">
-				<div className="flex items-start justify-between gap-4">
-					<div>
-						<h3 className="text-sm font-semibold text-black">
-							Have questions about this project?
-						</h3>
+			{currUserData?.id !== job.posterId && (
+				<div className="mt-6 rounded-lg border border-gray-200 bg-gray-50 p-4">
+					<div className="flex items-start justify-between gap-4">
+						<div>
+							<h3 className="text-sm font-semibold text-black">
+								Have questions about this project?
+							</h3>
 
-						<p className="mt-1 text-sm leading-5 text-gray-600">
-							Contact {job.poster.firstName} for more details about the project,
-							requirements, timeline, or anything else you'd like to know before
-							getting started.
-						</p>
+							<p className="mt-1 text-sm leading-5 text-gray-600">
+								Contact {job.poster.firstName} for more details about the
+								project, requirements, timeline, or anything else you'd like to
+								know before getting started.
+							</p>
+						</div>
+						<button
+							className="shrink-0 rounded-lg bg-black px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-gray-800"
+							onClick={() =>
+								hasChatWithPoster.length
+									? navigate(`/inbox/c/${hasChatWithPoster[0].id}`)
+									: navigate(`/inbox/c/${chatId}?to=${job.posterId}`)
+							}
+						>
+							Contact
+						</button>
 					</div>
-					<button
-						className="shrink-0 rounded-lg bg-black px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-gray-800"
-						onClick={() =>
-							hasChatWithPoster.length
-								? navigate(`/inbox/c/${hasChatWithPoster[0].id}`)
-								: navigate(`/inbox/c/${chatId}?to=${job.posterId}`)
-						}
-					>
-						Contact
-					</button>
 				</div>
-			</div>
+			)}
 
 			{/* Poster */}
 			<div className="mt-5 flex items-center justify-between border-t border-gray-100 pt-4">
@@ -185,11 +187,26 @@ export default function AdCard({ job }: { job: JobPayload }) {
 						View Posting
 					</button>
 
-					{currUserData?.role === "freelancer" && (
-						<button className="rounded-lg bg-green-700 px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-green-600">
-							Apply
-						</button>
+					{currUserData?.id === job.posterId && (
+						<>
+							<button className="rounded-lg bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-blue-600">
+								Edit Posting
+							</button>
+							<button className="rounded-lg bg-red-700 px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-red-600">
+								Delete Posting
+							</button>
+							<button className="rounded-lg bg-slate-700 px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-slate-600">
+								View Applicants
+							</button>
+						</>
 					)}
+
+					{currUserData?.role === "freelancer" &&
+						currUserData?.id !== job.posterId && (
+							<button className="rounded-lg bg-green-700 px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-green-600">
+								Apply
+							</button>
+						)}
 				</div>
 			</div>
 		</div>
