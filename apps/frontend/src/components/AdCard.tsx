@@ -5,6 +5,8 @@ import useChat from "../hooks/useChat";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { useState } from "react";
+import ApplicationModal from "./ApplicationModal";
 
 export default function AdCard({ job }: { job: JobPayload }) {
 	const postedDate = new Date(job.createdAt).toLocaleDateString();
@@ -13,6 +15,7 @@ export default function AdCard({ job }: { job: JobPayload }) {
 	const { currUserChats } = useChat();
 	const { data: currUserData } = useCurrentUser();
 	const location = useLocation();
+	const [showModal, setShowModal] = useState(false);
 
 	const hasChatWithPoster =
 		currUserChats?.filter((chat: ChatPayload) =>
@@ -23,7 +26,7 @@ export default function AdCard({ job }: { job: JobPayload }) {
 
 	return (
 		<div className="rounded-xl border border-gray-200 bg-white p-6 transition hover:border-gray-400">
-			{/* Header */}
+			{showModal && <ApplicationModal setShowModal={setShowModal} />}
 			<div className="flex items-start justify-between gap-6">
 				<div className="min-w-0">
 					<h2 className="text-lg font-semibold text-black">{job.jobTitle}</h2>
@@ -225,7 +228,10 @@ export default function AdCard({ job }: { job: JobPayload }) {
 					{currUserData?.role === "freelancer" &&
 						currUserData?.id !== job.posterId && (
 							/* Apply */
-							<button className="whitespace-nowrap rounded-lg bg-black px-4 py-2 text-sm font-medium text-white transition-all hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 active:scale-[0.98]">
+							<button
+								className="whitespace-nowrap rounded-lg bg-black px-4 py-2 text-sm font-medium text-white transition-all hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 active:scale-[0.98]"
+								onClick={() => setShowModal(true)}
+							>
 								Apply
 							</button>
 						)}
