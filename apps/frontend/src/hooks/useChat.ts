@@ -1,7 +1,7 @@
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { ChatPayload, Message } from "@repo/shared-types";
+import type { ChatPayload, Message, Participant } from "@repo/shared-types";
 
 export default function useChat() {
 	const queryClient = useQueryClient();
@@ -113,10 +113,26 @@ export default function useChat() {
 		}
 	});
 
+	const { data: chatParticipants } = useQuery({
+		queryKey: ["participants", chatID],
+		queryFn: async () => {
+			if (!chatID) return [];
+
+			const response = await axios.get<Participant[]>(
+				`${import.meta.env.VITE_BACKEND_URL}/api/chat/${chatID}/participants`,
+				{
+					withCredentials: true
+				}
+			);
+			return response.data;
+		}
+	});
+
 	return {
 		createChatMutation,
 		createMessageMutation,
 		currUserChats,
-		chatMessages
+		chatMessages,
+		chatParticipants
 	};
 }
