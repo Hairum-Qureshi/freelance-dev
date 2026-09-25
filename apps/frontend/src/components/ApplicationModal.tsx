@@ -17,7 +17,10 @@ export default function ApplicationModal({
 					setShowModal(false);
 			}}
 		>
-			<div className="w-full max-w-xl rounded-xl border border-gray-200 bg-white shadow-xl">
+			<div
+				className="w-full max-w-xl rounded-xl border border-gray-200 bg-white shadow-xl"
+				onClick={e => e.stopPropagation()}
+			>
 				{/* Header */}
 				<div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
 					<div>
@@ -48,7 +51,6 @@ export default function ApplicationModal({
 							maxLength={600}
 							value={applicationReason}
 							onChange={e => setApplicationReason(e.target.value)}
-							onClick={e => e.stopPropagation()}
 						/>
 						<p className="text-xs text-gray-500 w-full flex justify-end">
 							{applicationReason.length}/600 characters
@@ -71,8 +73,7 @@ export default function ApplicationModal({
 					<button
 						type="button"
 						className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:cursor-pointer"
-						onClick={e => {
-							e.stopPropagation();
+						onClick={() => {
 							if (confirm("Are you sure you want to cancel your application?"))
 								setShowModal(false);
 						}}
@@ -83,8 +84,7 @@ export default function ApplicationModal({
 					<button
 						type="button"
 						className="rounded-lg bg-black px-5 py-2 text-sm font-medium text-white transition hover:bg-gray-800 hover:cursor-pointer"
-						onClick={e => {
-							e.stopPropagation();
+						onClick={() => {
 							applyToJobMutation.mutate(applicationReason);
 							setShowModal(false);
 						}}
