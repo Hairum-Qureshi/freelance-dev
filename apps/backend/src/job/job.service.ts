@@ -139,6 +139,7 @@ export class JobService {
             email: true,
           },
         },
+        job: true,
       },
       orderBy: (applications, { desc }) => desc(applications.createdAt),
     });
