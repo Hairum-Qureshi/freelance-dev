@@ -8,7 +8,13 @@ export default function ApplicationModal({
 	const [applicationReason, setApplicationReason] = useState("");
 
 	return (
-		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+		<div
+			className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+			onClick={() => {
+				if (confirm("Are you sure you want to cancel your application?"))
+					setShowModal(false);
+			}}
+		>
 			<div className="w-full max-w-xl rounded-xl border border-gray-200 bg-white shadow-xl">
 				{/* Header */}
 				<div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
