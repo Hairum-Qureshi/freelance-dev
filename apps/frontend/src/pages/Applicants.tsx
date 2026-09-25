@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import useApplication from "../hooks/useApplication";
-import type { ChatPayload } from "@repo/shared-types";
+import type { ChatPayload, JobPayload } from "@repo/shared-types";
 import useChat from "../hooks/useChat";
 import { simpleflake } from "simpleflakes";
+import SidePanel from "../components/SidePanel";
 
 export default function Applications() {
 	const [status, setStatus] = useState("all");
@@ -13,6 +14,8 @@ export default function Applications() {
 	const { currUserChats } = useChat();
 	const navigate = useNavigate();
 	const chatId = simpleflake();
+	const [showJobPanel, setShowJobPanel] = useState(false);
+	const [selectedJob, setSelectedJob] = useState<JobPayload | null>(null);
 
 	function hasChatWithPoster(jobPosterId: string) {
 		const hasChatWithPoster =
@@ -27,7 +30,15 @@ export default function Applications() {
 	// TODO - add logic to render text if there are no applicants for any jobs
 
 	return (
-		<div className="min-h-screen bg-white px-4 py-8">
+		<div className="min-h-screen bg-white px-4 py-8 relative">
+			{selectedJob && (
+				<SidePanel
+					selectedJob={selectedJob}
+					setSelectedJob={setSelectedJob}
+					setShowJobPanel={setShowJobPanel}
+					showJobPanel={showJobPanel}
+				/>
+			)}
 			<div className="mx-auto w-full max-w-7xl">
 				<div className="overflow-hidden rounded-lg border border-slate-300 bg-white shadow-sm">
 					{/* Header */}
@@ -171,12 +182,12 @@ export default function Applications() {
 											</td>
 
 											<td className="whitespace-nowrap px-6 py-4">
-												<Link
-													to={`/jobs/${application.jobId}`}
+												<button
 													className="rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-100"
+													onClick = {() => {setShowJobPanel(true); setSelectedJob(application.job);}}
 												>
 													View Job
-												</Link>
+												</button>
 											</td>
 
 											<td className="whitespace-nowrap px-6 py-4">
