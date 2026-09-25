@@ -47,7 +47,7 @@ export default function Applications() {
 								<p className="text-xs font-medium uppercase tracking-wide text-slate-500">
 									Total Applications
 								</p>
-								<p className="text-2xl font-semibold text-slate-900">50</p>
+								<p className="text-2xl font-semibold text-slate-900">{allApplications?.length ?? 0}</p>
 							</div>
 
 							<div className="h-10 w-px bg-slate-200" />
