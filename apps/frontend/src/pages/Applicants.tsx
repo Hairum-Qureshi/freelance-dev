@@ -159,11 +159,7 @@ export default function Applications() {
 												</span>
 											</td>
 
-											<td className="whitespace-nowrap px-6 py-4">
-												<button className="rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-100">
-													Contact
-												</button>
-											</td>
+											
 
 											<td className="whitespace-nowrap px-6 py-4">
 												<button className="rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-100" onClick = {() => {
