@@ -64,15 +64,15 @@ export default function useJob() {
 				throw new Error("At least one skill must be specified");
 			}
 
-			if (parseFloat(budgetMin) > parseFloat(budgetMax)) {
+			if (parseInt(budgetMin) > parseInt(budgetMax)) {
 				throw new Error("Minimum budget cannot be greater than maximum budget");
 			}
 
-			if (parseFloat(budgetMin) < 0) {
+			if (parseInt(budgetMin) < 0) {
 				throw new Error("Minimum budget cannot be negative");
 			}
 
-			if (parseFloat(budgetMax) < 0) {
+			if (parseInt(budgetMax) < 0) {
 				throw new Error("Maximum budget cannot be negative");
 			}
 
