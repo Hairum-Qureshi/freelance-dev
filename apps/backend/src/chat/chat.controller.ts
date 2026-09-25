@@ -47,6 +47,12 @@ export class ChatController {
     return this.chatService.getChatMessagesById(chatId);
   }
 
+  @Get(':chatId/participants')
+  @UseGuards(AuthGuard())
+  getChatParticipants(@Param('chatId') chatId: string) {
+    return this.chatService.getChatParticipants(chatId);
+  }
+
   @Post(':chatId/message')
   @UseGuards(AuthGuard())
   @UseInterceptors(FilesInterceptor('attachments', 5))
