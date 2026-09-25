@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Get } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get, Param } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JobPostingDTO } from 'src/DTOs/job.dto';
 import { JobService } from './job.service';
@@ -22,5 +22,10 @@ export class JobController {
   @Get('all')
   async getAllJobs() {
     return this.jobService.getAllJobs();
+  }
+
+  @Get(':jobId')
+  async getJobById(@Param('jobId') jobId: string) {
+    return this.jobService.getJobData(jobId);
   }
 }
