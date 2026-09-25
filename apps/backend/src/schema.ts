@@ -193,6 +193,11 @@ export const ratingsTable = pgTable('ratings', {
   updatedAt: timestamp('updated_at').defaultNow(),
 });
 
+export const applicationStatus = pgEnum('status', [
+  'accepted',
+  'rejected',
+  'pending',
+]);
 export const applicationsTable = pgTable(
   'applications',
   {
@@ -204,6 +209,9 @@ export const applicationsTable = pgTable(
       .notNull()
       .references(() => usersTable.id),
     proposal: text('proposal'),
+    status: applicationStatus('status')
+      .notNull()
+      .$default(() => 'pending'),
     createdAt: timestamp('created_at').defaultNow(),
     updatedAt: timestamp('updated_at').defaultNow(),
   },
