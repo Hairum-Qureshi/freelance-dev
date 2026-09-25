@@ -1,5 +1,5 @@
 import ChatFooter from "../components/chat/ChatFooter";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import ChatHeader from "../components/chat/ChatHeader";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import MainChatContainer from "../components/chat/MainChatContainer";
@@ -7,14 +7,17 @@ import useUser from "../hooks/useUser";
 import useChat from "../hooks/useChat";
 import { useEffect, useState } from "react";
 import InboxUserCard from "../components/chat/InboxUserCard";
+import { useCurrentUser } from "../hooks/useCurrentUser";
+import type { ChatPayload } from "@repo/shared-types";
 
 export default function Inbox() {
 	const { userProfileData } = useUser();
-
-	const { currUserChats } = useChat();
+	const { data: currUserData } = useCurrentUser();
+	const { currUserChats, chatParticipants } = useChat();
 
 	// TODO - add autoscroll to bottom of inbox for latest message
 	// TODO - add an ability to remove a chat from the list of chats
+	// ! for some reason when you click on an image from a message and the slideshow appears, the textarea send and file upload buttons get pushed up to the top
 
 	const location = useLocation();
 
@@ -28,7 +31,20 @@ export default function Inbox() {
 
 	useEffect(() => {
 		if (location.pathname === "/inbox") setSelectedChat(null);
-	}, [location]);
+		if (chatParticipants) {
+			const otherUser = chatParticipants.filter(
+				participant => participant.user?.id !== currUserData?.id
+			);
+			if (!otherUser.length) return;
+			setSelectedChat({
+				id: otherUser[0].user?.id ?? "",
+				firstName: otherUser[0].user?.firstName ?? "",
+				lastName: otherUser[0].user?.lastName ?? "",
+				profilePicture: otherUser[0].user?.profilePicture ?? "",
+				hirerTitle: otherUser[0].user?.onboardingAnswers?.hirerTitle ?? "N/A"
+			});
+		}
+	}, [location, chatParticipants]);
 
 	// if you're a hirer, add a 'Hire' button in the conversation header
 
@@ -60,7 +76,11 @@ export default function Inbox() {
 								chatId={chat.id}
 								participants={chat.participants}
 								setSelectedChat={setSelectedChat}
-								latestMessage={!chat.latestMessage.message ? "Attached file(s)" : chat.latestMessage.message}
+								latestMessage={
+									!chat.latestMessage.message
+										? "Attached file(s)"
+										: chat.latestMessage.message
+								}
 							/>
 						))
 					) : (
