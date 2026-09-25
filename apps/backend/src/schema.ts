@@ -193,6 +193,19 @@ export const ratingsTable = pgTable('ratings', {
   updatedAt: timestamp('updated_at').defaultNow(),
 });
 
+export const applicationsTable = pgTable('applications', {
+  id: text().primaryKey(),
+  jobId: text('job_id')
+    .notNull()
+    .references(() => jobPostsTable.id),
+  applicantId: text('applicant_id')
+    .notNull()
+    .references(() => usersTable.id),
+  proposal: text('proposal'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
 // RELATIONS
 
 export const participantsRelations = relations(
@@ -260,3 +273,17 @@ export const ratingsRelations = relations(ratingsTable, ({ one }) => ({
     references: [usersTable.id],
   }),
 }));
+
+export const applicationsRelations = relations(
+  applicationsTable,
+  ({ one }) => ({
+    job: one(jobPostsTable, {
+      fields: [applicationsTable.jobId],
+      references: [jobPostsTable.id],
+    }),
+    applicant: one(usersTable, {
+      fields: [applicationsTable.applicantId],
+      references: [usersTable.id],
+    }),
+  }),
+);
