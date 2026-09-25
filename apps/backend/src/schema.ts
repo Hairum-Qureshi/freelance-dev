@@ -193,18 +193,27 @@ export const ratingsTable = pgTable('ratings', {
   updatedAt: timestamp('updated_at').defaultNow(),
 });
 
-export const applicationsTable = pgTable('applications', {
-  id: text().primaryKey(),
-  jobId: text('job_id')
-    .notNull()
-    .references(() => jobPostsTable.id),
-  applicantId: text('applicant_id')
-    .notNull()
-    .references(() => usersTable.id),
-  proposal: text('proposal'),
-  createdAt: timestamp('created_at').defaultNow(),
-  updatedAt: timestamp('updated_at').defaultNow(),
-});
+export const applicationsTable = pgTable(
+  'applications',
+  {
+    id: text().primaryKey(),
+    jobId: text('job_id')
+      .notNull()
+      .references(() => jobPostsTable.id),
+    applicantId: text('applicant_id')
+      .notNull()
+      .references(() => usersTable.id),
+    proposal: text('proposal'),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at').defaultNow(),
+  },
+  (table) => ({
+    uniqueApplication: uniqueIndex('job_applicant_unique').on(
+      table.jobId,
+      table.applicantId,
+    ),
+  }),
+);
 
 // RELATIONS
 
