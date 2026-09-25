@@ -4,6 +4,7 @@ import { applicationsTable } from 'src/schema';
 import SnowflakeId from 'snowflake-id';
 import { JobPostingDTO } from 'src/DTOs/job.dto';
 import { jobPostsTable } from 'src/schema';
+import { eq, and } from 'drizzle-orm/sql/expressions/conditions';
 
 @Injectable()
 export class JobService {
@@ -92,7 +93,12 @@ export class JobService {
     });
   }
 
-  async applyToJob(jobId: string, currUserId: string, proposal: string) {
+  async applyToJob(
+    jobId: string,
+    currUserId: string,
+    proposal: string,
+    posterId: string,
+  ) {
     const snowflake = new SnowflakeId({
       mid: 42,
       offset: (2019 - 1970) * 31536000 * 1000,
@@ -112,16 +118,41 @@ export class JobService {
       );
     }
 
-    const [application] = await this.db
-      .insert(applicationsTable)
-      .values({
-        id: snowflake.generate().toString(),
-        jobId,
-        applicantId: currUserId,
-        proposal,
-      })
-      .returning();
+    await this.db.insert(applicationsTable).values({
+      id: snowflake.generate().toString(),
+      jobId,
+      applicantId: currUserId,
+      posterId,
+      proposal,
+    });
+  }
 
-    return { applicationId: application.id };
+  async viewAllUserApplications({ currentUserId }: { currentUserId: string }) {
+    return this.db.query.applicationsTable.findMany({
+      where: (applications, { exists }) =>
+        exists(
+          this.db
+            .select()
+            .from(jobPostsTable)
+            .where(
+              and(
+                eq(jobPostsTable.id, applications.jobId),
+                eq(jobPostsTable.posterId, currentUserId),
+              ),
+            ),
+        ),
+      with: {
+        applicant: {
+          columns: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            profilePicture: true,
+            email: true,
+          },
+        },
+      },
+      orderBy: (applications, { desc }) => desc(applications.createdAt),
+    });
   }
 }
