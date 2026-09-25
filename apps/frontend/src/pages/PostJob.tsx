@@ -20,6 +20,8 @@ export default function PostJob() {
 
 	const { postJobListingMutation } = useJob();
 
+	// TODO - have save draft button work by saving data to localstorage
+
 	return (
 		<div className="min-h-screen bg-white px-4 py-8 sm:px-6 lg:px-8">
 			<div className="mx-auto max-w-4xl">
@@ -439,14 +441,14 @@ export default function PostJob() {
 						<div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-end">
 							<button
 								type="button"
-								className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+								className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 hover:cursor-pointer"
 							>
 								Save draft
 							</button>
 
 							<button
 								type="submit"
-								className="rounded-xl bg-black px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800"
+								className="rounded-xl bg-black px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800 hover:cursor-pointer"
 							>
 								Publish job
 							</button>
