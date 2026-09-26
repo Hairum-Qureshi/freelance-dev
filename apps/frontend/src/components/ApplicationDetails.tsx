@@ -80,7 +80,8 @@ export default function ApplicationDetails({
 											status: "accepted",
 											applicantName: `${applicant.firstName} ${applicant.lastName}`,
 											applicantEmail: applicant.email,
-											jobTitle: application.job.jobTitle
+											jobTitle: application.job.jobTitle,
+											jobId: application.job.id
 										});
 										setSelectedApplicationId(null);
 									}}
@@ -105,7 +106,8 @@ export default function ApplicationDetails({
 											status: "rejected",
 											applicantName: `${applicant.firstName} ${applicant.lastName}`,
 											applicantEmail: applicant.email,
-											jobTitle: application.job.jobTitle
+											jobTitle: application.job.jobTitle,
+											jobId: application.job.id
 										});
 										setSelectedApplicationId(null);
 									}}
@@ -129,7 +131,8 @@ export default function ApplicationDetails({
 										status: "pending",
 										applicantName: `${applicant.firstName} ${applicant.lastName}`,
 										applicantEmail: applicant.email,
-										jobTitle: application.job.jobTitle
+										jobTitle: application.job.jobTitle,
+										jobId: application.job.id
 									});
 									setSelectedApplicationId(null);
 								}}
