@@ -27,8 +27,6 @@ export default function Applications() {
 		return hasChatWithPoster;
 	}
 
-	// TODO - add logic to render text if there are no applicants for any jobs
-
 	return (
 		<div className="min-h-screen bg-white px-4 py-8 relative">
 			{selectedJob && (
@@ -132,7 +130,7 @@ export default function Applications() {
 								</tr>
 							</thead>
 
-							{allApplications?.length &&
+							{allApplications?.length ?
 								allApplications.map(application => (
 									<tbody
 										className="divide-y divide-slate-200"
@@ -169,9 +167,6 @@ export default function Applications() {
 													{application.status}
 												</span>
 											</td>
-
-											
-
 											<td className="whitespace-nowrap px-6 py-4">
 												<button className="rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-100 hover:cursor-pointer" onClick = {() => {
 													if(hasChatWithPoster(application.posterId).length) navigate(`/inbox/c/${hasChatWithPoster(application.posterId)[0].id}`)
@@ -200,7 +195,15 @@ export default function Applications() {
 											</td>
 										</tr>
 									</tbody>
-								))}
+								)) : (
+									<tbody>
+										<tr>
+											<td colSpan={7} className="whitespace-nowrap px-6 py-4 text-center text-sm text-gray-500">
+												No applications found
+											</td>
+										</tr>
+									</tbody>
+								)}
 						</table>
 					</div>
 
