@@ -65,16 +65,16 @@ export class EmailService {
           ? ACCEPTED_EMAIL_TEMPLATE.replace('{{ name }}', applicantName)
               .replace('{{ email }}', to)
               .replace('{{ status }}', status)
-              .replace('{{ title }}', jobTitle)
+              .replaceAll('{{ title }}', jobTitle)
           : status === 'rejected'
             ? REJECTED_EMAIL_TEMPLATE.replace('{{ name }}', applicantName)
                 .replace('{{ email }}', to)
                 .replace('{{ status }}', status)
-                .replace('{{ title }}', jobTitle)
+                .replaceAll('{{ title }}', jobTitle)
             : RETRACTED_EMAIL_TEMPLATE.replace('{{ name }}', applicantName)
                 .replace('{{ email }}', to)
                 .replace('{{ status }}', status)
-                .replace('{{ title }}', jobTitle),
+                .replaceAll('{{ title }}', jobTitle),
     });
   }
 }
