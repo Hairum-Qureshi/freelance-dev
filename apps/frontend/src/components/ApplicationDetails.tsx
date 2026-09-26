@@ -1,9 +1,11 @@
 import type { ApplicationPayload } from "@repo/shared-types";
 import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import { FaCheck } from "react-icons/fa6";
+import { TbCancel } from "react-icons/tb";
 
 export default function ApplicationDetails({
-	application,
+	application
 }: {
 	application: ApplicationPayload;
 }) {
@@ -51,6 +53,38 @@ export default function ApplicationDetails({
 				) : (
 					<p className="mt-2 text-sm text-slate-500">No resume attached.</p>
 				)}
+			</section>
+			<section className="border-t border-slate-200 pt-5">
+				<div className="divide-y divide-slate-200 rounded-md border border-slate-200">
+					<div className="flex items-center justify-between bg-gradient-to-r from-transparent to-green-50 px-4 py-3 transition-colors duration-200 hover:to-green-200">
+						<span className="text-sm font-medium text-slate-700">
+							Accept Application
+						</span>
+
+						<button
+							className="flex h-8 w-8 items-center justify-center rounded-md text-green-600 transition-colors duration-200 hover:cursor-pointer hover:bg-green-100"
+							aria-label="Accept application"
+						>
+							<FaCheck aria-hidden="true" className="text-xl" />
+						</button>
+					</div>
+
+					<div className="flex items-center justify-between bg-gradient-to-r from-transparent to-red-50 px-4 py-3 transition-colors duration-200 hover:to-red-200">
+						<span className="text-sm font-medium text-slate-700">
+							Reject Application
+						</span>
+
+						<button
+							className="flex h-8 w-8 items-center justify-center rounded-md text-red-600 transition-colors duration-200 hover:cursor-pointer hover:bg-red-100"
+							aria-label="Reject application"
+						>
+							<TbCancel aria-hidden="true" className="text-lg" />
+						</button>
+					</div>
+				</div>
+				<p className="py-3 text-sm text-slate-500">
+					{applicant.firstName} will automatically be notified of your decision via email.
+				</p>
 			</section>
 		</div>
 	);
