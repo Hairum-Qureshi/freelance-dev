@@ -3,6 +3,8 @@ import { RESEND_CLIENT } from '../providers/resend';
 import { Resend } from 'resend';
 import { ConfigService } from '@nestjs/config';
 import { EMAIL_TEMPLATE } from './templates/new-contact-message';
+import { ACCEPTED_EMAIL_TEMPLATE } from './templates/hired';
+import { REJECTED_EMAIL_TEMPLATE } from './templates/rejected';
 
 @Injectable()
 export class EmailService {
@@ -44,6 +46,29 @@ export class EmailService {
       html: EMAIL_TEMPLATE.replace('{{full name}}', applicantName)
         .replace('{{ email }}', to)
         .replace('{{ status }}', status),
+    });
+  }
+
+  async sendApplicationStatusEmail(
+    to: string,
+    applicantName: string,
+    status: 'accepted' | 'rejected',
+    jobTitle: string,
+  ) {
+    return this.resend.emails.send({
+      from: `Freelance Dev <${this.configService.getOrThrow<string>('EMAIL_FROM')}>`,
+      to,
+      subject: 'Application Status Update',
+      html:
+        status === 'accepted'
+          ? ACCEPTED_EMAIL_TEMPLATE.replace('{{ name }}', applicantName)
+              .replace('{{ email }}', to)
+              .replace('{{ status }}', status)
+              .replace('{{ job title }}', jobTitle)
+          : REJECTED_EMAIL_TEMPLATE.replace('{{ name }}', applicantName)
+              .replace('{{ email }}', to)
+              .replace('{{ status }}', status)
+              .replace('{{ job title }}', jobTitle),
     });
   }
 }
