@@ -64,11 +64,11 @@ export class EmailService {
           ? ACCEPTED_EMAIL_TEMPLATE.replace('{{ name }}', applicantName)
               .replace('{{ email }}', to)
               .replace('{{ status }}', status)
-              .replace('{{ job title }}', jobTitle)
+              .replace('{{ title }}', jobTitle)
           : REJECTED_EMAIL_TEMPLATE.replace('{{ name }}', applicantName)
               .replace('{{ email }}', to)
               .replace('{{ status }}', status)
-              .replace('{{ job title }}', jobTitle),
+              .replace('{{ title }}', jobTitle),
     });
   }
 }
