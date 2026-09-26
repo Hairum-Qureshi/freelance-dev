@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import useApplication from "../hooks/useApplication";
-import type { ApplicationPayload, ChatPayload } from "@repo/shared-types";
+import type { ChatPayload } from "@repo/shared-types";
 import useChat from "../hooks/useChat";
 import { simpleflake } from "simpleflakes";
 import ApplicationDetails from "../components/ApplicationDetails";
@@ -16,13 +16,20 @@ export default function Applications() {
 	const { currUserChats } = useChat();
 	const navigate = useNavigate();
 	const chatId = simpleflake();
-	const [selectedApplication, setSelectedApplication] =
-		useState<ApplicationPayload | null>(null);
-	const [activePanel, setActivePanel] = useState<"job" | "application" | null>(null);
+	const [selectedApplicationId, setSelectedApplicationId] = useState<
+		string | null
+	>(null);
+	const selectedApplication =
+		allApplications?.find(
+			application => application.id === selectedApplicationId
+		) ?? null;
+	const [activePanel, setActivePanel] = useState<"job" | "application" | null>(
+		null
+	);
 	const [isPanelOpen, setIsPanelOpen] = useState(false);
 	const closePanel = useCallback(() => setIsPanelOpen(false), []);
 	const handlePanelExited = useCallback(() => {
-		setSelectedApplication(null);
+		setSelectedApplicationId(null);
 		setActivePanel(null);
 	}, []);
 
@@ -47,7 +54,7 @@ export default function Applications() {
 					{activePanel === "job" ? (
 						<JobDetails selectedJob={selectedApplication.job} />
 					) : (
-						<ApplicationDetails application={selectedApplication} />
+						<ApplicationDetails application={selectedApplication} setSelectedApplicationId={setSelectedApplicationId} />
 					)}
 				</SlidingPanel>
 			)}
@@ -71,7 +78,9 @@ export default function Applications() {
 								<p className="text-xs font-medium uppercase tracking-wide text-slate-500">
 									Total Applications
 								</p>
-								<p className="text-2xl font-semibold text-slate-900">{allApplications?.length ?? 0}</p>
+								<p className="text-2xl font-semibold text-slate-900">
+									{allApplications?.length ?? 0}
+								</p>
 							</div>
 
 							<div className="h-10 w-px bg-slate-200" />
@@ -145,7 +154,7 @@ export default function Applications() {
 								</tr>
 							</thead>
 
-							{allApplications?.length ?
+							{allApplications?.length ? (
 								allApplications.map(application => (
 									<tbody
 										className="divide-y divide-slate-200"
@@ -183,10 +192,19 @@ export default function Applications() {
 												</span>
 											</td>
 											<td className="whitespace-nowrap px-6 py-4">
-												<button className="rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-100 hover:cursor-pointer" onClick = {() => {
-													if(hasChatWithPoster(application.posterId).length) navigate(`/inbox/c/${hasChatWithPoster(application.posterId)[0].id}`)
-													else navigate(`/inbox/c/${chatId}?to=${application.posterId}`) 
-												}}>
+												<button
+													className="rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-100 hover:cursor-pointer"
+													onClick={() => {
+														if (hasChatWithPoster(application.posterId).length)
+															navigate(
+																`/inbox/c/${hasChatWithPoster(application.posterId)[0].id}`
+															);
+														else
+															navigate(
+																`/inbox/c/${chatId}?to=${application.posterId}`
+															);
+													}}
+												>
 													Contact
 												</button>
 											</td>
@@ -194,11 +212,11 @@ export default function Applications() {
 											<td className="whitespace-nowrap px-6 py-4">
 												<button
 													className="rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-100 hover:cursor-pointer"
-														onClick={() => {
-															setSelectedApplication(application);
-															setActivePanel("job");
-															setIsPanelOpen(true);
-														}}
+													onClick={() => {
+														setSelectedApplicationId(application.id);
+														setActivePanel("job");
+														setIsPanelOpen(true);
+													}}
 												>
 													View Job
 												</button>
@@ -209,7 +227,7 @@ export default function Applications() {
 													type="button"
 													className="rounded-md border border-slate-900 bg-slate-900 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-slate-700 hover:cursor-pointer"
 													onClick={() => {
-														setSelectedApplication(application);
+														setSelectedApplicationId(application.id);
 														setActivePanel("application");
 														setIsPanelOpen(true);
 													}}
@@ -219,15 +237,19 @@ export default function Applications() {
 											</td>
 										</tr>
 									</tbody>
-								)) : (
-									<tbody>
-										<tr>
-											<td colSpan={7} className="whitespace-nowrap px-6 py-4 text-center text-sm text-gray-500">
-												No applications found
-											</td>
-										</tr>
-									</tbody>
-								)}
+								))
+							) : (
+								<tbody>
+									<tr>
+										<td
+											colSpan={7}
+											className="whitespace-nowrap px-6 py-4 text-center text-sm text-gray-500"
+										>
+											No applications found
+										</td>
+									</tr>
+								</tbody>
+							)}
 						</table>
 					</div>
 
