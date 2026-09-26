@@ -1,4 +1,4 @@
-import { JobPayload } from "./job-payload";
+import type { JobPayload } from "./job-payload";
 
 export type ApplicationPayload = {
 	id: string;
@@ -13,6 +13,7 @@ export type ApplicationPayload = {
 		lastName: string;
 		profilePicture: string;
 		email: string;
+		resumeId: string | null;
 	};
 	job: JobPayload;
 	createdAt: Date;
