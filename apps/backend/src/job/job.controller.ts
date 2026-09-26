@@ -1,4 +1,12 @@
-import { Controller, Post, Body, UseGuards, Get, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Get,
+  Param,
+  Patch,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JobPostingDTO } from 'src/DTOs/job.dto';
 import { JobService } from './job.service';
@@ -53,6 +61,24 @@ export class JobController {
     return this.jobService.viewAllUserApplications({
       currentUserId: currentUser.id,
     });
+  }
+
+  @Patch('application/:applicationId/update-status')
+  @UseGuards(AuthGuard())
+  async updateApplicationStatus(
+    @Param('applicationId') applicationId: string,
+    @Body('status') status: 'accepted' | 'rejected' | 'pending',
+    @Body('applicantName') applicantName: string,
+    @Body('applicantEmail') applicantEmail: string,
+    @Body('jobTitle') jobTitle: string,
+  ) {
+    return this.jobService.updateApplicationStatus(
+      applicationId,
+      status,
+      applicantName,
+      applicantEmail,
+      jobTitle,
+    );
   }
 
   @Get('applications/:jobId')
