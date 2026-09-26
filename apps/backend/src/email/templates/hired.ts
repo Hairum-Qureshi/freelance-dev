@@ -75,7 +75,7 @@ export const ACCEPTED_EMAIL_TEMPLATE = `<table
                 color: #111111;
               "
             >
-              You've been accepted
+              {{ title }}
             </h1>
 
             <p

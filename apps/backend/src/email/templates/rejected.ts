@@ -75,7 +75,7 @@ export const REJECTED_EMAIL_TEMPLATE = `<table
                 color: #111111;
               "
             >
-              Application update
+              {{ title }}
             </h1>
 
             <p
@@ -135,7 +135,10 @@ export const REJECTED_EMAIL_TEMPLATE = `<table
                       color: #777777;
                     "
                   >
-                    Status: <strong style="color: #111111;">{{ status }}</strong>
+                    Status:
+                    <strong style="color: #111111;">
+                      {{ status }}
+                    </strong>
                   </p>
                 </td>
               </tr>
