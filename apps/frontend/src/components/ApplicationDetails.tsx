@@ -21,10 +21,19 @@ export default function ApplicationDetails({
 	return (
 		<div className="px-6 py-5">
 			<div className="border-b border-slate-200 pb-4">
-				<p className="text-xs font-medium uppercase tracking-wide text-slate-400">
-					Application from
-				</p>
-				<h2 className="mt-1 text-lg font-semibold text-slate-950">
+				<div className="flex items-center justify-between">
+					<p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+						Application from
+					</p>
+					{application.status === "accepted" && (
+						<div className="mt-4 flex ml-auto">
+							<button className="rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-green-700">
+								Pay {applicant.firstName}
+							</button>
+						</div>
+					)}
+				</div>
+				<h2 className={`${application.status !== "accepted" && "mt-1"} text-lg font-semibold text-slate-950`}>
 					{applicant.firstName} {applicant.lastName}
 				</h2>
 				<p className="mt-1 text-sm text-slate-600">{applicant.email}</p>
