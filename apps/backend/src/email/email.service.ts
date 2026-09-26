@@ -55,6 +55,7 @@ export class EmailService {
     applicantName: string,
     status: 'accepted' | 'rejected' | 'pending',
     jobTitle: string,
+    jobId: string,
   ) {
     return this.resend.emails.send({
       from: `Freelance Dev <${this.configService.getOrThrow<string>('EMAIL_FROM')}>`,
@@ -66,6 +67,10 @@ export class EmailService {
               .replace('{{ email }}', to)
               .replace('{{ status }}', status)
               .replaceAll('{{ title }}', jobTitle)
+              .replace(
+                '{{ job_url }}',
+                `${this.configService.getOrThrow<string>('FRONTEND_URL')}/listing/${jobId}`,
+              )
           : status === 'rejected'
             ? REJECTED_EMAIL_TEMPLATE.replace('{{ name }}', applicantName)
                 .replace('{{ email }}', to)
