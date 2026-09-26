@@ -24,13 +24,15 @@ export default function useApplication() {
 			status,
 			applicantName,
 			applicantEmail,
-			jobTitle
+			jobTitle,
+			jobId
 		}: {
 			applicationId: string;
 			status: "accepted" | "rejected" | "pending";
 			applicantName: string;
 			applicantEmail: string;
 			jobTitle: string;
+			jobId: string;
 		}): Promise<void> => {
 			if (!applicationId) return;
 
@@ -40,7 +42,8 @@ export default function useApplication() {
 					status,
 					applicantName,
 					applicantEmail,
-					jobTitle
+					jobTitle,
+					jobId
 				},
 				{
 					withCredentials: true

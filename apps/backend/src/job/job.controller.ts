@@ -71,6 +71,7 @@ export class JobController {
     @Body('applicantName') applicantName: string,
     @Body('applicantEmail') applicantEmail: string,
     @Body('jobTitle') jobTitle: string,
+    @Body('jobId') jobId: string,
   ) {
     return this.jobService.updateApplicationStatus(
       applicationId,
@@ -78,6 +79,7 @@ export class JobController {
       applicantName,
       applicantEmail,
       jobTitle,
+      jobId,
     );
   }
 

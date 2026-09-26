@@ -158,6 +158,7 @@ export class JobService {
     applicantName: string,
     applicantEmail: string,
     jobTitle: string,
+    jobId: string,
   ) {
     await this.db
       .update(applicationsTable)
@@ -169,6 +170,7 @@ export class JobService {
       applicantName,
       status,
       jobTitle,
+      jobId,
     );
   }
 }
