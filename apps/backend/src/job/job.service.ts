@@ -154,7 +154,7 @@ export class JobService {
 
   async updateApplicationStatus(
     applicationId: string,
-    status: 'accepted' | 'rejected',
+    status: 'accepted' | 'rejected' | 'pending',
     applicantName: string,
     applicantEmail: string,
     jobTitle: string,
