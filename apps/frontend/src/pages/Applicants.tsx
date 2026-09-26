@@ -173,7 +173,7 @@ export default function Applications() {
 											
 
 											<td className="whitespace-nowrap px-6 py-4">
-												<button className="rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-100" onClick = {() => {
+												<button className="rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-100 hover:cursor-pointer" onClick = {() => {
 													if(hasChatWithPoster(application.posterId).length) navigate(`/inbox/c/${hasChatWithPoster(application.posterId)[0].id}`)
 													else navigate(`/inbox/c/${chatId}?to=${application.posterId}`) 
 												}}>
@@ -183,7 +183,7 @@ export default function Applications() {
 
 											<td className="whitespace-nowrap px-6 py-4">
 												<button
-													className="rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-100"
+													className="rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-100 hover:cursor-pointer"
 													onClick = {() => {setShowJobPanel(true); setSelectedJob(application.job);}}
 												>
 													View Job
