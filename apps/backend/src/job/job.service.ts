@@ -1,13 +1,18 @@
 import { Injectable, Inject, HttpStatus, HttpException } from '@nestjs/common';
+import { EmailService } from 'src/email/email.service';
 import { Database } from 'src/providers/postgres-db';
 import { applicationsTable } from 'src/schema';
 import SnowflakeId from 'snowflake-id';
 import { JobPostingDTO } from 'src/DTOs/job.dto';
 import { jobPostsTable } from 'src/schema';
+import { eq } from 'drizzle-orm';
 
 @Injectable()
 export class JobService {
-  constructor(@Inject('NeonDBProvider') private readonly db: Database) {}
+  constructor(
+    @Inject('NeonDBProvider') private readonly db: Database,
+    private readonly emailService: EmailService,
+  ) {}
 
   async createJob(jobPosting: JobPostingDTO, posterId: string) {
     const snowflake = new SnowflakeId({
@@ -145,5 +150,25 @@ export class JobService {
       },
       orderBy: (applications, { desc }) => desc(applications.createdAt),
     });
+  }
+
+  async updateApplicationStatus(
+    applicationId: string,
+    status: 'accepted' | 'rejected',
+    applicantName: string,
+    applicantEmail: string,
+    jobTitle: string,
+  ) {
+    await this.db
+      .update(applicationsTable)
+      .set({ status })
+      .where(eq(applicationsTable.id, applicationId));
+
+    await this.emailService.sendApplicationStatusEmail(
+      applicantEmail,
+      applicantName,
+      status,
+      jobTitle,
+    );
   }
 }
