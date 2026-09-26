@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import HowDoesItWork from "../pages/HowDoesItWork";
 import Contact from "../pages/Contact";
 import PostJob from "../pages/PostJob";
 import ShowNavbar from "./middleware/ShowNavbar";
@@ -41,6 +42,7 @@ export default function App() {
 					<Route path="/post-job" element={<PostJob />} />
 					<Route path="/contact" element={<Contact />} />
 					<Route path="/inbox" element={<Inbox />} />
+					<Route path="/how-it-works" element={<HowDoesItWork />} />
 					<Route path="/inbox/c/:chatID" element={<Inbox />} />
 					<Route path="/listings" element={<Listings />} />
 					<Route path="/listing/:jobID" element={<Listing />} />
