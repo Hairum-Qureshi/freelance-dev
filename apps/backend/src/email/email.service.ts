@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { EMAIL_TEMPLATE } from './templates/new-contact-message';
 import { ACCEPTED_EMAIL_TEMPLATE } from './templates/hired';
 import { REJECTED_EMAIL_TEMPLATE } from './templates/rejected';
+import { RETRACTED_EMAIL_TEMPLATE } from './templates/retracted';
 
 @Injectable()
 export class EmailService {
@@ -52,7 +53,7 @@ export class EmailService {
   async sendApplicationStatusEmail(
     to: string,
     applicantName: string,
-    status: 'accepted' | 'rejected',
+    status: 'accepted' | 'rejected' | 'pending',
     jobTitle: string,
   ) {
     return this.resend.emails.send({
@@ -65,10 +66,15 @@ export class EmailService {
               .replace('{{ email }}', to)
               .replace('{{ status }}', status)
               .replace('{{ title }}', jobTitle)
-          : REJECTED_EMAIL_TEMPLATE.replace('{{ name }}', applicantName)
-              .replace('{{ email }}', to)
-              .replace('{{ status }}', status)
-              .replace('{{ title }}', jobTitle),
+          : status === 'rejected'
+            ? REJECTED_EMAIL_TEMPLATE.replace('{{ name }}', applicantName)
+                .replace('{{ email }}', to)
+                .replace('{{ status }}', status)
+                .replace('{{ title }}', jobTitle)
+            : RETRACTED_EMAIL_TEMPLATE.replace('{{ name }}', applicantName)
+                .replace('{{ email }}', to)
+                .replace('{{ status }}', status)
+                .replace('{{ title }}', jobTitle),
     });
   }
 }
