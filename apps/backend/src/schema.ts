@@ -226,6 +226,20 @@ export const applicationsTable = pgTable(
   }),
 );
 
+export const notificationsTable = pgTable('notifications', {
+  id: text().primaryKey(),
+  receiverId: text('receiver_id')
+    .notNull()
+    .references(() => usersTable.id),
+  content: text('content').notNull(),
+  senderId: text('sender_id').references(() => usersTable.id),
+  read: boolean('read')
+    .notNull()
+    .$default(() => false),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
 // RELATIONS
 
 export const participantsRelations = relations(
@@ -303,6 +317,20 @@ export const applicationsRelations = relations(
     }),
     applicant: one(usersTable, {
       fields: [applicationsTable.applicantId],
+      references: [usersTable.id],
+    }),
+  }),
+);
+
+export const notificationsRelations = relations(
+  notificationsTable,
+  ({ one }) => ({
+    receiver: one(usersTable, {
+      fields: [notificationsTable.receiverId],
+      references: [usersTable.id],
+    }),
+    sender: one(usersTable, {
+      fields: [notificationsTable.senderId],
       references: [usersTable.id],
     }),
   }),
