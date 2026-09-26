@@ -1,11 +1,13 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import useApplication from "../hooks/useApplication";
-import type { ChatPayload, JobPayload } from "@repo/shared-types";
+import type { ApplicationPayload, ChatPayload } from "@repo/shared-types";
 import useChat from "../hooks/useChat";
 import { simpleflake } from "simpleflakes";
-import JobDetailsSidePanel from "../components/JobDetailsSidePanel";
+import ApplicationDetails from "../components/ApplicationDetails";
+import JobDetails from "../components/JobDetails";
+import SlidingPanel from "../components/SlidingPanel";
 
 export default function Applications() {
 	const [status, setStatus] = useState("all");
@@ -14,8 +16,15 @@ export default function Applications() {
 	const { currUserChats } = useChat();
 	const navigate = useNavigate();
 	const chatId = simpleflake();
-	const [showJobPanel, setShowJobPanel] = useState(false);
-	const [selectedJob, setSelectedJob] = useState<JobPayload | null>(null);
+	const [selectedApplication, setSelectedApplication] =
+		useState<ApplicationPayload | null>(null);
+	const [activePanel, setActivePanel] = useState<"job" | "application" | null>(null);
+	const [isPanelOpen, setIsPanelOpen] = useState(false);
+	const closePanel = useCallback(() => setIsPanelOpen(false), []);
+	const handlePanelExited = useCallback(() => {
+		setSelectedApplication(null);
+		setActivePanel(null);
+	}, []);
 
 	function hasChatWithPoster(jobPosterId: string) {
 		const hasChatWithPoster =
@@ -29,14 +38,20 @@ export default function Applications() {
 
 	return (
 		<div className="min-h-screen bg-white px-4 py-8 relative">
-			{selectedJob && (
-				<JobDetailsSidePanel
-					selectedJob={selectedJob}
-					setSelectedJob={setSelectedJob}
-					setShowJobPanel={setShowJobPanel}
-					showJobPanel={showJobPanel}
-				/>
+			{selectedApplication && activePanel && (
+				<SlidingPanel
+					isOpen={isPanelOpen}
+					onClose={closePanel}
+					onExited={handlePanelExited}
+				>
+					{activePanel === "job" ? (
+						<JobDetails selectedJob={selectedApplication.job} />
+					) : (
+						<ApplicationDetails application={selectedApplication} />
+					)}
+				</SlidingPanel>
 			)}
+
 			<div className="mx-auto w-full max-w-7xl">
 				<div className="overflow-hidden rounded-lg border border-slate-300 bg-white shadow-sm">
 					{/* Header */}
@@ -179,19 +194,28 @@ export default function Applications() {
 											<td className="whitespace-nowrap px-6 py-4">
 												<button
 													className="rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-100 hover:cursor-pointer"
-													onClick = {() => {setShowJobPanel(true); setSelectedJob(application.job);}}
+														onClick={() => {
+															setSelectedApplication(application);
+															setActivePanel("job");
+															setIsPanelOpen(true);
+														}}
 												>
 													View Job
 												</button>
 											</td>
 
 											<td className="whitespace-nowrap px-6 py-4">
-												<Link
-													to={`/applications/${application.id}`}
+												<button
+													type="button"
 													className="rounded-md border border-slate-900 bg-slate-900 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-slate-700"
+													onClick={() => {
+														setSelectedApplication(application);
+														setActivePanel("application");
+														setIsPanelOpen(true);
+													}}
 												>
 													View Application
-												</Link>
+												</button>
 											</td>
 										</tr>
 									</tbody>
