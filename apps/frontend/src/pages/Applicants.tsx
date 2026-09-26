@@ -207,7 +207,7 @@ export default function Applications() {
 											<td className="whitespace-nowrap px-6 py-4">
 												<button
 													type="button"
-													className="rounded-md border border-slate-900 bg-slate-900 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-slate-700"
+													className="rounded-md border border-slate-900 bg-slate-900 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-slate-700 hover:cursor-pointer"
 													onClick={() => {
 														setSelectedApplication(application);
 														setActivePanel("application");
