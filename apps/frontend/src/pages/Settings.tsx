@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { FaArrowLeftLong } from "react-icons/fa6";
-
+import useStripe from "../hooks/useStripe";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import type { OnboardingData } from "@repo/shared-types";
 import PillInput from "../components/PillInput";
@@ -18,9 +18,12 @@ export default function Settings() {
 	const skills = onboardingAnswers?.technologies ?? [];
 
 	const isWorker = currentUser?.role === "freelancer";
+	const hasStripeAccount = Boolean(currentUser?.stripeAccountId?.trim());
 
 	const inputClassName =
 		"mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm";
+
+	const { createStripeConnectedAccountMutation } = useStripe();
 
 	// Save onboarding information
 	const saveOnboardingAnswers = useMutation({
@@ -524,108 +527,121 @@ export default function Settings() {
 										: "Manage the payment methods you use to pay freelancers."}
 								</p>
 
-								{isWorker ? (
-									<>
-										{/* Payout status */}
-										<div className="mt-6 rounded-md border border-gray-300 p-4">
-											<div className="flex items-start justify-between gap-4">
-												<div>
-													<h3 className="font-medium text-gray-900">
-														Payout status
-													</h3>
+								{!hasStripeAccount ? (
+									isWorker ? (
+										<>
+											{/* Payout status */}
+											<div className="mt-6 rounded-md border border-gray-300 p-4">
+												<div className="flex items-start justify-between gap-4">
+													<div>
+														<h3 className="font-medium text-gray-900">
+															Payout status
+														</h3>
 
-													<p className="mt-1 text-sm text-gray-500">
-														Your Stripe account is not connected yet.
-													</p>
+														<p className="mt-1 text-sm text-gray-500">
+															Your Stripe account is not connected yet.
+														</p>
+													</div>
+
+													<span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">
+														Not connected
+													</span>
 												</div>
-
-												<span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">
-													Not connected
-												</span>
-											</div>
-										</div>
-
-										{/* Payout information */}
-										<div className="mt-5">
-											<h3 className="font-medium text-gray-900">
-												Receive payments
-											</h3>
-
-											<p className="mt-1 text-sm text-gray-500">
-												Connect a Stripe account to receive payments from
-												clients for completed work.
-											</p>
-
-											<div className="mt-4 rounded-md bg-gray-50 p-4">
-												<p className="text-sm text-gray-600">
-													Stripe will securely collect the information required
-													to verify your identity and set up payouts.
-												</p>
-
-												<ul className="mt-3 list-inside list-disc space-y-1 text-sm text-gray-500">
-													<li>Personal or business information</li>
-													<li>Identity verification information</li>
-													<li>Payout bank account information</li>
-													<li>Tax information when required</li>
-												</ul>
 											</div>
 
-											<button
-												type="button"
-												className="mt-4 rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
-												// TODO: Replace with Stripe Connect onboarding
-												onClick={() => {
-													console.log("Start Stripe Connect onboarding");
-												}}
-											>
-												Set up payouts
-											</button>
-										</div>
-									</>
-								) : (
-									<>
-										{/* Client payment methods */}
-										<div className="mt-6">
-											<h3 className="font-medium text-gray-900">
-												Payment methods
-											</h3>
+											{/* Payout information */}
+											<div className="mt-5">
+												<h3 className="font-medium text-gray-900">
+													Receive payments
+												</h3>
 
-											<p className="mt-1 text-sm text-gray-500">
-												Add a payment method to pay freelancers for completed
-												work.
-											</p>
-
-											<div className="mt-4 rounded-md border border-dashed border-gray-300 p-6 text-center">
-												<p className="text-sm text-gray-500">
-													No payment methods added yet.
+												<p className="mt-1 text-sm text-gray-500">
+													Connect a Stripe account to receive payments from
+													clients for completed work.
 												</p>
+
+												<div className="mt-4 rounded-md bg-gray-50 p-4">
+													<p className="text-sm text-gray-600">
+														Stripe will securely collect the information
+														required to verify your identity and set up payouts.
+													</p>
+
+													<ul className="mt-3 list-inside list-disc space-y-1 text-sm text-gray-500">
+														<li>Personal or business information</li>
+														<li>Identity verification information</li>
+														<li>Payout bank account information</li>
+														<li>Tax information when required</li>
+													</ul>
+												</div>
 
 												<button
 													type="button"
-													className="mt-4 rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
-													// TODO: Replace with Stripe payment method setup
+													className="mt-4 rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 hover:opacity-80 hover:cursor-pointer"
+													// TODO: Replace with Stripe Connect onboarding
 													onClick={() => {
-														console.log("Add Stripe payment method");
+														createStripeConnectedAccountMutation.mutate();
 													}}
 												>
-													Add payment method
+													Set up payouts
 												</button>
 											</div>
-										</div>
+										</>
+									) : (
+										<>
+											{/* Client payment methods */}
+											<div className="mt-6">
+												<h3 className="font-medium text-gray-900">
+													Payment methods
+												</h3>
 
-										{/* Billing information */}
-										<div className="mt-6 rounded-md bg-gray-50 p-4">
-											<h3 className="font-medium text-gray-900">
-												How payments work
+												<p className="mt-1 text-sm text-gray-500">
+													Add a payment method to pay freelancers for completed
+													work.
+												</p>
+
+												<div className="mt-4 rounded-md border border-dashed border-gray-300 p-6 text-center">
+													<p className="text-sm text-gray-500">
+														No payment methods added yet.
+													</p>
+
+													<button
+														type="button"
+														className="mt-4 rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 hover:opacity-80 hover:cursor-pointer"
+														onClick={() => {
+															createStripeConnectedAccountMutation.mutate();
+														}}
+													>
+														Add payment method
+													</button>
+												</div>
+											</div>
+
+											{/* Billing information */}
+											<div className="mt-6 rounded-md bg-gray-50 p-4">
+												<h3 className="font-medium text-gray-900">
+													How payments work
+												</h3>
+
+												<p className="mt-1 text-sm text-gray-500">
+													Your payment information will be securely handled by
+													Stripe. Your card details will not be stored directly
+													by this platform.
+												</p>
+											</div>
+										</>
+									)
+								) : (
+									<div className="mt-6">
+										<div className="mt-6 rounded-md bg-green-50 p-4">
+											<h3 className="font-medium text-green-900">
+												Stripe Connected
 											</h3>
-
-											<p className="mt-1 text-sm text-gray-500">
-												Your payment information will be securely handled by
-												Stripe. Your card details will not be stored directly by
-												this platform.
+											<p className="mt-1 text-sm text-green-700">
+												You have successfully set up your Stripe account for
+												payouts.
 											</p>
 										</div>
-									</>
+									</div>
 								)}
 							</section>
 						)}
