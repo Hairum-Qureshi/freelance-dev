@@ -13,6 +13,7 @@ export type UserPayload = {
 	resumeId: string | null;
 	location: string | null;
 	deleted: boolean;
+	stripeAccountId: string | null;
 	createdAt: Date | string | null;
 	updatedAt: Date | string | null;
 };
