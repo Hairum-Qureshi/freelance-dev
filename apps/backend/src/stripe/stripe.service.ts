@@ -14,15 +14,15 @@ export class StripeService {
     private readonly configService: ConfigService,
   ) {}
 
-  private async createAccountLink(accountId: string) {
+  private async createAccountLink(accountId: string, userId: string) {
     const accountLink = await this.stripe['v2'].core.accountLinks.create({
       account: accountId,
       use_case: {
         type: 'account_onboarding',
         account_onboarding: {
           configurations: ['recipient'],
-          refresh_url: `${this.configService.get('FRONTEND_URL')}/settings`,
-          return_url: `${this.configService.get('FRONTEND_URL')}/settings`,
+          refresh_url: `${this.configService.get('FRONTEND_URL')}/${userId}/settings`,
+          return_url: `${this.configService.get('FRONTEND_URL')}/${userId}/settings`,
         },
       },
     });
@@ -75,7 +75,7 @@ export class StripeService {
       .set({ stripeAccountId: account.id, stripeAccountConnected: true })
       .where(eq(usersTable.id, userId));
 
-    const accountLink = await this.createAccountLink(account.id);
+    const accountLink = await this.createAccountLink(account.id, userId);
 
     return { url: accountLink.url };
   }
