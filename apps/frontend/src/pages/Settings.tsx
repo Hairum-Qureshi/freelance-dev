@@ -18,12 +18,12 @@ export default function Settings() {
 	const skills = onboardingAnswers?.technologies ?? [];
 
 	const isWorker = currentUser?.role === "freelancer";
-	const hasStripeAccount = Boolean(currentUser?.stripeAccountId?.trim());
+	const hasStripeAccount = Boolean(currentUser?.stripeAccountConnected);
 
 	const inputClassName =
 		"mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm";
 
-	const { createStripeConnectedAccountMutation } = useStripe();
+	const { createStripeConnectedAccount, isPending } = useStripe();
 
 	// Save onboarding information
 	const saveOnboardingAnswers = useMutation({
@@ -577,12 +577,14 @@ export default function Settings() {
 												<button
 													type="button"
 													className="mt-4 rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 hover:opacity-80 hover:cursor-pointer"
-													// TODO: Replace with Stripe Connect onboarding
 													onClick={() => {
-														createStripeConnectedAccountMutation.mutate();
+														createStripeConnectedAccount();
 													}}
+													disabled={isPending}
 												>
-													Set up payouts
+													{isPending
+														? "Setting up Stripe..."
+														: "Set up payouts"}
 												</button>
 											</div>
 										</>
@@ -608,10 +610,13 @@ export default function Settings() {
 														type="button"
 														className="mt-4 rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 hover:opacity-80 hover:cursor-pointer"
 														onClick={() => {
-															createStripeConnectedAccountMutation.mutate();
+															createStripeConnectedAccount();
 														}}
+														disabled={isPending}
 													>
-														Add payment method
+														{isPending
+															? "Setting up Stripe..."
+															: "Add payment method"}
 													</button>
 												</div>
 											</div>

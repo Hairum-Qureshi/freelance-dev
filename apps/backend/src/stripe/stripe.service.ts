@@ -77,6 +77,6 @@ export class StripeService {
 
     const accountLink = await this.createAccountLink(account.id);
 
-    return { accountLink };
+    return { url: accountLink.url };
   }
 }
