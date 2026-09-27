@@ -103,7 +103,7 @@ export class UserService {
       onboardingAnswers: user.onboardingAnswers,
       resumeId: user.resumeId,
       location: user.location,
-      stripeAccountId: user.stripeAccountId,
+      stripeAccountConnected: user.stripeAccountConnected ?? false,
       deleted: user.deleted ?? false,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,

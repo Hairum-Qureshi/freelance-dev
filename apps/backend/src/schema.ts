@@ -30,6 +30,7 @@ export const usersTable = pgTable('users', {
   location: text('location'),
   deleted: boolean('deleted').default(false),
   stripeAccountId: text('stripe_account_id').unique(),
+  stripeAccountConnected: boolean('stripe_account_connected').default(false),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
