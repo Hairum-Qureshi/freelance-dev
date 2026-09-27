@@ -26,10 +26,10 @@ export const usersTable = pgTable('users', {
   onboardingAnswers: jsonb('onboarding_answers')
     .$type<OnboardingAnswers>()
     .notNull(),
-  resumeId: text('resume_id'),
+  resumeId: text('resume_id').unique(),
   location: text('location'),
   deleted: boolean('deleted').default(false),
-  stripeAccountId: text('stripe_account_id'),
+  stripeAccountId: text('stripe_account_id').unique(),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
