@@ -29,6 +29,7 @@ export const usersTable = pgTable('users', {
   resumeId: text('resume_id'),
   location: text('location'),
   deleted: boolean('deleted').default(false),
+  stripeAccountId: text('stripe_account_id'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
