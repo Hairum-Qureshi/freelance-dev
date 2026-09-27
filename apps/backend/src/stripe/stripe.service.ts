@@ -4,12 +4,14 @@ import { eq } from 'drizzle-orm';
 import { Database } from 'src/providers/postgres-db';
 import { usersTable } from 'src/schema';
 import { Stripe } from 'stripe';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class StripeService {
   constructor(
     @Inject('StripeProvider') private readonly stripe: Stripe,
     @Inject('NeonDBProvider') private db: Database,
+    private readonly configService: ConfigService,
   ) {}
 
   private async createAccountLink(accountId: string) {
@@ -19,8 +21,8 @@ export class StripeService {
         type: 'account_onboarding',
         account_onboarding: {
           configurations: ['recipient'],
-          refresh_url: 'https://example.com',
-          return_url: `https://example.com?accountId=${accountId}`,
+          refresh_url: `${this.configService.get('FRONTEND_URL')}/settings`,
+          return_url: `${this.configService.get('FRONTEND_URL')}/settings`,
         },
       },
     });
