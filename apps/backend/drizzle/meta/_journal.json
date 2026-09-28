@@ -169,6 +169,13 @@
       "when": 1790488535722,
       "tag": "0023_mean_blur",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1790566208899,
+      "tag": "0024_huge_nextwave",
+      "breakpoints": true
     }
   ]
 }
