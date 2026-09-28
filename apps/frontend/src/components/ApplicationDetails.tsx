@@ -249,6 +249,11 @@ export default function ApplicationDetails({
 								${application.job.salaryMin} – ${application.job.salaryMax}
 							</p>
 						</div>
+						<div className = "mt-3">
+							<p className="mt-1 text-sm text-slate-500">
+								{applicant.firstName} will be emailed whenever you set the agreed payment amount.
+							</p>
+						</div>
 					</div>
 				</section>
 			)}
