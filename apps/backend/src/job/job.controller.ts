@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Post,
-  Body,
-  UseGuards,
-  Get,
-  Param,
-  Patch,
-} from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get, Param } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JobPostingDTO } from 'src/DTOs/job.dto';
 import { JobService } from './job.service';
@@ -37,63 +29,5 @@ export class JobController {
   @UseGuards(AuthGuard())
   async getJobById(@Param('jobId') jobId: string) {
     return this.jobService.getJobData(jobId);
-  }
-
-  @Post(':jobId/apply')
-  @UseGuards(AuthGuard())
-  async applyToJob(
-    @Param('jobId') jobId: string,
-    @CurrentUser() currentUser: UserPayload,
-    @Body('proposal') proposal: string,
-    @Body('posterId') posterId: string,
-  ) {
-    return this.jobService.applyToJob(
-      jobId,
-      currentUser.id,
-      proposal,
-      posterId,
-    );
-  }
-
-  @Get('applications/all')
-  @UseGuards(AuthGuard())
-  async getAllSubmittedApplications(@CurrentUser() currentUser: UserPayload) {
-    return this.jobService.viewAllUserApplications({
-      currentUserId: currentUser.id,
-    });
-  }
-
-  @Patch('application/:applicationId/update-status')
-  @UseGuards(AuthGuard())
-  async updateApplicationStatus(
-    @Param('applicationId') applicationId: string,
-    @Body('status') status: 'accepted' | 'rejected' | 'pending',
-    @Body('applicantName') applicantName: string,
-    @Body('applicantEmail') applicantEmail: string,
-    @Body('jobTitle') jobTitle: string,
-    @Body('jobId') jobId: string,
-  ) {
-    return this.jobService.updateApplicationStatus(
-      applicationId,
-      status,
-      applicantName,
-      applicantEmail,
-      jobTitle,
-      jobId,
-    );
-  }
-
-  @Patch('application/:applicationId/set-payment-price')
-  @UseGuards(AuthGuard())
-  async setPaymentPrice(
-    @Param('applicationId') applicationId: string,
-    @Body('paymentPrice') paymentPrice: number,
-    @CurrentUser() currentUser: UserPayload,
-  ) {
-    return this.jobService.setPaymentPrice(
-      applicationId,
-      paymentPrice,
-      currentUser.firstName,
-    );
   }
 }

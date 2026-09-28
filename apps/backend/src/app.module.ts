@@ -8,6 +8,7 @@ import { ChatModule } from './chat/chat.module';
 import { EmailModule } from './email/email.module';
 import { JobModule } from './job/job.module';
 import { StripeModule } from './stripe/stripe.module';
+import { ApplicationModule } from './application/application.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { StripeModule } from './stripe/stripe.module';
     EmailModule,
     JobModule,
     StripeModule,
+    ApplicationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
