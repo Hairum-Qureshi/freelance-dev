@@ -49,7 +49,7 @@ export default function ApplicationDetails({
 									Cancel
 								</button>
 							)}
-							{application.job.agreedPaymentRate && (
+							{application.job.agreedPaymentRateCents && (
 								<button className="rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-green-700">
 									Pay {applicant.firstName}
 								</button>
@@ -197,13 +197,13 @@ export default function ApplicationDetails({
 						</h3>
 					</div>
 					<p className="mt-3 whitespace-pre-wrap text-sm leading-6 text-slate-700 wrap-break-word">
-						{!application.job.agreedPaymentRate ? (
+						{!application.job.agreedPaymentRateCents ? (
 							`You currently have not agreed on a payment rate. Once you have agreed on a rate, the "Pay ${applicant.firstName}" button will become available.`
 						) : (
 							<>
 								You have agreed on a payment rate of{" "}
 								<span className="font-medium text-green-700">
-									${(application.job.agreedPaymentRate / 100).toFixed(2)}
+									${(application.job.agreedPaymentRateCents / 100).toFixed(2)}
 								</span>
 								.
 							</>

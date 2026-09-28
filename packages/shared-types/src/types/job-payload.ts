@@ -14,7 +14,7 @@ export type JobPayload = {
 	deliverables: string;
 	salaryMin: number;
 	salaryMax: number;
-	agreedPaymentRate: number | null;
+	agreedPaymentRateCents: number | null;
 	skills: string[];
 	posterId: string;
 	poster: {
