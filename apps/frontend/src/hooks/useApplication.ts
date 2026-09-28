@@ -18,6 +18,19 @@ export default function useApplication() {
 		}
 	});
 
+	const { data: currUserApplications } = useQuery({
+		queryKey: ["currUserApplications"],
+		queryFn: async () => {
+			const response = await axios.get<ApplicationPayload[]>(
+				`${import.meta.env.VITE_BACKEND_URL}/api/application/all/applied`,
+				{
+					withCredentials: true
+				}
+			);
+			return response.data;
+		}
+	});
+
 	const updateApplicantStatusMutation = useMutation({
 		mutationFn: async ({
 			applicationId,
@@ -57,5 +70,37 @@ export default function useApplication() {
 		}
 	});
 
-	return { allApplications, updateApplicantStatusMutation };
+	const withdrawApplicationMutation = useMutation({
+		mutationFn: async ({
+			applicationId
+		}: {
+			applicationId: string;
+		}): Promise<void> => {
+			if (!applicationId) return;
+
+			await axios.patch(
+				`${import.meta.env.VITE_BACKEND_URL}/api/application/${applicationId}/withdraw`,
+				{},
+				{
+					withCredentials: true
+				}
+			);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["applications"]
+			});
+
+			queryClient.invalidateQueries({
+				queryKey: ["currUserApplications"]
+			});
+		}
+	});
+
+	return {
+		allApplications,
+		currUserApplications,
+		updateApplicantStatusMutation,
+		withdrawApplicationMutation
+	};
 }
