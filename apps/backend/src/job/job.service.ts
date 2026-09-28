@@ -192,6 +192,7 @@ export class JobService {
         eq(applicationsTable.id, applicationId),
       with: {
         job: true,
+        applicant: true,
       },
     })) as ApplicationPayload;
 
