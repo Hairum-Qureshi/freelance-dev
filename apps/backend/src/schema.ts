@@ -361,3 +361,10 @@ export const notificationsRelations = relations(
     }),
   }),
 );
+
+export const paymentsRelations = relations(paymentsTable, ({ one }) => ({
+  payer: one(usersTable, {
+    fields: [paymentsTable.payerId],
+    references: [usersTable.id],
+  }),
+}));
