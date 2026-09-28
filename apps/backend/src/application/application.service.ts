@@ -110,4 +110,15 @@ export class ApplicationService {
       Math.floor(paymentPrice * 100),
     );
   }
+
+  async getAllSubmittedApplications(currUserId: string) {
+    return this.db.query.applicationsTable.findMany({
+      where: (applicationsTable, { eq }) =>
+        eq(applicationsTable.applicantId, currUserId),
+      with: {
+        job: true,
+      },
+      orderBy: (applications, { desc }) => desc(applications.createdAt),
+    });
+  }
 }
