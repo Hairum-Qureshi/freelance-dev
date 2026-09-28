@@ -11,7 +11,7 @@ import {
   decimal,
 } from 'drizzle-orm/pg-core';
 import type { OnboardingAnswers } from '@repo/shared-types';
-import { relations, sql } from 'drizzle-orm';
+import { relations } from 'drizzle-orm';
 
 export const userRoleEnum = pgEnum('user_role', ['hirer', 'freelancer']);
 
@@ -170,7 +170,7 @@ export const jobPostsTable = pgTable('jobs', {
   deliverables: text('deliverables').notNull(),
   salaryMin: integer('budget_min').notNull(),
   salaryMax: integer('budget_max').notNull(),
-  agreedPaymentRate: integer('agreed_payment_rate').default(sql`null`),
+  agreedPaymentRateCents: integer('agreed_payment_rate_cents'),
   skills: text('skills')
     .array()
     .notNull()
@@ -239,6 +239,29 @@ export const notificationsTable = pgTable('notifications', {
   read: boolean('read')
     .notNull()
     .$default(() => false),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+export const paymentStatus = pgEnum('payment_status', [
+  'pending',
+  'completed',
+  'refund',
+  'failed',
+]);
+
+export const paymentsTable = pgTable('payments', {
+  id: text().primaryKey(),
+  jobId: text('job_id')
+    .notNull()
+    .references(() => jobPostsTable.id),
+  amountCents: integer('amount_cents').notNull(),
+  status: paymentStatus('status')
+    .notNull()
+    .$default(() => 'pending'),
+  payerId: text('payer_id')
+    .notNull()
+    .references(() => usersTable.id),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
