@@ -88,7 +88,12 @@ export class JobController {
   async setPaymentPrice(
     @Param('applicationId') applicationId: string,
     @Body('paymentPrice') paymentPrice: number,
+    @CurrentUser() currentUser: UserPayload,
   ) {
-    return this.jobService.setPaymentPrice(applicationId, paymentPrice);
+    return this.jobService.setPaymentPrice(
+      applicationId,
+      paymentPrice,
+      currentUser.firstName,
+    );
   }
 }
