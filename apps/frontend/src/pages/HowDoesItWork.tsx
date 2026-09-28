@@ -1,4 +1,8 @@
+import { Link } from "react-router-dom";
+import { useCurrentUser } from "../hooks/useCurrentUser";
+
 export default function HowDoesItWork() {
+	const { data: currUser } = useCurrentUser();
 	return (
 		<div className="min-h-screen bg-white px-4 py-16 sm:px-6 lg:px-8">
 			<div className="mx-auto max-w-5xl">
@@ -413,6 +417,19 @@ export default function HowDoesItWork() {
 								and follow the platform's payment process when the project is
 								ready to be completed.
 							</p>
+
+							{currUser && currUser.role === "hirer" && (
+								<p className="mt-4 text-sm leading-6 text-slate-600">
+									You can view a record of your payments in the{" "}
+									<Link
+										to={`/p/${currUser?.id}/settings?section=payments`}
+										className="text-blue-500"
+									>
+										Payment Settings
+									</Link>{" "}
+									section.
+								</p>
+							)}
 						</div>
 
 						<div className="border border-slate-200 p-6">
@@ -426,6 +443,19 @@ export default function HowDoesItWork() {
 								and make sure the agreed-upon work is completed before
 								requesting or receiving payment.
 							</p>
+							{currUser && currUser.role === "freelancer" && (
+								<p className="mt-4 text-sm leading-6 text-slate-600">
+									Make sure that you've connected to your Stripe account to
+									receive payments! Visit{" "}
+									<Link
+										to={`/p/${currUser?.id}/settings?section=payments`}
+										className="text-blue-500"
+									>
+										Payment Settings
+									</Link>{" "}
+									to connect your account.
+								</p>
+							)}
 						</div>
 					</div>
 				</section>
