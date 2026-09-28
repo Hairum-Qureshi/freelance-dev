@@ -222,7 +222,7 @@ export default function ApplicationDetails({
 									onClick={() => {
 										setShowSetPaymentPrice(true);
 										setPaymentPriceMutation.mutate({
-											jobId: application.job.id,
+											applicationId: application.id,
 											paymentPrice: paymentPrice ?? 0,
 											jobSalaryMin: application.job.salaryMin,
 											jobSalaryMax: application.job.salaryMax

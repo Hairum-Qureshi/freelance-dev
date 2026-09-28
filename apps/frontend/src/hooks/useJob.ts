@@ -187,12 +187,12 @@ export default function useJob() {
 
 	const setPaymentPriceMutation = useMutation({
 		mutationFn: async ({
-			jobId,
+			applicationId,
 			paymentPrice,
 			jobSalaryMin,
 			jobSalaryMax
 		}: {
-			jobId: string;
+			applicationId: string;
 			paymentPrice: number;
 			jobSalaryMin: number;
 			jobSalaryMax: number;
@@ -222,7 +222,7 @@ export default function useJob() {
 			}
 
 			await axios.patch(
-				`${import.meta.env.VITE_BACKEND_URL}/api/job/${jobId}/set-payment-price`,
+				`${import.meta.env.VITE_BACKEND_URL}/api/job/application/${applicationId}/set-payment-price`,
 				{
 					paymentPrice
 				},

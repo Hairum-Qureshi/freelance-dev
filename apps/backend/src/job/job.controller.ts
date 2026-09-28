@@ -83,7 +83,7 @@ export class JobController {
     );
   }
 
-  @Patch(':applicationId/set-payment-price')
+  @Patch('application/:applicationId/set-payment-price')
   @UseGuards(AuthGuard())
   async setPaymentPrice(
     @Param('applicationId') applicationId: string,
