@@ -173,4 +173,11 @@ export class JobService {
       jobId,
     );
   }
+
+  async setPaymentPrice(jobId: string, paymentPrice: number) {
+    await this.db
+      .update(jobPostsTable)
+      .set({ agreedPaymentRate: paymentPrice })
+      .where(eq(jobPostsTable.id, jobId));
+  }
 }
