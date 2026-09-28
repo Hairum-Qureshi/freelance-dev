@@ -16,6 +16,12 @@ export class ApplicationController {
     });
   }
 
+  @Get('all/applied')
+  @UseGuards(AuthGuard())
+  async getAllCurrentUserApplications(@CurrentUser() currentUser: UserPayload) {
+    return this.applicationService.getAllSubmittedApplications(currentUser.id);
+  }
+
   @Patch(':applicationId/update-status')
   @UseGuards(AuthGuard())
   async updateApplicationStatus(
