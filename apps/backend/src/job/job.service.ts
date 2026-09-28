@@ -220,7 +220,7 @@ export class JobService {
 
     await this.db
       .update(jobPostsTable)
-      .set({ agreedPaymentRate: Math.floor(paymentPrice * 100) }) // convert payment to cents
+      .set({ agreedPaymentRateCents: Math.floor(paymentPrice * 100) }) // convert payment to cents
       .where(eq(jobPostsTable.id, application.job.id));
 
     await this.emailService.sendPayRateEmail(
