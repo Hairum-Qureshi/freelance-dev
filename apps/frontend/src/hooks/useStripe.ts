@@ -26,8 +26,27 @@ export default function useStripe() {
 		}
 	});
 
+	const createPaymentIntent = useMutation({
+		mutationFn: async ({
+			applicationId,
+			hiredUserId
+		}: {
+			applicationId: string;
+			hiredUserId: string;
+		}): Promise<void> => {
+			await axios.post(
+				`${import.meta.env.VITE_BACKEND_URL}/api/stripe/${applicationId}/create-payment-intent`,
+				{ hiredUserId },
+				{
+					withCredentials: true
+				}
+			);
+		}
+	});
+
 	return {
 		createStripeConnectedAccount,
-		isPending
+		isPending,
+		createPaymentIntent
 	};
 }

@@ -7,6 +7,7 @@ import { useState } from "react";
 import useApplication from "../hooks/useApplication";
 import useJob from "../hooks/useJob";
 import { useCurrentUser } from "../hooks/useCurrentUser";
+import useStripe from "../hooks/useStripe";
 
 export default function ApplicationDetails({
 	application,
@@ -24,6 +25,7 @@ export default function ApplicationDetails({
 	const [showSetPaymentPrice, setShowSetPaymentPrice] = useState(false);
 	const [paymentPrice, setPaymentPrice] = useState<number>();
 	const { setPaymentPriceMutation } = useJob();
+	const { createPaymentIntent } = useStripe();
 
 	return (
 		<div className="px-6 py-5">
@@ -50,7 +52,15 @@ export default function ApplicationDetails({
 								</button>
 							)}
 							{application.job.agreedPaymentRateCents && (
-								<button className="rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-green-700">
+								<button
+									className="rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-green-700"
+									onClick={() =>
+										createPaymentIntent.mutate({
+											applicationId: application.id,
+											hiredUserId: applicant.id
+										})
+									}
+								>
 									Pay {applicant.firstName}
 								</button>
 							)}
