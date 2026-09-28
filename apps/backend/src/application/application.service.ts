@@ -131,4 +131,38 @@ export class ApplicationService {
       orderBy: (applications, { desc }) => desc(applications.createdAt),
     });
   }
+
+  async withdrawApplication(applicationId: string, currUserId: string) {
+    const application = await this.db.query.applicationsTable.findFirst({
+      where: (applicationsTable, { eq }) =>
+        eq(applicationsTable.id, applicationId),
+    });
+
+    if (!application) {
+      throw new NotFoundException('Application not found');
+    }
+
+    // check if the application has already been accepted or rejected
+    if (
+      application.status === 'accepted' ||
+      application.status === 'rejected'
+    ) {
+      throw new HttpException(
+        'Cannot withdraw an application that has already been accepted or rejected. Contact the client for further assistance.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    // check if the current user is the applicant
+    if (application.applicantId !== currUserId) {
+      throw new HttpException(
+        'You can only withdraw your own applications',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
+    await this.db
+      .delete(applicationsTable)
+      .where(eq(applicationsTable.id, applicationId));
+  }
 }
