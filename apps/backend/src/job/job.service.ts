@@ -7,6 +7,7 @@ import { JobPostingDTO } from 'src/DTOs/job.dto';
 import { jobPostsTable } from 'src/schema';
 import { eq } from 'drizzle-orm';
 import { NotFoundException } from '@nestjs/common';
+import { ApplicationPayload } from '@repo/shared-types';
 
 @Injectable()
 export class JobService {
@@ -182,13 +183,13 @@ export class JobService {
         HttpStatus.BAD_REQUEST,
       );
 
-    const application = await this.db.query.applicationsTable.findFirst({
+    const application = (await this.db.query.applicationsTable.findFirst({
       where: (applicationsTable, { eq }) =>
         eq(applicationsTable.id, applicationId),
       with: {
         job: true,
       },
-    });
+    })) as ApplicationPayload;
 
     if (!application) {
       throw new NotFoundException('Application not found');
@@ -200,21 +201,21 @@ export class JobService {
         HttpStatus.BAD_REQUEST,
       );
 
-    if (paymentPrice < application[0].job.salaryMin)
+    if (paymentPrice < application.job.salaryMin)
       throw new HttpException(
-        `Payment price cannot be less than the minimum salary of ${application[0].job.salaryMin}`,
+        `Payment price cannot be less than the minimum salary of ${application.job.salaryMin}`,
         HttpStatus.BAD_REQUEST,
       );
 
-    if (paymentPrice > application[0].job.salaryMax)
+    if (paymentPrice > application.job.salaryMax)
       throw new HttpException(
-        `Payment price cannot be greater than the maximum salary of ${application[0].job.salaryMax}`,
+        `Payment price cannot be greater than the maximum salary of ${application.job.salaryMax}`,
         HttpStatus.BAD_REQUEST,
       );
 
     await this.db
       .update(jobPostsTable)
-      .set({ agreedPaymentRate: paymentPrice })
-      .where(eq(jobPostsTable.id, application[0].job.id));
+      .set({ agreedPaymentRate: Math.floor(paymentPrice * 100) }) // convert payment to cents
+      .where(eq(jobPostsTable.id, application.job.id));
   }
 }
