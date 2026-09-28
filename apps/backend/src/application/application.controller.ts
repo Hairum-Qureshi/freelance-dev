@@ -55,4 +55,16 @@ export class ApplicationController {
       currentUser.firstName,
     );
   }
+
+  @Patch(':applicationId/withdraw')
+  @UseGuards(AuthGuard())
+  async withdrawApplication(
+    @Param('applicationId') applicationId: string,
+    @CurrentUser() currentUser: UserPayload,
+  ) {
+    return this.applicationService.withdrawApplication(
+      applicationId,
+      currentUser.id,
+    );
+  }
 }
