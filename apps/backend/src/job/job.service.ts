@@ -176,7 +176,11 @@ export class JobService {
     );
   }
 
-  async setPaymentPrice(applicationId: string, paymentPrice: number) {
+  async setPaymentPrice(
+    applicationId: string,
+    paymentPrice: number,
+    currUserName: string,
+  ) {
     if (paymentPrice === 0)
       throw new HttpException(
         'Payment price cannot be zero',
@@ -217,5 +221,12 @@ export class JobService {
       .update(jobPostsTable)
       .set({ agreedPaymentRate: Math.floor(paymentPrice * 100) }) // convert payment to cents
       .where(eq(jobPostsTable.id, application.job.id));
+
+    await this.emailService.sendPayRateEmail(
+      application.applicant.email,
+      currUserName,
+      application.applicant.firstName,
+      Math.floor(paymentPrice * 100),
+    );
   }
 }
