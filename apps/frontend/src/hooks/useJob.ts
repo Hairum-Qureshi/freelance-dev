@@ -173,7 +173,7 @@ export default function useJob() {
 			}
 
 			await axios.post(
-				`${import.meta.env.VITE_BACKEND_URL}/api/job/${jobID}/apply`,
+				`${import.meta.env.VITE_BACKEND_URL}/api/application/${jobID}/apply`,
 				{
 					proposal: applicationReason,
 					posterId
@@ -222,7 +222,7 @@ export default function useJob() {
 			}
 
 			await axios.patch(
-				`${import.meta.env.VITE_BACKEND_URL}/api/job/application/${applicationId}/set-payment-price`,
+				`${import.meta.env.VITE_BACKEND_URL}/api/application/${applicationId}/set-payment-price`,
 				{
 					paymentPrice
 				},

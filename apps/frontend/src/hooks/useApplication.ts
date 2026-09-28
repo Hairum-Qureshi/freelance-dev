@@ -9,7 +9,7 @@ export default function useApplication() {
 		queryKey: ["applications"],
 		queryFn: async () => {
 			const response = await axios.get<ApplicationPayload[]>(
-				`${import.meta.env.VITE_BACKEND_URL}/api/job/applications/all`,
+				`${import.meta.env.VITE_BACKEND_URL}/api/application/all`,
 				{
 					withCredentials: true
 				}
@@ -37,7 +37,7 @@ export default function useApplication() {
 			if (!applicationId) return;
 
 			await axios.patch(
-				`${import.meta.env.VITE_BACKEND_URL}/api/job/application/${applicationId}/update-status`,
+				`${import.meta.env.VITE_BACKEND_URL}/api/application/${applicationId}/update-status`,
 				{
 					status,
 					applicantName,
