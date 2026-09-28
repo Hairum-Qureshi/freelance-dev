@@ -1,5 +1,6 @@
 import useStripe from "../../hooks/useStripe";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
+import { Link } from "react-router-dom";
 
 export default function Payments() {
 	const { data: currentUser } = useCurrentUser();
@@ -69,7 +70,15 @@ export default function Payments() {
 							</p>
 							<div className="mt-4 rounded-md border border-dashed border-gray-300 p-6 text-center">
 								<p className="text-sm text-gray-500">
-									No payments have been made yet.
+									No payments have been made yet. <br /> To make a payment, view
+									your hired applications{" "}
+									<Link
+										to="http://localhost:5173/applicants/all?hired=true"
+										className="text-blue-600 hover:underline"
+									>
+										here
+									</Link>
+									.
 								</p>
 							</div>
 						</div>
