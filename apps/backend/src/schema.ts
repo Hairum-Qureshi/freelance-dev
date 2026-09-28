@@ -265,6 +265,7 @@ export const paymentsTable = pgTable('payments', {
   paidToId: text('paid_to_id')
     .notNull()
     .references(() => usersTable.id),
+  stripePaymentIntentId: text('stripe_payment_intent_id').notNull(),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
