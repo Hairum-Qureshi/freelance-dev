@@ -117,6 +117,16 @@ export class ApplicationService {
         eq(applicationsTable.applicantId, currUserId),
       with: {
         job: true,
+        applicant: {
+          columns: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            profilePicture: true,
+            email: true,
+            resumeId: true,
+          },
+        },
       },
       orderBy: (applications, { desc }) => desc(applications.createdAt),
     });
