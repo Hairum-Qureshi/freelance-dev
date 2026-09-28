@@ -6,6 +6,7 @@ import SnowflakeId from 'snowflake-id';
 import { JobPostingDTO } from 'src/DTOs/job.dto';
 import { jobPostsTable } from 'src/schema';
 import { eq } from 'drizzle-orm';
+import { NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class JobService {
@@ -175,6 +176,30 @@ export class JobService {
   }
 
   async setPaymentPrice(jobId: string, paymentPrice: number) {
+    const job = await this.db.query.jobPostsTable.findFirst({
+      where: (jobPosts, { eq }) => eq(jobPosts.id, jobId),
+    });
+
+    if (!job) throw new NotFoundException('Job not found');
+
+    if (paymentPrice === 0)
+      throw new HttpException(
+        'Payment price cannot be zero',
+        HttpStatus.BAD_REQUEST,
+      );
+
+    if (paymentPrice < job.salaryMin)
+      throw new HttpException(
+        `Payment price cannot be less than the minimum salary of ${job.salaryMin}`,
+        HttpStatus.BAD_REQUEST,
+      );
+
+    if (paymentPrice > job.salaryMax)
+      throw new HttpException(
+        `Payment price cannot be greater than the maximum salary of ${job.salaryMax}`,
+        HttpStatus.BAD_REQUEST,
+      );
+
     await this.db
       .update(jobPostsTable)
       .set({ agreedPaymentRate: paymentPrice })
