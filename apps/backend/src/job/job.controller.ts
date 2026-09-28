@@ -83,12 +83,12 @@ export class JobController {
     );
   }
 
-  @Patch(':jobId/set-payment-price')
+  @Patch(':applicationId/set-payment-price')
   @UseGuards(AuthGuard())
   async setPaymentPrice(
-    @Param('jobId') jobId: string,
+    @Param('applicationId') applicationId: string,
     @Body('paymentPrice') paymentPrice: number,
   ) {
-    return this.jobService.setPaymentPrice(jobId, paymentPrice);
+    return this.jobService.setPaymentPrice(applicationId, paymentPrice);
   }
 }

@@ -175,34 +175,46 @@ export class JobService {
     );
   }
 
-  async setPaymentPrice(jobId: string, paymentPrice: number) {
-    const job = await this.db.query.jobPostsTable.findFirst({
-      where: (jobPosts, { eq }) => eq(jobPosts.id, jobId),
-    });
-
-    if (!job) throw new NotFoundException('Job not found');
-
+  async setPaymentPrice(applicationId: string, paymentPrice: number) {
     if (paymentPrice === 0)
       throw new HttpException(
         'Payment price cannot be zero',
         HttpStatus.BAD_REQUEST,
       );
 
-    if (paymentPrice < job.salaryMin)
+    const application = await this.db.query.applicationsTable.findFirst({
+      where: (applicationsTable, { eq }) =>
+        eq(applicationsTable.id, applicationId),
+      with: {
+        job: true,
+      },
+    });
+
+    if (!application) {
+      throw new NotFoundException('Application not found');
+    }
+
+    if (application.status !== 'accepted')
       throw new HttpException(
-        `Payment price cannot be less than the minimum salary of ${job.salaryMin}`,
+        'Payment price can only be set for accepted applications',
         HttpStatus.BAD_REQUEST,
       );
 
-    if (paymentPrice > job.salaryMax)
+    if (paymentPrice < application[0].job.salaryMin)
       throw new HttpException(
-        `Payment price cannot be greater than the maximum salary of ${job.salaryMax}`,
+        `Payment price cannot be less than the minimum salary of ${application[0].job.salaryMin}`,
+        HttpStatus.BAD_REQUEST,
+      );
+
+    if (paymentPrice > application[0].job.salaryMax)
+      throw new HttpException(
+        `Payment price cannot be greater than the maximum salary of ${application[0].job.salaryMax}`,
         HttpStatus.BAD_REQUEST,
       );
 
     await this.db
       .update(jobPostsTable)
       .set({ agreedPaymentRate: paymentPrice })
-      .where(eq(jobPostsTable.id, jobId));
+      .where(eq(jobPostsTable.id, application[0].job.id));
   }
 }
