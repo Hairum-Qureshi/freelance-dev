@@ -221,7 +221,7 @@ export default function useJob() {
 				return;
 			}
 
-			await axios.post(
+			await axios.patch(
 				`${import.meta.env.VITE_BACKEND_URL}/api/job/${jobId}/set-payment-price`,
 				{
 					paymentPrice
