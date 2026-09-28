@@ -97,7 +97,7 @@ export class EmailService {
       html: PAY_RATE_EMAIL_TEMPLATE.replace('{{ client_name }}', clientName)
         .replace('{{ name }}', applicantName)
         .replace('{{ email }}', to)
-        .replace('{{ pay_rate }}', `$${(payRate / 100).toFixed(2)}`),
+        .replaceAll('{{ pay_rate }}', `$${(payRate / 100).toFixed(2)}`),
     });
   }
 }
