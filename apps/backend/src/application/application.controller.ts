@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Post,
-  Body,
-  UseGuards,
-  Get,
-  Param,
-  Patch,
-} from '@nestjs/common';
+import { Controller, Body, UseGuards, Get, Param, Patch } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApplicationService } from './application.service';
 import { CurrentUser } from 'src/decorators/currentUser.decorator';
@@ -15,22 +7,6 @@ import type { UserPayload } from '@repo/shared-types';
 @Controller('application')
 export class ApplicationController {
   constructor(private readonly applicationService: ApplicationService) {}
-
-  @Post(':jobId/apply')
-  @UseGuards(AuthGuard())
-  async applyToJob(
-    @Param('jobId') jobId: string,
-    @CurrentUser() currentUser: UserPayload,
-    @Body('proposal') proposal: string,
-    @Body('posterId') posterId: string,
-  ) {
-    return this.applicationService.applyToJob(
-      jobId,
-      currentUser.id,
-      proposal,
-      posterId,
-    );
-  }
 
   @Get('all')
   @UseGuards(AuthGuard())
