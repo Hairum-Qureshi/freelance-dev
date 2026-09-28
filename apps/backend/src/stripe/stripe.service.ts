@@ -22,7 +22,7 @@ export class StripeService {
         account_onboarding: {
           configurations: ['recipient'],
           refresh_url: `${this.configService.get('FRONTEND_URL')}/${userId}/settings`,
-          return_url: `${this.configService.get('FRONTEND_URL')}/${userId}/settings`,
+          return_url: `${this.configService.get('FRONTEND_URL')}/${userId}/settings?section=payments`,
         },
       },
     });
