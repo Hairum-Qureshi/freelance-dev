@@ -1,5 +1,6 @@
 import {
   Injectable,
+  ForbiddenException,
   HttpException,
   HttpStatus,
   NotFoundException,
@@ -88,7 +89,7 @@ export class StripeService {
   }
 
   async createPaymentIntent(
-    currEmail: string,
+    currentUser: UserPayload,
     applicationId: string,
     hiredUserId: string,
   ) {
@@ -101,6 +102,11 @@ export class StripeService {
     })) as ApplicationPayload | null;
 
     if (!application) throw new NotFoundException('Application not found');
+
+    if (application.posterId !== currentUser.id)
+      throw new ForbiddenException(
+        'Only the application poster can make payment',
+      );
 
     if (application.status !== 'accepted')
       throw new BadRequestException('Application is not accepted');
@@ -140,7 +146,7 @@ export class StripeService {
       transfer_data: {
         destination: user.stripeAccountId,
       },
-      receipt_email: currEmail,
+      receipt_email: currentUser.email,
     });
 
     return {

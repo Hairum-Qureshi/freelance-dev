@@ -40,7 +40,7 @@ export class StripeController {
   ) {
     // TODO - add role guard to restrict only clients to this endpoint
     return this.stripeService.createPaymentIntent(
-      user.email,
+      user,
       applicationId,
       hiredUserId,
     );
