@@ -173,7 +173,7 @@ export default function useJob() {
 			}
 
 			await axios.post(
-				`${import.meta.env.VITE_BACKEND_URL}/api/application/${jobID}/apply`,
+				`${import.meta.env.VITE_BACKEND_URL}/api/job/${jobID}/apply`,
 				{
 					proposal: applicationReason,
 					posterId
