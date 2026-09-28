@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { Link } from "react-router-dom";
@@ -10,7 +11,10 @@ import Payments from "../components/settings/Payments";
 import HiringNeeds from "../components/settings/HiringNeeds";
 
 export default function Settings() {
-	const [activeSection, setActiveSection] = useState("profile");
+	const [searchParams] = useSearchParams();
+	const [activeSection, setActiveSection] = useState(
+		searchParams.get("section") || "profile"
+	);
 	const { data: currentUser } = useCurrentUser();
 	const isWorker = currentUser?.role === "freelancer";
 	const navigate = useNavigate();
