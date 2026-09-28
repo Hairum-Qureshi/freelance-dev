@@ -75,7 +75,7 @@ export const PAY_RATE_EMAIL_TEMPLATE = `<table
                 color: #111111;
               "
             >
-              Hello {{ name }}, A pay rate has been agreed upon
+              Hello {{ name }}, a pay rate has been agreed upon
             </h1>
 
             <p
