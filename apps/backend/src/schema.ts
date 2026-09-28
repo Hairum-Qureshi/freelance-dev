@@ -11,7 +11,7 @@ import {
   decimal,
 } from 'drizzle-orm/pg-core';
 import type { OnboardingAnswers } from '@repo/shared-types';
-import { relations } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 
 export const userRoleEnum = pgEnum('user_role', ['hirer', 'freelancer']);
 
@@ -170,6 +170,7 @@ export const jobPostsTable = pgTable('jobs', {
   deliverables: text('deliverables').notNull(),
   salaryMin: integer('budget_min').notNull(),
   salaryMax: integer('budget_max').notNull(),
+  agreedPaymentRate: integer('agreed_payment_rate').default(sql`null`),
   skills: text('skills')
     .array()
     .notNull()
