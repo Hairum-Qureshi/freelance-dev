@@ -262,6 +262,9 @@ export const paymentsTable = pgTable('payments', {
   payerId: text('payer_id')
     .notNull()
     .references(() => usersTable.id),
+  paidToId: text('paid_to_id')
+    .notNull()
+    .references(() => usersTable.id),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
