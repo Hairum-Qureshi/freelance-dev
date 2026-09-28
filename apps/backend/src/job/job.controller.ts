@@ -30,4 +30,20 @@ export class JobController {
   async getJobById(@Param('jobId') jobId: string) {
     return this.jobService.getJobData(jobId);
   }
+
+  @Post(':jobId/apply')
+  @UseGuards(AuthGuard())
+  async applyToJob(
+    @Param('jobId') jobId: string,
+    @CurrentUser() currentUser: UserPayload,
+    @Body('proposal') proposal: string,
+    @Body('posterId') posterId: string,
+  ) {
+    return this.jobService.applyToJob(
+      jobId,
+      currentUser.id,
+      proposal,
+      posterId,
+    );
+  }
 }

@@ -1,8 +1,9 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { Database } from 'src/providers/postgres-db';
 import SnowflakeId from 'snowflake-id';
 import { JobPostingDTO } from 'src/DTOs/job.dto';
 import { jobPostsTable } from 'src/schema';
+import { applicationsTable } from 'src/schema';
 
 @Injectable()
 export class JobService {
@@ -72,6 +73,40 @@ export class JobService {
           },
         },
       },
+    });
+  }
+
+  async applyToJob(
+    jobId: string,
+    currUserId: string,
+    proposal: string,
+    posterId: string,
+  ) {
+    const snowflake = new SnowflakeId({
+      mid: 42,
+      offset: (2019 - 1970) * 31536000 * 1000,
+    });
+
+    if (!proposal.trim()) {
+      throw new HttpException(
+        'Proposal cannot be empty',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (proposal.length < 20 || proposal.length > 600) {
+      throw new HttpException(
+        'Proposal must be between 20 and 600 characters',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    await this.db.insert(applicationsTable).values({
+      id: snowflake.generate().toString(),
+      jobId,
+      applicantId: currUserId,
+      posterId,
+      proposal,
     });
   }
 
