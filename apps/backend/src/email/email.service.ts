@@ -6,6 +6,7 @@ import { EMAIL_TEMPLATE } from './templates/new-contact-message';
 import { ACCEPTED_EMAIL_TEMPLATE } from './templates/hired';
 import { REJECTED_EMAIL_TEMPLATE } from './templates/rejected';
 import { RETRACTED_EMAIL_TEMPLATE } from './templates/retracted';
+import { PAY_RATE_EMAIL_TEMPLATE } from './templates/pay-rate';
 
 @Injectable()
 export class EmailService {
@@ -80,6 +81,23 @@ export class EmailService {
                 .replace('{{ email }}', to)
                 .replace('{{ status }}', status)
                 .replaceAll('{{ title }}', jobTitle),
+    });
+  }
+
+  async sendPayRateEmail(
+    to: string,
+    clientName: string,
+    applicantName: string,
+    payRate: number,
+  ) {
+    return this.resend.emails.send({
+      from: `Freelance Dev <${this.configService.getOrThrow<string>('EMAIL_FROM')}>`,
+      to,
+      subject: 'Agreed Pay Rate',
+      html: PAY_RATE_EMAIL_TEMPLATE.replace('{{ client_name }}', clientName)
+        .replace('{{ name }}', applicantName)
+        .replace('{{ email }}', to)
+        .replace('{{ pay_rate }}', `$${(payRate / 100).toFixed(2)}`),
     });
   }
 }
