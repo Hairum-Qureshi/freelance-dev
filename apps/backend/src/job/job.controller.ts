@@ -83,9 +83,12 @@ export class JobController {
     );
   }
 
-  @Get('applications/:jobId')
+  @Patch(':jobId/set-payment-price')
   @UseGuards(AuthGuard())
-  async getApplicationsForJob(@Param('jobId') jobId: string) {
-    // return this.jobService.getApplicationsForJob(jobId);
+  async setPaymentPrice(
+    @Param('jobId') jobId: string,
+    @Body('paymentPrice') paymentPrice: number,
+  ) {
+    return this.jobService.setPaymentPrice(jobId, paymentPrice);
   }
 }
