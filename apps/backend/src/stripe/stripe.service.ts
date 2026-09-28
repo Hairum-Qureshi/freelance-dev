@@ -1,10 +1,17 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  HttpException,
+  HttpStatus,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { Inject } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { Database } from 'src/providers/postgres-db';
-import { usersTable } from 'src/schema';
+import { applicationsTable, usersTable } from 'src/schema';
 import { Stripe } from 'stripe';
 import { ConfigService } from '@nestjs/config';
+import { ApplicationPayload, UserPayload } from '@repo/shared-types';
 
 @Injectable()
 export class StripeService {
@@ -78,5 +85,66 @@ export class StripeService {
     const accountLink = await this.createAccountLink(account.id, userId);
 
     return { url: accountLink.url };
+  }
+
+  async createPaymentIntent(
+    currEmail: string,
+    applicationId: string,
+    hiredUserId: string,
+  ) {
+    const application = (await this.db.query.applicationsTable.findFirst({
+      where: eq(applicationsTable.id, applicationId),
+      with: {
+        applicant: true,
+        job: true,
+      },
+    })) as ApplicationPayload | null;
+
+    if (!application) throw new NotFoundException('Application not found');
+
+    if (application.status !== 'accepted')
+      throw new BadRequestException('Application is not accepted');
+
+    const user = (await this.db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.id, hiredUserId))
+      .limit(1)
+      .then((rows) => (rows.length ? rows[0] : null))) as
+      | (UserPayload & { stripeAccountId: string })
+      | null;
+
+    if (!user) throw new NotFoundException('User not found');
+
+    if (application.applicant.id !== hiredUserId)
+      throw new BadRequestException(
+        'Hired user does not match the application',
+      );
+
+    if (!application.job.agreedPaymentRateCents)
+      throw new BadRequestException(
+        'Agreed payment rate is not set for this job',
+      );
+
+    if (!user.stripeAccountConnected || !user.stripeAccountId)
+      throw new BadRequestException(
+        'Hired user does not have a connected Stripe account',
+      );
+
+    const paymentIntent = await this.stripe.paymentIntents.create({
+      amount: application.job.agreedPaymentRateCents,
+      currency: 'usd',
+      automatic_payment_methods: {
+        enabled: true,
+      },
+      transfer_data: {
+        destination: user.stripeAccountId,
+      },
+      receipt_email: currEmail,
+    });
+
+    return {
+      clientSecret: paymentIntent.client_secret,
+    };
   }
 }
