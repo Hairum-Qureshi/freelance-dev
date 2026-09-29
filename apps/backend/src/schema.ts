@@ -26,9 +26,11 @@ export const usersTable = pgTable('users', {
   onboardingAnswers: jsonb('onboarding_answers')
     .$type<OnboardingAnswers>()
     .notNull(),
-  resumeId: text('resume_id'),
+  resumeId: text('resume_id').unique(),
   location: text('location'),
   deleted: boolean('deleted').default(false),
+  stripeAccountId: text('stripe_account_id').unique(),
+  stripeAccountConnected: boolean('stripe_account_connected').default(false),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
@@ -168,6 +170,7 @@ export const jobPostsTable = pgTable('jobs', {
   deliverables: text('deliverables').notNull(),
   salaryMin: integer('budget_min').notNull(),
   salaryMax: integer('budget_max').notNull(),
+  agreedPaymentRateCents: integer('agreed_payment_rate_cents'),
   skills: text('skills')
     .array()
     .notNull()
@@ -236,6 +239,33 @@ export const notificationsTable = pgTable('notifications', {
   read: boolean('read')
     .notNull()
     .$default(() => false),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+export const paymentStatus = pgEnum('payment_status', [
+  'pending',
+  'completed',
+  'refund',
+  'failed',
+]);
+
+export const paymentsTable = pgTable('payments', {
+  id: text().primaryKey(),
+  jobId: text('job_id')
+    .notNull()
+    .references(() => jobPostsTable.id),
+  amountCents: integer('amount_cents').notNull(),
+  status: paymentStatus('status')
+    .notNull()
+    .$default(() => 'pending'),
+  payerId: text('payer_id')
+    .notNull()
+    .references(() => usersTable.id),
+  paidToId: text('paid_to_id')
+    .notNull()
+    .references(() => usersTable.id),
+  stripePaymentIntentId: text('stripe_payment_intent_id').notNull(),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
@@ -335,3 +365,10 @@ export const notificationsRelations = relations(
     }),
   }),
 );
+
+export const paymentsRelations = relations(paymentsTable, ({ one }) => ({
+  payer: one(usersTable, {
+    fields: [paymentsTable.payerId],
+    references: [usersTable.id],
+  }),
+}));

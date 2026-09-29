@@ -1,18 +1,13 @@
-import { Injectable, Inject, HttpStatus, HttpException } from '@nestjs/common';
-import { EmailService } from 'src/email/email.service';
+import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { Database } from 'src/providers/postgres-db';
-import { applicationsTable } from 'src/schema';
 import SnowflakeId from 'snowflake-id';
 import { JobPostingDTO } from 'src/DTOs/job.dto';
 import { jobPostsTable } from 'src/schema';
-import { eq } from 'drizzle-orm';
+import { applicationsTable } from 'src/schema';
 
 @Injectable()
 export class JobService {
-  constructor(
-    @Inject('NeonDBProvider') private readonly db: Database,
-    private readonly emailService: EmailService,
-  ) {}
+  constructor(@Inject('NeonDBProvider') private readonly db: Database) {}
 
   async createJob(jobPosting: JobPostingDTO, posterId: string) {
     const snowflake = new SnowflakeId({
@@ -81,23 +76,6 @@ export class JobService {
     });
   }
 
-  async getJobData(jobId: string) {
-    return this.db.query.jobPostsTable.findFirst({
-      where: (jobPosts, { eq }) => eq(jobPosts.id, jobId),
-      with: {
-        poster: {
-          columns: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            profilePicture: true,
-            email: true,
-          },
-        },
-      },
-    });
-  }
-
   async applyToJob(
     jobId: string,
     currUserId: string,
@@ -132,45 +110,20 @@ export class JobService {
     });
   }
 
-  async viewAllUserApplications({ currentUserId }: { currentUserId: string }) {
-    return this.db.query.applicationsTable.findMany({
-      where: (applications, { eq }) => eq(applications.posterId, currentUserId),
+  async getJobData(jobId: string) {
+    return this.db.query.jobPostsTable.findFirst({
+      where: (jobPosts, { eq }) => eq(jobPosts.id, jobId),
       with: {
-        applicant: {
+        poster: {
           columns: {
             id: true,
             firstName: true,
             lastName: true,
             profilePicture: true,
             email: true,
-            resumeId: true,
           },
         },
-        job: true,
       },
-      orderBy: (applications, { desc }) => desc(applications.createdAt),
     });
-  }
-
-  async updateApplicationStatus(
-    applicationId: string,
-    status: 'accepted' | 'rejected' | 'pending',
-    applicantName: string,
-    applicantEmail: string,
-    jobTitle: string,
-    jobId: string,
-  ) {
-    await this.db
-      .update(applicationsTable)
-      .set({ status })
-      .where(eq(applicationsTable.id, applicationId));
-
-    await this.emailService.sendApplicationStatusEmail(
-      applicantEmail,
-      applicantName,
-      status,
-      jobTitle,
-      jobId,
-    );
   }
 }

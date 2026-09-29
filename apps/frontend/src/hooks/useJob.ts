@@ -1,11 +1,12 @@
 import type { JobPayload } from "@repo/shared-types";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function useJob() {
 	const navigate = useNavigate();
 	const { jobID } = useParams();
+	const queryClient = useQueryClient();
 
 	const postJobListingMutation = useMutation({
 		mutationFn: async ({
@@ -151,5 +152,97 @@ export default function useJob() {
 		}
 	});
 
-	return { postJobListingMutation, allJobs, job };
+	const applyToJobMutation = useMutation({
+		mutationFn: async ({
+			applicationReason,
+			posterId
+		}: {
+			applicationReason: string;
+			posterId: string;
+		}): Promise<void> => {
+			if (!jobID) return;
+
+			if (!applicationReason.trim()) {
+				alert("Application reason cannot be empty");
+				return;
+			}
+
+			if (applicationReason.length < 20 || applicationReason.length > 600) {
+				alert("Application reason must be between 20 and 600 characters");
+				return;
+			}
+
+			await axios.post(
+				`${import.meta.env.VITE_BACKEND_URL}/api/job/${jobID}/apply`,
+				{
+					proposal: applicationReason,
+					posterId
+				},
+				{
+					withCredentials: true
+				}
+			);
+		}
+	});
+
+	const setPaymentPriceMutation = useMutation({
+		mutationFn: async ({
+			applicationId,
+			paymentPrice,
+			jobSalaryMin,
+			jobSalaryMax
+		}: {
+			applicationId: string;
+			paymentPrice: number;
+			jobSalaryMin: number;
+			jobSalaryMax: number;
+		}): Promise<void> => {
+			if (!paymentPrice) {
+				alert("Payment price is required");
+				return;
+			}
+
+			if (paymentPrice === 0) {
+				alert("Payment price cannot be zero");
+				return;
+			}
+
+			if (paymentPrice < jobSalaryMin) {
+				alert(
+					`Payment price cannot be less than the minimum salary of ${jobSalaryMin}`
+				);
+				return;
+			}
+
+			if (paymentPrice > jobSalaryMax) {
+				alert(
+					`Payment price cannot be greater than the maximum salary of ${jobSalaryMax}`
+				);
+				return;
+			}
+
+			await axios.patch(
+				`${import.meta.env.VITE_BACKEND_URL}/api/application/${applicationId}/set-payment-price`,
+				{
+					paymentPrice
+				},
+				{
+					withCredentials: true
+				}
+			);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["applications"]
+			});
+		}
+	});
+
+	return {
+		postJobListingMutation,
+		allJobs,
+		job,
+		applyToJobMutation,
+		setPaymentPriceMutation
+	};
 }

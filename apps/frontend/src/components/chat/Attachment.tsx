@@ -25,6 +25,8 @@ export default function Attachment({
 		return `${(bytes / 1024 ** 3).toFixed(1)} GB`;
 	}
 
+	// TODO - make it so that you can delete attached files
+
 	return (
 		<div className="flex w-52 shrink-0 items-center gap-3 rounded-md border border-slate-200 p-2">
 			<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-slate-100">

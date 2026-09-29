@@ -23,8 +23,13 @@ import TermsOfService from "../pages/TermsOfService";
 import PrivacyPolicy from "../pages/PrivacyPolicy";
 import Applicants from "../pages/Applicants";
 import JobApplicants from "../pages/JobApplicants";
+import SubmittedApplications from "../pages/SubmittedApplications";
+import { loadStripe } from "@stripe/stripe-js";
+import Payment from "../pages/Payment";
 
 export default function App() {
+	const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+
 	return (
 		<BrowserRouter>
 			<ShowNavbar>
@@ -46,11 +51,19 @@ export default function App() {
 					<Route path="/inbox/c/:chatID" element={<Inbox />} />
 					<Route path="/listings" element={<Listings />} />
 					<Route path="/listing/:jobID" element={<Listing />} />
+					<Route
+						path="/submitted-applications"
+						element={<SubmittedApplications />}
+					/>
 					{/* <Route path="/listing/:edit" element={<EditJob />} /> */}
 					<Route path="/privacy-policy" element={<PrivacyPolicy />} />
 					<Route path="/applicants/all" element={<Applicants />} />
 					<Route path="/applicants/:jobID/all" element={<JobApplicants />} />
 					<Route path="/terms-of-service" element={<TermsOfService />} />
+					<Route
+						path="/payment/:applicationId"
+						element={<Payment stripePromise={stripePromise} />}
+					/>
 					<Route
 						path="/onboarding"
 						element={

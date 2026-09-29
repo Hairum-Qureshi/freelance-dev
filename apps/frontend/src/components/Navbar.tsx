@@ -50,6 +50,12 @@ export default function Navbar() {
 					How It Works
 				</Link>
 
+				{currUserData?.role !== "hirer" && (
+					<Link to="/submitted-applications" className="hover:underline">
+						View Applications
+					</Link>
+				)}
+
 				{currUserData?.role === "hirer" && (
 					<Link to="/post-job" className="hover:underline">
 						Post a Job

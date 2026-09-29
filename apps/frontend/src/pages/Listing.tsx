@@ -3,13 +3,21 @@ import ReviewCard from "../components/ReviewCard";
 import { IoStarSharp } from "react-icons/io5";
 import { IoIosStarHalf } from "react-icons/io";
 import { FaEdit } from "react-icons/fa";
+import useJob from "../hooks/useJob";
+import NotFound from "./NotFound";
 
 export default function Listing() {
+	const { job } = useJob();
+
+	console.log(job);
+
+	if (!job) return <NotFound />;
+
 	return (
 		<div className="min-h-screen w-full bg-slate-100 px-4 py-6 sm:px-6">
 			<div className="flex flex-row w-[87%] m-auto space-x-4">
 				<div className="w-1/2">
-					<AdCard />
+					<AdCard job={job} />
 				</div>
 				<div className="w-1/2">
 					<div className="h-fit rounded-md border border-slate-300 bg-white p-5 shadow-sm">

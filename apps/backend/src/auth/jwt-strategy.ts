@@ -45,6 +45,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       resumeId: user.resumeId,
       location: user.location,
       deleted: user.deleted ?? false,
+      stripeAccountConnected: user.stripeAccountConnected ?? false,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     };

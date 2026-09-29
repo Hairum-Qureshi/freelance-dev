@@ -2,9 +2,11 @@ import { useState } from "react";
 import useJob from "../hooks/useJob";
 
 export default function ApplicationModal({
-	setShowModal
+	setShowModal,
+	posterId
 }: {
 	setShowModal: (show: boolean) => void;
+	posterId: string;
 }) {
 	const [applicationReason, setApplicationReason] = useState("");
 	const { applyToJobMutation } = useJob();
@@ -85,7 +87,7 @@ export default function ApplicationModal({
 						type="button"
 						className="rounded-lg bg-black px-5 py-2 text-sm font-medium text-white transition hover:bg-gray-800 hover:cursor-pointer"
 						onClick={() => {
-							applyToJobMutation.mutate(applicationReason);
+							applyToJobMutation.mutate({applicationReason, posterId});
 							setShowModal(false);
 						}}
 					>

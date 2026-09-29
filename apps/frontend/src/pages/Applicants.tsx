@@ -54,7 +54,10 @@ export default function Applications() {
 					{activePanel === "job" ? (
 						<JobDetails selectedJob={selectedApplication.job} />
 					) : (
-						<ApplicationDetails application={selectedApplication} setSelectedApplicationId={setSelectedApplicationId} />
+						<ApplicationDetails
+							application={selectedApplication}
+							setSelectedApplicationId={setSelectedApplicationId}
+						/>
 					)}
 				</SlidingPanel>
 			)}
@@ -76,7 +79,7 @@ export default function Applications() {
 						<div className="flex items-center gap-4">
 							<div className="text-right">
 								<p className="text-xs font-medium uppercase tracking-wide text-slate-500">
-									Total Applications
+									Total Applicants
 								</p>
 								<p className="text-2xl font-semibold text-slate-900">
 									{allApplications?.length ?? 0}

@@ -125,7 +125,7 @@ export const REJECTED_EMAIL_TEMPLATE = `<table
                       color: #111111;
                     "
                   >
-                    {{ job title }}
+                    {{ title }}
                   </p>
 
                   <p

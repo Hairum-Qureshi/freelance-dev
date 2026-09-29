@@ -1,0 +1,1 @@
+ALTER TABLE "jobs" ALTER COLUMN "agreed_payment_rate_cents" DROP DEFAULT;
