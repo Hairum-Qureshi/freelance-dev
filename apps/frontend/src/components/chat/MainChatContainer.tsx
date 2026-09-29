@@ -14,6 +14,8 @@ dayjs.extend(utc);
 
 // TODO - need to handle last message
 // TODO - need to handle read status
+// TODO - need to handle case where a user attaches a file and an image
+// TODO - when sending a message with attachments, make it so that the send button is disabled until the attachments are fully uploaded
 
 export default function MainChatContainer() {
 	const { chatMessages } = useChat();

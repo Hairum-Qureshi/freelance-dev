@@ -5,7 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 export default function useApplication() {
 	const queryClient = useQueryClient();
 
-	const { data: allApplications } = useQuery({
+	const allApplicationsQuery = useQuery({
 		queryKey: ["applications"],
 		queryFn: async () => {
 			const response = await axios.get<ApplicationPayload[]>(
@@ -17,6 +17,7 @@ export default function useApplication() {
 			return response.data;
 		}
 	});
+	const { data: allApplications } = allApplicationsQuery;
 
 	const { data: currUserApplications } = useQuery({
 		queryKey: ["currUserApplications"],
@@ -99,6 +100,8 @@ export default function useApplication() {
 
 	return {
 		allApplications,
+		allApplicationsIsPending: allApplicationsQuery.isPending,
+		allApplicationsIsError: allApplicationsQuery.isError,
 		currUserApplications,
 		updateApplicantStatusMutation,
 		withdrawApplicationMutation

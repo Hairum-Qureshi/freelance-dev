@@ -9,7 +9,6 @@ import NotFound from "../pages/NotFound";
 import "../css/index.css";
 import Join from "../pages/Join";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { Elements } from "@stripe/react-stripe-js";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import ShowFooter from "./middleware/ShowFooter";
@@ -26,6 +25,7 @@ import Applicants from "../pages/Applicants";
 import JobApplicants from "../pages/JobApplicants";
 import SubmittedApplications from "../pages/SubmittedApplications";
 import { loadStripe } from "@stripe/stripe-js";
+import Payment from "../pages/Payment";
 
 export default function App() {
 	const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
@@ -38,40 +38,42 @@ export default function App() {
 			<GoogleOAuthProvider
 				clientId={import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID}
 			>
-				<Elements stripe={stripePromise}>
-					<Routes>
-						<Route path="/" element={<Home />} />
-						<Route path="/about" element={<About />} />
-						<Route path="/join" element={<Join />} />
-						<Route path="/p/:uid" element={<Profile />} />
-						<Route path="/p/:uid/settings" element={<Settings />} />
-						<Route path="/post-job" element={<PostJob />} />
-						<Route path="/contact" element={<Contact />} />
-						<Route path="/inbox" element={<Inbox />} />
-						<Route path="/how-it-works" element={<HowDoesItWork />} />
-						<Route path="/inbox/c/:chatID" element={<Inbox />} />
-						<Route path="/listings" element={<Listings />} />
-						<Route path="/listing/:jobID" element={<Listing />} />
-						<Route
-							path="/submitted-applications"
-							element={<SubmittedApplications />}
-						/>
-						{/* <Route path="/listing/:edit" element={<EditJob />} /> */}
-						<Route path="/privacy-policy" element={<PrivacyPolicy />} />
-						<Route path="/applicants/all" element={<Applicants />} />
-						<Route path="/applicants/:jobID/all" element={<JobApplicants />} />
-						<Route path="/terms-of-service" element={<TermsOfService />} />
-						<Route
-							path="/onboarding"
-							element={
-								<OnboardViewing>
-									<Onboarding />
-								</OnboardViewing>
-							}
-						/>
-						<Route path="*" element={<NotFound />} />
-					</Routes>
-				</Elements>
+				<Routes>
+					<Route path="/" element={<Home />} />
+					<Route path="/about" element={<About />} />
+					<Route path="/join" element={<Join />} />
+					<Route path="/p/:uid" element={<Profile />} />
+					<Route path="/p/:uid/settings" element={<Settings />} />
+					<Route path="/post-job" element={<PostJob />} />
+					<Route path="/contact" element={<Contact />} />
+					<Route path="/inbox" element={<Inbox />} />
+					<Route path="/how-it-works" element={<HowDoesItWork />} />
+					<Route path="/inbox/c/:chatID" element={<Inbox />} />
+					<Route path="/listings" element={<Listings />} />
+					<Route path="/listing/:jobID" element={<Listing />} />
+					<Route
+						path="/submitted-applications"
+						element={<SubmittedApplications />}
+					/>
+					{/* <Route path="/listing/:edit" element={<EditJob />} /> */}
+					<Route path="/privacy-policy" element={<PrivacyPolicy />} />
+					<Route path="/applicants/all" element={<Applicants />} />
+					<Route path="/applicants/:jobID/all" element={<JobApplicants />} />
+					<Route path="/terms-of-service" element={<TermsOfService />} />
+					<Route
+						path="/payment/:applicationId"
+						element={<Payment stripePromise={stripePromise} />}
+					/>
+					<Route
+						path="/onboarding"
+						element={
+							<OnboardViewing>
+								<Onboarding />
+							</OnboardViewing>
+						}
+					/>
+					<Route path="*" element={<NotFound />} />
+				</Routes>
 			</GoogleOAuthProvider>
 			<ShowFooter>
 				<Footer />

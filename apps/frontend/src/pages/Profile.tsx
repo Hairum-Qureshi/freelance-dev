@@ -21,7 +21,7 @@ export default function Profile() {
 	const projectTypes =
 		onboardingAnswers?.seekingProjects ?? onboardingAnswers?.interests ?? [];
 	const hiringNeeds = onboardingAnswers?.hiringFor ?? [];
-	const isWorker = onboardingAnswers?.role === "Work";
+	const isWorker = userProfileData?.role === "freelancer";
 	const role = isWorker
 		? "Freelance developer"
 		: (onboardingAnswers?.hirerTitle ?? "Hiring professional");
@@ -34,6 +34,8 @@ export default function Profile() {
 		: { label: "Growing", score: 1 };
 
 	const [showResume, setShowResume] = useState(false);
+
+	// TODO - need to prevent users from viewing the admin user profile - prevent them from accessing it
 
 	return (
 		<div className="min-h-screen w-full bg-slate-100/50 px-4 py-6 sm:px-6">

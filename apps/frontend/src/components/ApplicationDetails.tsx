@@ -1,13 +1,12 @@
 import type { ApplicationPayload } from "@repo/shared-types";
 import { FaArrowUpRightFromSquare } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaCheck } from "react-icons/fa6";
 import { TbCancel } from "react-icons/tb";
 import { useState } from "react";
 import useApplication from "../hooks/useApplication";
 import useJob from "../hooks/useJob";
 import { useCurrentUser } from "../hooks/useCurrentUser";
-import useStripe from "../hooks/useStripe";
 
 export default function ApplicationDetails({
 	application,
@@ -17,6 +16,7 @@ export default function ApplicationDetails({
 	setSelectedApplicationId: (id: string | null) => void;
 }) {
 	const { applicant } = application;
+	const navigate = useNavigate();
 	const { data: currUser } = useCurrentUser();
 	const resumeUrl = applicant.resumeId
 		? `${import.meta.env.VITE_IMAGE_KIT_URL_ENDPOINT}/profiles/${applicant.id}/Resume.pdf?v=${applicant.resumeId}`
@@ -25,7 +25,6 @@ export default function ApplicationDetails({
 	const [showSetPaymentPrice, setShowSetPaymentPrice] = useState(false);
 	const [paymentPrice, setPaymentPrice] = useState<number>();
 	const { setPaymentPriceMutation } = useJob();
-	const { createPaymentIntent } = useStripe();
 
 	return (
 		<div className="px-6 py-5">
@@ -54,12 +53,7 @@ export default function ApplicationDetails({
 							{application.job.agreedPaymentRateCents && (
 								<button
 									className="rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:cursor-pointer hover:bg-green-700"
-									onClick={() =>
-										createPaymentIntent.mutate({
-											applicationId: application.id,
-											hiredUserId: applicant.id
-										})
-									}
+									onClick={() => navigate(`/payment/${application.id}`)}
 								>
 									Pay {applicant.firstName}
 								</button>

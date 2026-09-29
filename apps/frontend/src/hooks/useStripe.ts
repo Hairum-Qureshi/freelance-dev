@@ -1,8 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function useStripe() {
 	const queryClient = useQueryClient();
+	const navigate = useNavigate();
 
 	const { mutate: createStripeConnectedAccount, isPending } = useMutation({
 		mutationFn: async (): Promise<string> => {
@@ -19,10 +21,7 @@ export default function useStripe() {
 		onSuccess: url => {
 			queryClient.invalidateQueries({
 				queryKey: ["currentUser"]
-			});
-
-			// Redirect to Stripe's hosted onboarding flow
-			window.location.href = url;
+			});			navigate(url);
 		}
 	});
 
@@ -33,14 +32,16 @@ export default function useStripe() {
 		}: {
 			applicationId: string;
 			hiredUserId: string;
-		}): Promise<void> => {
-			await axios.post(
+		}): Promise<{ clientSecret: string }> => {
+			const response = await axios.post<{ clientSecret: string }>(
 				`${import.meta.env.VITE_BACKEND_URL}/api/stripe/${applicationId}/create-payment-intent`,
 				{ hiredUserId },
 				{
 					withCredentials: true
 				}
 			);
+
+			return response.data;
 		}
 	});
 
