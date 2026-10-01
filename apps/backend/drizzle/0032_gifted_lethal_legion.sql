@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "job_poster_unique" ON "ratings" USING btree ("job_id","user_id");

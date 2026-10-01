@@ -225,6 +225,13 @@
       "when": 1790832300002,
       "tag": "0031_outstanding_ronan",
       "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1790890787840,
+      "tag": "0032_gifted_lethal_legion",
+      "breakpoints": true
     }
   ]
 }
