@@ -58,12 +58,12 @@ export default function useRating() {
 		queryFn: async () => {
 			if (!jobID) return null;
 
-			const response = await axios.get<RatingsPayload[] & { average: number }>(
-				`${import.meta.env.VITE_BACKEND_URL}/api/job/${jobID}/reviews`,
-				{
-					withCredentials: true
-				}
-			);
+			const response = await axios.get<{
+				average: number;
+				ratings: RatingsPayload[];
+			}>(`${import.meta.env.VITE_BACKEND_URL}/api/job/${jobID}/reviews`, {
+				withCredentials: true
+			});
 
 			return response.data;
 		}
