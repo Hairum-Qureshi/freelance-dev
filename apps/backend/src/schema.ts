@@ -182,20 +182,29 @@ export const jobPostsTable = pgTable('jobs', {
   updatedAt: timestamp('updated_at').defaultNow(),
 });
 
-export const ratingsTable = pgTable('ratings', {
-  id: text().primaryKey(),
-  jobId: text('job_id')
-    .notNull()
-    .references(() => jobPostsTable.id),
-  posterId: text('user_id')
-    .notNull()
-    .references(() => usersTable.id),
-  rating: decimal({ precision: 2, scale: 1 }).notNull(),
-  title: text('title').notNull(),
-  review: text('review').notNull(),
-  createdAt: timestamp('created_at').defaultNow(),
-  updatedAt: timestamp('updated_at').defaultNow(),
-});
+export const ratingsTable = pgTable(
+  'ratings',
+  {
+    id: text().primaryKey(),
+    jobId: text('job_id')
+      .notNull()
+      .references(() => jobPostsTable.id),
+    posterId: text('user_id')
+      .notNull()
+      .references(() => usersTable.id),
+    rating: decimal({ precision: 2, scale: 1 }).notNull(),
+    title: text('title').notNull(),
+    review: text('review').notNull(),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at').defaultNow(),
+  },
+  (table) => ({
+    uniqueRating: uniqueIndex('job_poster_unique').on(
+      table.jobId,
+      table.posterId,
+    ),
+  }),
+);
 
 export const applicationStatus = pgEnum('status', [
   'accepted',
