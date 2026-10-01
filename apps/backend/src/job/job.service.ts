@@ -227,15 +227,16 @@ export class JobService {
     });
 
     return !jobRatings
-      ? []
-      : [
-          ...jobRatings,
-          {
-            average:
-              jobRatings
-                .map((r) => parseFloat(r.rating))
-                .reduce((a, b) => a + b, 0) / jobRatings.length,
-          },
-        ];
+      ? {
+          average: 0,
+          ratings: [],
+        }
+      : {
+          average:
+            jobRatings
+              .map((r) => parseFloat(r.rating))
+              .reduce((a, b) => a + b, 0) / jobRatings.length,
+          ratings: jobRatings,
+        };
   }
 }
