@@ -243,19 +243,21 @@ export default function ProfileContent({
 								Work history
 							</button>
 
-							<button
-								type="button"
-								role="tab"
-								aria-selected={workerTab === "payments"}
-								className={`px-3 py-2 text-sm font-medium ${
-									workerTab === "payments"
-										? "border-b-2 border-slate-950 text-slate-950"
-										: "text-slate-500 hover:cursor-pointer hover:text-slate-800"
-								}`}
-								onClick={() => setWorkerTab("payments")}
-							>
-								Payments
-							</button>
+							{currUserData?.id === userProfileData?.id && (
+								<button
+									type="button"
+									role="tab"
+									aria-selected={workerTab === "payments"}
+									className={`px-3 py-2 text-sm font-medium ${
+										workerTab === "payments"
+											? "border-b-2 border-slate-950 text-slate-950"
+											: "text-slate-500 hover:cursor-pointer hover:text-slate-800"
+									}`}
+									onClick={() => setWorkerTab("payments")}
+								>
+									Payments
+								</button>
+							)}
 						</div>
 					</div>
 
