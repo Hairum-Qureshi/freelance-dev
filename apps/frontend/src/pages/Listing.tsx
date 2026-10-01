@@ -9,13 +9,20 @@ import NotFound from "./NotFound";
 import { useState } from "react";
 import ReviewEditor from "../components/ReviewEditor";
 import useRating from "../hooks/useRating";
+import { useCurrentUser } from "../hooks/useCurrentUser";
 
 export default function Listing() {
 	const [showReviewEditor, setShowReviewEditor] = useState(false);
+	const [editReviewMode, setEditReviewMode] = useState(false);
+	const { data: currUser } = useCurrentUser();
 
 	const { job } = useJob();
 
 	const { jobRatings } = useRating();
+
+	const hasRated = jobRatings?.ratings.some(
+		rating => rating.posterId === currUser?.id
+	);
 
 	if (!job) return <NotFound />;
 
@@ -27,6 +34,8 @@ export default function Listing() {
 		<MdStarBorder className="text-yellow-500 text-lg" />
 	];
 
+	// TODO - make it so that if you already posted a review, the 'add review' button doesn't show. Also have it so that the edit and delete buttons are available for your own reviews.
+
 	function renderShadedStars(rating: number) {
 		for (let i = 1; i <= 5; i++) {
 			stars[i - 1] = <IoStarSharp className="text-yellow-500" />;
@@ -34,9 +43,8 @@ export default function Listing() {
 				stars[i - 1] = <IoIosStarHalf className="text-yellow-500" />;
 				break;
 			}
-			if (i > rating) {
+			if (i > rating)
 				stars[i - 1] = <MdStarBorder className="text-yellow-500" />;
-			}
 		}
 
 		return stars.map((star, index) => <span key={index}>{star}</span>);
@@ -56,7 +64,7 @@ export default function Listing() {
 								Reviews ({jobRatings?.ratings?.length ?? 0})
 							</h1>
 
-							{!showReviewEditor ? (
+							{hasRated ? null : !showReviewEditor && !editReviewMode ? (
 								<button
 									className="flex items-center gap-2 rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:cursor-pointer"
 									onClick={() => setShowReviewEditor(true)}
@@ -67,7 +75,11 @@ export default function Listing() {
 							) : (
 								<button
 									className="flex items-center gap-2 rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:cursor-pointer"
-									onClick={() => setShowReviewEditor(false)}
+									onClick={() =>
+										editReviewMode
+											? setEditReviewMode(false)
+											: setShowReviewEditor(false)
+									}
 								>
 									Cancel Review
 								</button>
@@ -100,14 +112,30 @@ export default function Listing() {
 									jobId={job.id}
 								/>
 							)}
+
 							{jobRatings?.ratings?.length ? (
-								jobRatings?.ratings?.map(rating => (
-									<ReviewCard
-										key={rating.id}
-										rating={rating}
-										renderShadedStars={renderShadedStars}
-									/>
-								))
+								jobRatings.ratings.map(rating =>
+									rating.posterId === currUser?.id && editReviewMode ? (
+										<ReviewEditor
+											key={rating.id}
+											setShowReviewEditor={setShowReviewEditor}
+											jobId={job.id}
+											editRating={parseFloat(rating.rating)}
+											editTitle={rating.title}
+											editReview={rating.review}
+											isEditMode
+											setEditReviewMode={setEditReviewMode}
+										/>
+									) : (
+										<ReviewCard
+											key={rating.id}
+											rating={rating}
+											renderShadedStars={renderShadedStars}
+											setEditReviewMode={setEditReviewMode}
+											isOwner={rating.posterId === currUser?.id}
+										/>
+									)
+								)
 							) : (
 								<p className="text-sm text-slate-500 text-center my-5">
 									No reviews yet.

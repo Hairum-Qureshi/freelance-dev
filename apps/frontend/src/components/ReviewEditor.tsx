@@ -4,22 +4,32 @@ import useRating from "../hooks/useRating";
 
 export default function ReviewEditor({
 	setShowReviewEditor,
-	jobId
+	jobId,
+	editRating,
+	editTitle,
+	editReview,
+	isEditMode = false,
+	setEditReviewMode
 }: {
 	setShowReviewEditor: (show: boolean) => void;
 	jobId: string;
+	editRating?: number;
+	editTitle?: string;
+	editReview?: string;
+	isEditMode?: boolean;
+	setEditReviewMode?: (show: boolean) => void;
 }) {
-	const [rating, setRating] = useState(0);
-	const [title, setTitle] = useState("");
-	const [review, setReview] = useState("");
-	const { postRatingMutation } = useRating();
+	const [rating, setRating] = useState(editRating ?? 0);
+	const [title, setTitle] = useState(editTitle ?? "");
+	const [review, setReview] = useState(editReview ?? "");
+	const { postRatingMutation, editRatingMutation } = useRating();
 
 	return (
 		<div className="mt-3 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
 			{/* Header */}
 			<div className="mb-4">
 				<h3 className="text-base font-semibold text-slate-900">
-					Leave a review
+					{isEditMode ? "Edit your review" : "Leave a review"}
 				</h3>
 				<p className="mt-1 text-sm text-slate-500">
 					Share your experience working with this client.
@@ -37,6 +47,7 @@ export default function ReviewEditor({
 						onRatingChange={setRating}
 						isHalfRatingEnabled
 						dimension={10}
+						initialRating={rating}
 					/>
 
 					<span className="text-sm font-medium text-slate-500">
@@ -90,17 +101,32 @@ export default function ReviewEditor({
 
 			{/* Submit */}
 			<div className="mt-4 flex justify-end">
-				<button
-					type="button"
-					disabled={rating === 0 || !title.trim() || !review.trim()}
-					className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-300"
-					onClick={() => {
-						postRatingMutation.mutate({ jobId, rating, title, review });
-						setShowReviewEditor(false);
-					}}
-				>
-					Submit review
-				</button>
+				{!isEditMode ? (
+					<button
+						type="button"
+						disabled={rating === 0 || !title.trim() || !review.trim()}
+						className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-300"
+						onClick={() => {
+							postRatingMutation.mutate({ jobId, rating, title, review });
+							setShowReviewEditor(false);
+						}}
+					>
+						Submit review
+					</button>
+				) : (
+					<button
+						type="button"
+						disabled={rating === 0 || !title.trim() || !review.trim()}
+						className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-300 hover:cursor-pointer"
+						onClick={() => {
+							editRatingMutation.mutate({ jobId, rating, title, review });
+							setShowReviewEditor(false);
+							setEditReviewMode?.(false);
+						}}
+					>
+						Update review
+					</button>
+				)}
 			</div>
 		</div>
 	);
