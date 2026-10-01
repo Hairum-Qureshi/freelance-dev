@@ -1,4 +1,12 @@
-import { Controller, Post, Body, UseGuards, Get, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Get,
+  Param,
+  Patch,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JobPostingDTO } from 'src/DTOs/job.dto';
 import { JobService } from './job.service';
@@ -69,5 +77,23 @@ export class JobController {
   @UseGuards(AuthGuard())
   async getJobReviews(@Param('jobId') jobId: string) {
     return this.jobService.getJobReviews(jobId);
+  }
+
+  @Patch(':jobId/edit-review')
+  @UseGuards(AuthGuard())
+  async editReview(
+    @Param('jobId') jobId: string,
+    @CurrentUser() currentUser: UserPayload,
+    @Body('rating') rating: number,
+    @Body('title') title: string,
+    @Body('review') review: string,
+  ) {
+    return this.jobService.editExistingReview(
+      jobId,
+      currentUser.id,
+      rating,
+      title,
+      review,
+    );
   }
 }
