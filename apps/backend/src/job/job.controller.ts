@@ -47,7 +47,7 @@ export class JobController {
     );
   }
 
-  @Post(':jobId/review')
+  @Post(':jobId/add-review')
   @UseGuards(AuthGuard())
   async leaveReview(
     @Param('jobId') jobId: string,
@@ -56,5 +56,11 @@ export class JobController {
     @Body('review') review: string,
   ) {
     return this.jobService.leaveReview(jobId, currentUser.id, rating, review);
+  }
+
+  @Get(':jobId/reviews')
+  @UseGuards(AuthGuard())
+  async getJobReviews(@Param('jobId') jobId: string) {
+    return this.jobService.getJobReviews(jobId);
   }
 }
