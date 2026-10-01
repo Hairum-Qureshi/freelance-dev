@@ -211,6 +211,13 @@
       "when": 1790826370438,
       "tag": "0029_faithful_centennial",
       "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1790828018778,
+      "tag": "0030_milky_captain_stacy",
+      "breakpoints": true
     }
   ]
 }
