@@ -188,6 +188,18 @@ export class JobService {
       );
     }
 
+    const hasReviewed = await this.db.query.ratingsTable.findFirst({
+      where: (ratings, { eq }) =>
+        eq(ratings.jobId, jobId) && eq(ratings.posterId, currUserId),
+    });
+
+    if (hasReviewed) {
+      throw new HttpException(
+        'You have already reviewed this job',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     await this.db.insert(ratingsTable).values({
       id: snowflake.generate().toString(),
       jobId,
