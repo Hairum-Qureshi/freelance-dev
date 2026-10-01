@@ -105,7 +105,7 @@ export default function ReviewEditor({
 					<button
 						type="button"
 						disabled={rating === 0 || !title.trim() || !review.trim()}
-						className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-300"
+						className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-300 hover:cursor-pointer"
 						onClick={() => {
 							postRatingMutation.mutate({ jobId, rating, title, review });
 							setShowReviewEditor(false);
