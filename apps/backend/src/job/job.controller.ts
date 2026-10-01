@@ -6,6 +6,7 @@ import {
   Get,
   Param,
   Patch,
+  Delete,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JobPostingDTO } from 'src/DTOs/job.dto';
@@ -80,5 +81,14 @@ export class JobController {
     @Body() reviewDTO: ReviewDTO,
   ) {
     return this.jobService.editExistingReview(jobId, currentUser.id, reviewDTO);
+  }
+
+  @Delete(':jobId/delete-review')
+  @UseGuards(AuthGuard())
+  async deleteReview(
+    @Param('jobId') jobId: string,
+    @CurrentUser() currentUser: UserPayload,
+  ) {
+    return this.jobService.deleteReview(jobId, currentUser.id);
   }
 }

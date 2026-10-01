@@ -250,4 +250,21 @@ export class JobService {
         eq(ratingsTable.jobId, jobId) && eq(ratingsTable.posterId, currUserId),
       );
   }
+
+  async deleteReview(jobId: string, currUserId: string) {
+    const existingReview = await this.db.query.ratingsTable.findFirst({
+      where: (ratings, { eq }) =>
+        eq(ratings.jobId, jobId) && eq(ratings.posterId, currUserId),
+    });
+
+    if (!existingReview) {
+      throw new HttpException('Review not found', HttpStatus.NOT_FOUND);
+    }
+
+    await this.db
+      .delete(ratingsTable)
+      .where(
+        eq(ratingsTable.jobId, jobId) && eq(ratingsTable.posterId, currUserId),
+      );
+  }
 }
