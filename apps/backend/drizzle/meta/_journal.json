@@ -204,6 +204,13 @@
       "when": 1790639076384,
       "tag": "0028_green_zaran",
       "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1790826370438,
+      "tag": "0029_faithful_centennial",
+      "breakpoints": true
     }
   ]
 }
