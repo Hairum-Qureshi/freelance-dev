@@ -191,7 +191,7 @@ export const ratingsTable = pgTable('ratings', {
     .notNull()
     .references(() => usersTable.id),
   rating: decimal({ precision: 2, scale: 1 }).notNull(),
-  comment: text('comment'),
+  comment: text('comment').notNull(),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
