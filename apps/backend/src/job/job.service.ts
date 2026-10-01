@@ -1,8 +1,14 @@
-import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  HttpException,
+  HttpStatus,
+  NotFoundException,
+} from '@nestjs/common';
 import { Database } from 'src/providers/postgres-db';
 import SnowflakeId from 'snowflake-id';
 import { JobPostingDTO } from 'src/DTOs/job.dto';
-import { jobPostsTable } from 'src/schema';
+import { jobPostsTable, ratingsTable } from 'src/schema';
 import { applicationsTable } from 'src/schema';
 
 @Injectable()
@@ -124,6 +130,72 @@ export class JobService {
           },
         },
       },
+    });
+  }
+
+  async leaveReview(
+    jobId: string,
+    currUserId: string,
+    rating: number,
+    review: string,
+  ) {
+    const snowflake = new SnowflakeId({
+      mid: 42,
+      offset: (2019 - 1970) * 31536000 * 1000,
+    });
+
+    if (rating < 1 || rating > 5) {
+      throw new HttpException(
+        'Rating must be between 1 and 5',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (!review.trim()) {
+      throw new HttpException('Review cannot be empty', HttpStatus.BAD_REQUEST);
+    }
+
+    if (review.length < 20 || review.length > 600) {
+      throw new HttpException(
+        'Review must be between 20 and 600 characters',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const application = await this.db.query.applicationsTable.findFirst({
+      where: (applications, { eq }) =>
+        eq(applications.jobId, jobId) &&
+        eq(applications.applicantId, currUserId),
+    });
+
+    if (!application) {
+      throw new HttpException(
+        'You can only leave a review for a job you were hired for',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const job = await this.db.query.jobPostsTable.findFirst({
+      where: (jobPosts, { eq }) => eq(jobPosts.id, jobId),
+    });
+
+    if (!job) throw new NotFoundException('Job not found');
+
+    if (job.posterId === currUserId) {
+      throw new HttpException(
+        'You cannot leave a review for your own job posting',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    await this.db.insert(ratingsTable).values({
+      id: snowflake.generate().toString(),
+      jobId,
+      posterId: currUserId,
+      rating: rating.toString(),
+      comment: review,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
   }
 }
