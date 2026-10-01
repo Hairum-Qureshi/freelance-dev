@@ -283,7 +283,7 @@ export default function ProfileContent({
 				</section>
 			)}
 
-			{isWorker && (
+			{isWorker ? (
 				<section className="border-t border-slate-200 pt-7">
 					<div className="flex items-end justify-between gap-4">
 						<div>
@@ -292,7 +292,8 @@ export default function ProfileContent({
 							</h2>
 
 							<p className="mt-1 text-sm text-slate-500">
-								Build trust with feedback from every project.
+								Here's what clients have said about {userProfileData?.firstName}
+								's work.
 							</p>
 						</div>
 
@@ -305,6 +306,27 @@ export default function ProfileContent({
 						<p className="mt-1 text-sm text-slate-500">
 							Completed projects will make this space yours.
 						</p>
+					</div>
+				</section>
+			) : (
+				<section className="border-t border-slate-200 pt-7">
+					<div className="flex items-end justify-between gap-4">
+						<div>
+							<h2 className="text-xl font-semibold text-slate-950">
+								Freelancer reviews
+							</h2>
+
+							<p className="mt-1 text-sm text-slate-500">
+								Here's what freelancers have said about{" "}
+								{userProfileData?.firstName}.
+							</p>
+						</div>
+
+						<span className="text-sm text-slate-400">0 reviews</span>
+					</div>
+
+					<div className="mt-5 rounded-md border border-dashed border-slate-300 px-5 py-8 text-center">
+						<p className="font-medium text-slate-700">No reviews yet</p>
 					</div>
 				</section>
 			)}
