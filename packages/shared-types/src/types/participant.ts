@@ -1,4 +1,5 @@
-import { OnboardingAnswers } from "./onboarding-answers.js";
+import type { OnboardingAnswers } from "./onboarding-answers.js";
+import type { MinimalUser } from "./minimal-user.js";
 
 export type Participant = {
 	id: string;
@@ -6,11 +7,7 @@ export type Participant = {
 	firstName: string;
 	lastName: string;
 	onboardingAnswers: OnboardingAnswers;
-	user?: {
-		id: string;
-		firstName: string;
-		lastName: string;
-		profilePicture: string;
+	user?: MinimalUser & {
 		onboardingAnswers: OnboardingAnswers;
 	};
 };

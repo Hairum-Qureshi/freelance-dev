@@ -1,4 +1,5 @@
 import type { JobPayload } from "./job-payload";
+import { MinimalUser } from "./minimal-user";
 
 export type ApplicationPayload = {
 	id: string;
@@ -7,14 +8,7 @@ export type ApplicationPayload = {
 	posterId: string;
 	proposal: string;
 	status: "pending" | "accepted" | "rejected";
-	applicant: {
-		id: string;
-		firstName: string;
-		lastName: string;
-		profilePicture: string;
-		email: string;
-		resumeId: string | null;
-	};
+	applicant: MinimalUser & { resumeId: string | null; email: string };
 	job: JobPayload;
 	createdAt: Date;
 	updatedAt: Date;

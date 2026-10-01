@@ -1,3 +1,4 @@
+import type { MinimalUser } from "./minimal-user";
 import { OnboardingAnswers } from "./onboarding-answers";
 import { Attachment } from "./attachment";
 
@@ -7,11 +8,7 @@ export type Message = {
 	message: string;
 	createdAt: Date;
 	updatedAt: Date;
-	sender: {
-		id: string;
-		firstName: string;
-		lastName: string;
-		profilePicture: string;
+	sender: MinimalUser & {
 		onboardingAnswers: OnboardingAnswers;
 	};
 	attachments: Attachment[];

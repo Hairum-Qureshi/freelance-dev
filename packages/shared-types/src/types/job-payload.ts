@@ -1,3 +1,5 @@
+import type { MinimalUser } from "./minimal-user";
+
 export type JobPayload = {
 	id: string;
 	jobTitle: string;
@@ -17,13 +19,7 @@ export type JobPayload = {
 	agreedPaymentRateCents: number | null;
 	skills: string[];
 	posterId: string;
-	poster: {
-		id: string;
-		firstName: string;
-		lastName: string;
-		profilePicture: string;
-		email: string;
-	};
+	poster: MinimalUser & { email: string };
 	createdAt: Date;
 	updatedAt: Date;
 };
