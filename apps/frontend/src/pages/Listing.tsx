@@ -5,11 +5,13 @@ import { IoIosStarHalf } from "react-icons/io";
 import { FaEdit } from "react-icons/fa";
 import useJob from "../hooks/useJob";
 import NotFound from "./NotFound";
+import { useState } from "react";
+import ReviewEditor from "../components/ReviewEditor";
 
 export default function Listing() {
-	const { job } = useJob();
+	const [showReviewEditor, setShowReviewEditor] = useState(false);
 
-	console.log(job);
+	const { job } = useJob();
 
 	if (!job) return <NotFound />;
 
@@ -27,10 +29,22 @@ export default function Listing() {
 								Reviews (2)
 							</h1>
 
-							<button className="flex items-center gap-2 rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50">
-								<FaEdit className="text-xs" />
-								Write a Review
-							</button>
+							{!showReviewEditor ? (
+								<button
+									className="flex items-center gap-2 rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:cursor-pointer"
+									onClick={() => setShowReviewEditor(true)}
+								>
+									<FaEdit className="text-xs" />
+									Write a Review
+								</button>
+							) : (
+								<button
+									className="flex items-center gap-2 rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:cursor-pointer"
+									onClick={() => setShowReviewEditor(false)}
+								>
+									Cancel Review
+								</button>
+							)}
 						</div>
 
 						{/* Rating Summary */}
@@ -54,6 +68,7 @@ export default function Listing() {
 
 						{/* Reviews */}
 						<div className="mt-2">
+							{showReviewEditor && <ReviewEditor />}
 							<ReviewCard />
 							<ReviewCard />
 						</div>
