@@ -205,7 +205,7 @@ export class JobService {
       jobId,
       posterId: currUserId,
       rating: rating.toString(),
-      comment: review,
+      review,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -214,6 +214,16 @@ export class JobService {
   async getJobReviews(jobId: string) {
     const jobRatings = await this.db.query.ratingsTable.findMany({
       where: (ratings, { eq }) => eq(ratings.jobId, jobId),
+      with: {
+        poster: {
+          columns: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            profilePicture: true,
+          },
+        },
+      },
     });
 
     return !jobRatings
