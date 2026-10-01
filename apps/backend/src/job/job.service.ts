@@ -155,9 +155,9 @@ export class JobService {
       throw new HttpException('Review cannot be empty', HttpStatus.BAD_REQUEST);
     }
 
-    if (review.length < 20 || review.length > 600) {
+    if (review.length > 600) {
       throw new HttpException(
-        'Review must be between 20 and 600 characters',
+        'Review cannot exceed 600 characters',
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -209,5 +209,23 @@ export class JobService {
       createdAt: new Date(),
       updatedAt: new Date(),
     });
+  }
+
+  async getJobReviews(jobId: string) {
+    const jobRatings = await this.db.query.ratingsTable.findMany({
+      where: (ratings, { eq }) => eq(ratings.jobId, jobId),
+    });
+
+    return !jobRatings
+      ? []
+      : [
+          ...jobRatings,
+          {
+            average:
+              jobRatings
+                .map((r) => parseFloat(r.rating))
+                .reduce((a, b) => a + b, 0) / jobRatings.length,
+          },
+        ];
   }
 }
