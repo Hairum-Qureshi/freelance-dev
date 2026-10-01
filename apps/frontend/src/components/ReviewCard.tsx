@@ -1,5 +1,9 @@
 import type { RatingsPayload } from "@repo/shared-types";
 import type { JSX } from "react";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
 
 export default function ReviewCard({
 	rating,
@@ -26,7 +30,7 @@ export default function ReviewCard({
 					</div>
 				</div>
 
-				<span className="text-xs text-slate-400">{rating.createdAt}</span>
+				<span className="text-xs text-slate-400">{dayjs(rating.createdAt).fromNow()}</span>
 			</div>
 
 			{/* Review Body */}
