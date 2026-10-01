@@ -8,8 +8,10 @@ import {
 import { Database } from 'src/providers/postgres-db';
 import SnowflakeId from 'snowflake-id';
 import { JobPostingDTO } from 'src/DTOs/job.dto';
+import { ReviewDTO } from 'src/DTOs/review.dto';
 import { jobPostsTable, ratingsTable } from 'src/schema';
 import { applicationsTable } from 'src/schema';
+import { eq } from 'drizzle-orm/sql/expressions/conditions';
 
 @Injectable()
 export class JobService {
@@ -133,46 +135,13 @@ export class JobService {
     });
   }
 
-  async leaveReview(
-    jobId: string,
-    currUserId: string,
-    rating: number,
-    title: string,
-    review: string,
-  ) {
+  async leaveReview(jobId: string, currUserId: string, reviewDTO: ReviewDTO) {
     const snowflake = new SnowflakeId({
       mid: 42,
       offset: (2019 - 1970) * 31536000 * 1000,
     });
 
-    if (rating < 1 || rating > 5) {
-      throw new HttpException(
-        'Rating must be between 1 and 5',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    if (!title || !title.trim()) {
-      throw new HttpException('Title cannot be empty', HttpStatus.BAD_REQUEST);
-    }
-
-    if (title.length > 100) {
-      throw new HttpException(
-        'Title cannot exceed 100 characters',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    if (!review || !review.trim()) {
-      throw new HttpException('Review cannot be empty', HttpStatus.BAD_REQUEST);
-    }
-
-    if (review.length > 600) {
-      throw new HttpException(
-        'Review cannot exceed 600 characters',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    const { rating, title, review } = reviewDTO;
 
     const application = await this.db.query.applicationsTable.findFirst({
       where: (applications, { eq }) =>
@@ -251,5 +220,34 @@ export class JobService {
               .reduce((a, b) => a + b, 0) / jobRatings.length,
           ratings: jobRatings,
         };
+  }
+
+  async editExistingReview(
+    jobId: string,
+    currUserId: string,
+    reviewDTO: ReviewDTO,
+  ) {
+    const existingReview = await this.db.query.ratingsTable.findFirst({
+      where: (ratings, { eq }) =>
+        eq(ratings.jobId, jobId) && eq(ratings.posterId, currUserId),
+    });
+
+    if (!existingReview) {
+      throw new HttpException('Review not found', HttpStatus.NOT_FOUND);
+    }
+
+    const { rating, title, review } = reviewDTO;
+
+    await this.db
+      .update(ratingsTable)
+      .set({
+        rating: rating.toString(),
+        title: title.trim(),
+        review,
+        updatedAt: new Date(),
+      })
+      .where(
+        eq(ratingsTable.jobId, jobId) && eq(ratingsTable.posterId, currUserId),
+      );
   }
 }

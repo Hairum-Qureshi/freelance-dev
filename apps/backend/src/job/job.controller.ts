@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JobPostingDTO } from 'src/DTOs/job.dto';
+import { ReviewDTO } from 'src/DTOs/review.dto';
 import { JobService } from './job.service';
 import { CurrentUser } from 'src/decorators/currentUser.decorator';
 import type { UserPayload } from '@repo/shared-types';
@@ -60,17 +61,9 @@ export class JobController {
   async leaveReview(
     @Param('jobId') jobId: string,
     @CurrentUser() currentUser: UserPayload,
-    @Body('rating') rating: number,
-    @Body('title') title: string,
-    @Body('review') review: string,
+    @Body() reviewDTO: ReviewDTO,
   ) {
-    return this.jobService.leaveReview(
-      jobId,
-      currentUser.id,
-      rating,
-      title,
-      review,
-    );
+    return this.jobService.leaveReview(jobId, currentUser.id, reviewDTO);
   }
 
   @Get(':jobId/reviews')
@@ -84,16 +77,8 @@ export class JobController {
   async editReview(
     @Param('jobId') jobId: string,
     @CurrentUser() currentUser: UserPayload,
-    @Body('rating') rating: number,
-    @Body('title') title: string,
-    @Body('review') review: string,
+    @Body() reviewDTO: ReviewDTO,
   ) {
-    return this.jobService.editExistingReview(
-      jobId,
-      currentUser.id,
-      rating,
-      title,
-      review,
-    );
+    return this.jobService.editExistingReview(jobId, currentUser.id, reviewDTO);
   }
 }
