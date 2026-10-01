@@ -1,5 +1,5 @@
 import type { JobPayload } from "./job-payload";
-import { MinimalUser } from "./minimal-user";
+import type { MinimalUser } from "./minimal-user";
 
 export type ApplicationPayload = {
 	id: string;

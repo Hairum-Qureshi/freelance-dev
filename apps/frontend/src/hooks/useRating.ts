@@ -10,14 +10,26 @@ export default function useRating() {
 		mutationFn: async ({
 			jobId,
 			rating,
+			title,
 			review
 		}: {
 			jobId: string;
 			rating: number;
+			title: string;
 			review: string;
 		}): Promise<void> => {
 			if (rating < 1 || rating > 5) {
 				alert("Please enter a rating between 1 and 5.");
+				return;
+			}
+
+			if (!title.trim()) {
+				alert("Please enter a title before sending.");
+				return;
+			}
+
+			if (title.length > 100) {
+				alert("Title cannot exceed 100 characters.");
 				return;
 			}
 
@@ -35,6 +47,7 @@ export default function useRating() {
 				`${import.meta.env.VITE_BACKEND_URL}/api/job/${jobId}/add-review`,
 				{
 					rating,
+					title: title.trim(),
 					review
 				},
 				{

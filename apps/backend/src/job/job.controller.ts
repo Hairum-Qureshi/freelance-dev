@@ -53,9 +53,16 @@ export class JobController {
     @Param('jobId') jobId: string,
     @CurrentUser() currentUser: UserPayload,
     @Body('rating') rating: number,
+    @Body('title') title: string,
     @Body('review') review: string,
   ) {
-    return this.jobService.leaveReview(jobId, currentUser.id, rating, review);
+    return this.jobService.leaveReview(
+      jobId,
+      currentUser.id,
+      rating,
+      title,
+      review,
+    );
   }
 
   @Get(':jobId/reviews')

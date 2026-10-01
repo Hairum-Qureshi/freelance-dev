@@ -137,6 +137,7 @@ export class JobService {
     jobId: string,
     currUserId: string,
     rating: number,
+    title: string,
     review: string,
   ) {
     const snowflake = new SnowflakeId({
@@ -151,7 +152,18 @@ export class JobService {
       );
     }
 
-    if (!review.trim()) {
+    if (!title || !title.trim()) {
+      throw new HttpException('Title cannot be empty', HttpStatus.BAD_REQUEST);
+    }
+
+    if (title.length > 100) {
+      throw new HttpException(
+        'Title cannot exceed 100 characters',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (!review || !review.trim()) {
       throw new HttpException('Review cannot be empty', HttpStatus.BAD_REQUEST);
     }
 
@@ -205,6 +217,7 @@ export class JobService {
       jobId,
       posterId: currUserId,
       rating: rating.toString(),
+      title: title.trim(),
       review,
       createdAt: new Date(),
       updatedAt: new Date(),

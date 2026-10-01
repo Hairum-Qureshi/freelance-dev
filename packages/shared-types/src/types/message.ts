@@ -1,6 +1,6 @@
 import type { MinimalUser } from "./minimal-user";
-import { OnboardingAnswers } from "./onboarding-answers";
-import { Attachment } from "./attachment";
+import type { OnboardingAnswers } from "./onboarding-answers";
+import type { Attachment } from "./attachment";
 
 export type Message = {
 	id: string;

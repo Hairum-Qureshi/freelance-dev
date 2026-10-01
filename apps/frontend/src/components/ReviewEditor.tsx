@@ -10,6 +10,7 @@ export default function ReviewEditor({
 	jobId: string;
 }) {
 	const [rating, setRating] = useState(0);
+	const [title, setTitle] = useState("");
 	const [review, setReview] = useState("");
 	const { postRatingMutation } = useRating();
 
@@ -46,6 +47,27 @@ export default function ReviewEditor({
 				</div>
 			</div>
 
+			{/* Title */}
+			<div className="mt-4">
+				<label
+					htmlFor="title"
+					className="mb-2 block text-sm font-medium text-slate-700"
+				>
+					Title
+				</label>
+
+				<input
+					type="text"
+					id="title"
+					className="w-full rounded-md border border-slate-300 bg-white p-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
+					placeholder="Summarize your review"
+					required
+					maxLength={100}
+					value={title}
+					onChange={e => setTitle(e.target.value)}
+				/>
+			</div>
+
 			{/* Review */}
 			<div className="mt-4">
 				<label
@@ -70,10 +92,10 @@ export default function ReviewEditor({
 			<div className="mt-4 flex justify-end">
 				<button
 					type="button"
-					disabled={rating === 0}
+					disabled={rating === 0 || !title.trim() || !review.trim()}
 					className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-300"
 					onClick={() => {
-						postRatingMutation.mutate({ jobId, rating, review });
+						postRatingMutation.mutate({ jobId, rating, title, review });
 						setShowReviewEditor(false);
 					}}
 				>

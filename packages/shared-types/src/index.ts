@@ -15,3 +15,5 @@ export type { Attachment } from "./types/attachment.js";
 export type { FileAttachment } from "./types/file-attachment.js";
 export type { JobPayload } from "./types/job-payload.js";
 export type { ApplicationPayload } from "./types/application-payload.js";
+export type { RatingsPayload } from "./types/ratings-payload.js";
+export type { MinimalUser } from "./types/minimal-user.js";
