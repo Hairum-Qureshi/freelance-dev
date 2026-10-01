@@ -232,6 +232,13 @@
       "when": 1790890787840,
       "tag": "0032_gifted_lethal_legion",
       "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1790896191164,
+      "tag": "0033_heavy_ravenous",
+      "breakpoints": true
     }
   ]
 }
