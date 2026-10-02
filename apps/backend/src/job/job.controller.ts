@@ -73,6 +73,12 @@ export class JobController {
     return this.jobService.getJobReviews(jobId);
   }
 
+  @Get('/reviews/about/:userId')
+  @UseGuards(AuthGuard())
+  async getReviewsAboutMe(@Param('userId') userId: string) {
+    return this.jobService.reviewsAboutMe(userId);
+  }
+
   @Patch(':jobId/edit-review')
   @UseGuards(AuthGuard())
   async editReview(

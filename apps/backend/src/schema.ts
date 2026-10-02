@@ -189,7 +189,7 @@ export const ratingsTable = pgTable(
     jobId: text('job_id')
       .notNull()
       .references(() => jobPostsTable.id),
-    posterId: text('user_id')
+    posterId: text('poster_id')
       .notNull()
       .references(() => usersTable.id),
     rating: decimal({ precision: 2, scale: 1 }).notNull(),
