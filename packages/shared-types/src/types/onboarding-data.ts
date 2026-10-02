@@ -2,7 +2,7 @@ import type { UserRole } from "./user-role.js";
 
 export interface OnboardingData {
 	role: UserRole | null;
-	hirerTitle?: string;
+	clientTitle?: string;
 	budget?: string;
 	hiringFor?: string[];
 	interests?: string[];

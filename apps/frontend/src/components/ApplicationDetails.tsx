@@ -33,7 +33,7 @@ export default function ApplicationDetails({
 					<p className="text-xs font-medium uppercase tracking-wide text-slate-400">
 						{showSetPaymentPrice ? "Set Payment Price" : "Application from"}
 					</p>
-					{application.status === "accepted" && currUser?.role === "hirer" && (
+					{application.status === "accepted" && currUser?.role === "client" && (
 						<div className="mt-4 flex ml-auto space-x-2">
 							{!showSetPaymentPrice ? (
 								<button
@@ -101,7 +101,7 @@ export default function ApplicationDetails({
 							<p className="mt-2 text-sm text-slate-500">No resume attached.</p>
 						)}
 					</section>
-					{currUser?.role === "hirer" && (
+					{currUser?.role === "client" && (
 						<section className="border-t border-slate-200 pt-5">
 							<div className="divide-y divide-slate-200 rounded-md border border-slate-200">
 								{application.status === "pending" ? (
@@ -190,6 +190,44 @@ export default function ApplicationDetails({
 								{applicant.firstName} will automatically be notified of your
 								decision via email.
 							</p>
+							{application.status === "accepted" && (
+								<div className="mt-6 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+									<div className="mb-4">
+										<h2 className="text-base font-semibold text-slate-950">
+											Write a review about {applicant.firstName}'s performance
+										</h2>
+										<p className="mt-1 text-sm text-slate-500">
+											Share your experience having {applicant.firstName} work
+											for you.
+										</p>
+									</div>
+
+									<div>
+										<textarea
+											className="min-h-32 w-full resize-y rounded-md border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-slate-500 focus:bg-white focus:ring-2 focus:ring-slate-200"
+											placeholder="What did they do well? How was it working with them?"
+											rows={5}
+										/>
+
+										<div className="mt-3 flex items-center justify-between">
+											<span className="text-xs text-slate-400">
+												Be honest and constructive.
+											</span>
+
+											<button
+												type="button"
+												className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 active:bg-slate-950"
+											>
+												Submit review
+											</button>
+										</div>
+										<p className="mt-3 text-sm text-slate-500 text-center">
+											Note that {applicant.firstName} will be able to see this
+											review once submitted and be notified upon submission.
+										</p>
+									</div>
+								</div>
+							)}
 						</section>
 					)}
 				</>

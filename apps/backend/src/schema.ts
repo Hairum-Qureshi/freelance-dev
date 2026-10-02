@@ -13,7 +13,7 @@ import {
 import type { OnboardingAnswers } from '@repo/shared-types';
 import { relations } from 'drizzle-orm';
 
-export const userRoleEnum = pgEnum('user_role', ['hirer', 'freelancer']);
+export const userRoleEnum = pgEnum('user_role', ['client', 'freelancer']);
 
 export const usersTable = pgTable('users', {
   id: text().primaryKey(),

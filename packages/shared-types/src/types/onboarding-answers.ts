@@ -2,7 +2,7 @@ import type { UserRole } from "./user-role.js";
 
 export type OnboardingAnswers = {
 	role?: UserRole;
-	hirerTitle?: string;
+	clientTitle?: string;
 	budget?: string;
 	hiringFor?: string[];
 	interests?: string[];

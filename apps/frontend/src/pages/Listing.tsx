@@ -133,6 +133,7 @@ export default function Listing() {
 											renderShadedStars={renderShadedStars}
 											setEditReviewMode={setEditReviewMode}
 											isOwner={rating.posterId === currUser?.id}
+											jobId={job.id}
 										/>
 									)
 								)

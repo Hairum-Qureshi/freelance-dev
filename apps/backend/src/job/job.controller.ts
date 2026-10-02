@@ -26,7 +26,7 @@ export class JobController {
     @Body() jobPostingDTO: JobPostingDTO,
     @CurrentUser() currentUser: UserPayload,
   ) {
-    // TODO - add guard to prevent only users with a hirer role to create job postings
+    // TODO - add guard to prevent only users with a client role to create job postings
     return this.jobService.createJob(jobPostingDTO, currentUser.id);
   }
 
@@ -78,7 +78,7 @@ export class JobController {
   @UseGuards(AuthGuard())
   async getReviewsAboutMe(
     @Param('userId') userId: string,
-    @Query('role') role: 'hirer' | 'freelancer',
+    @Query('role') role: 'client' | 'freelancer',
   ) {
     return this.jobService.reviewsAboutMe(userId, role);
   }

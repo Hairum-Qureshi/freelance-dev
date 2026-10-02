@@ -18,7 +18,7 @@ export default function InboxUserCard({
 		firstName: string;
 		lastName: string;
 		profilePicture: string;
-		hirerTitle: string;
+		clientTitle: string;
 	}) => void;
 	latestMessage: string;
 }) {
@@ -35,7 +35,7 @@ export default function InboxUserCard({
 			firstName: participant?.firstName ?? "",
 			lastName: participant?.lastName ?? "",
 			profilePicture: participant?.profilePicture ?? "",
-			hirerTitle: participant?.onboardingAnswers?.hirerTitle ?? ""
+			clientTitle: participant?.onboardingAnswers?.clientTitle ?? ""
 		});
 	}, []);
 
@@ -48,7 +48,7 @@ export default function InboxUserCard({
 						firstName: participant?.firstName ?? "",
 						lastName: participant?.lastName ?? "",
 						profilePicture: participant?.profilePicture ?? "",
-						hirerTitle: participant?.onboardingAnswers?.hirerTitle ?? ""
+						clientTitle: participant?.onboardingAnswers?.clientTitle ?? ""
 					})
 				}
 				className={`p-3 border-t border-b border-slate-200 cursor-pointer hover:bg-slate-100 ${selected ? "bg-slate-200" : ""}`}

@@ -18,7 +18,7 @@ export default function Availability() {
 		const formData = new FormData(event.currentTarget);
 		const updatedAnswers: OnboardingData = {
 			...onboardingAnswers,
-			role: formData.get("role") as "hirer" | "freelancer",
+			role: formData.get("role") as "client" | "freelancer",
 			responseTime: String(formData.get("responseTime") ?? "")
 		};
 		await axios.post(
@@ -58,7 +58,7 @@ export default function Availability() {
 					<input
 						type="radio"
 						name="role"
-						value="hirer"
+						value="client"
 						defaultChecked={!isWorker}
 					/>
 					<span>

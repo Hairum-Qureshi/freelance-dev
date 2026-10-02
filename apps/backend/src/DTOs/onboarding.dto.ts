@@ -2,12 +2,12 @@ import { IsArray, IsEnum, IsOptional, IsString } from 'class-validator';
 
 export class OnboardingDTO {
   @IsOptional()
-  @IsEnum(['hirer', 'freelancer'])
-  role!: 'hirer' | 'freelancer';
+  @IsEnum(['client', 'freelancer'])
+  role!: 'client' | 'freelancer';
 
   @IsOptional()
   @IsString()
-  hirerTitle?: string;
+  clientTitle?: string;
 
   @IsOptional()
   @IsString()

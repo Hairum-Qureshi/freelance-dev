@@ -24,11 +24,11 @@ export default function HowDoesItWork() {
 					</p>
 				</div>
 
-				{/* Hirer Section */}
+				{/* Client Section */}
 				<section className="border-t border-slate-200 pt-10">
 					<div className="mb-8">
 						<p className="text-sm font-semibold uppercase tracking-widest text-slate-500">
-							For Hirers
+							For Clients
 						</p>
 
 						<h2 className="mt-2 text-2xl font-bold text-slate-900">
@@ -143,7 +143,7 @@ export default function HowDoesItWork() {
 							<p className="mt-2 text-sm leading-6 text-slate-600">
 								Apply to projects you're interested in. Introduce yourself,
 								explain why you're a good fit, and provide any relevant
-								information that can help the hirer understand what you can
+								information that can help the client understand what you can
 								bring to the project.
 							</p>
 						</div>
@@ -399,7 +399,7 @@ export default function HowDoesItWork() {
 						</h2>
 
 						<p className="mt-3 max-w-2xl text-slate-600">
-							Projects involve an agreed-upon budget between the hirer and
+							Projects involve an agreed-upon budget between the client and
 							freelancer. Make sure both sides understand the scope of work,
 							expected deliverables, and payment terms before work begins.
 						</p>
@@ -408,7 +408,7 @@ export default function HowDoesItWork() {
 					<div className="grid gap-4 md:grid-cols-2">
 						<div className="border border-slate-200 p-6">
 							<p className="text-sm font-semibold uppercase tracking-widest text-slate-500">
-								For Hirers
+								For Clients
 							</p>
 
 							<p className="mt-4 text-sm leading-6 text-slate-600">
@@ -418,7 +418,7 @@ export default function HowDoesItWork() {
 								ready to be completed.
 							</p>
 
-							{currUser && currUser.role === "hirer" && (
+							{currUser && currUser.role === "client" && (
 								<p className="mt-4 text-sm leading-6 text-slate-600">
 									You can view a record of your payments in the{" "}
 									<Link

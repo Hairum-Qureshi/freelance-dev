@@ -26,7 +26,7 @@ export default function Inbox() {
 		firstName: string;
 		lastName: string;
 		profilePicture: string;
-		hirerTitle: string;
+		clientTitle: string;
 	} | null>(null);
 
 	useEffect(() => {
@@ -41,12 +41,12 @@ export default function Inbox() {
 				firstName: otherUser[0].user?.firstName ?? "",
 				lastName: otherUser[0].user?.lastName ?? "",
 				profilePicture: otherUser[0].user?.profilePicture ?? "",
-				hirerTitle: otherUser[0].user?.onboardingAnswers?.hirerTitle ?? "N/A"
+				clientTitle: otherUser[0].user?.onboardingAnswers?.clientTitle ?? "N/A"
 			});
 		}
 	}, [location, chatParticipants]);
 
-	// if you're a hirer, add a 'Hire' button in the conversation header
+	// if you're a client, add a 'Hire' button in the conversation header
 
 	return (
 		<div className="h-[calc(100vh-4rem)] flex">
@@ -108,8 +108,8 @@ export default function Inbox() {
 							}
 							title={
 								userProfileData
-									? (userProfileData.onboardingAnswers?.hirerTitle ?? "N/A")
-									: (selectedChat?.hirerTitle ?? "N/A")
+									? (userProfileData.onboardingAnswers?.clientTitle ?? "N/A")
+									: (selectedChat?.clientTitle ?? "N/A")
 							}
 						/>
 						<MainChatContainer />

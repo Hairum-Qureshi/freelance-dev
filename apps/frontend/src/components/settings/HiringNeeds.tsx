@@ -29,7 +29,7 @@ export default function HiringNeeds() {
 		saveOnboardingAnswers.mutate({
 			...onboardingAnswers,
 			role: currentUser?.role ?? null,
-			hirerTitle: String(formData.get("hirerTitle") ?? ""),
+			clientTitle: String(formData.get("clientTitle") ?? ""),
 			budget: String(formData.get("budget") ?? ""),
 			hiringFor: String(formData.get("hiringFor") ?? "")
 				.split(",")
@@ -47,10 +47,10 @@ export default function HiringNeeds() {
 			<label className="mt-6 block text-sm font-medium text-gray-700">
 				Your title
 				<input
-					name="hirerTitle"
+					name="clientTitle"
 					type="text"
 					className={inputClassName}
-					defaultValue={onboardingAnswers?.hirerTitle ?? ""}
+					defaultValue={onboardingAnswers?.clientTitle ?? ""}
 					placeholder="e.g. Project Manager"
 				/>
 			</label>

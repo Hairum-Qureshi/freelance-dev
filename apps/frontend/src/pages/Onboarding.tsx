@@ -25,7 +25,7 @@ export default function Onboarding() {
 				{
 					text: "Hire",
 					nextText: 2,
-					onClick: () => setOnboardData({ ...onboardingData, role: "hirer" })
+					onClick: () => setOnboardData({ ...onboardingData, role: "client" })
 				},
 				{
 					text: "Work",
@@ -44,31 +44,37 @@ export default function Onboarding() {
 					text: "Project Manager",
 					nextText: 3,
 					onClick: () =>
-						setOnboardData({ ...onboardingData, hirerTitle: "Project Manager" })
+						setOnboardData({
+							...onboardingData,
+							clientTitle: "Project Manager"
+						})
 				},
 				{
 					text: "Startup Founder",
 					nextText: 3,
 					onClick: () =>
-						setOnboardData({ ...onboardingData, hirerTitle: "Startup Founder" })
+						setOnboardData({
+							...onboardingData,
+							clientTitle: "Startup Founder"
+						})
 				},
 				{
 					text: "CTO",
 					nextText: 3,
 					onClick: () =>
-						setOnboardData({ ...onboardingData, hirerTitle: "CTO" })
+						setOnboardData({ ...onboardingData, clientTitle: "CTO" })
 				},
 				{
 					text: "Contractor",
 					nextText: 3,
 					onClick: () =>
-						setOnboardData({ ...onboardingData, hirerTitle: "Contractor" })
+						setOnboardData({ ...onboardingData, clientTitle: "Contractor" })
 				},
 				{
 					text: "Agency Owner",
 					nextText: 3,
 					onClick: () =>
-						setOnboardData({ ...onboardingData, hirerTitle: "Agency Owner" })
+						setOnboardData({ ...onboardingData, clientTitle: "Agency Owner" })
 				}
 			]
 		},

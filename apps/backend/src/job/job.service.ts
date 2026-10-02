@@ -185,6 +185,7 @@ export class JobService {
       id: snowflake.generate().toString(),
       jobId,
       posterId: currUserId,
+      jobPosterId: job.posterId,
       rating: rating.toString(),
       title: title.trim(),
       review,
@@ -266,5 +267,30 @@ export class JobService {
       .where(
         eq(ratingsTable.jobId, jobId) && eq(ratingsTable.posterId, currUserId),
       );
+  }
+
+  async reviewsAboutMe(userId: string, role: 'client' | 'freelancer') {
+    const user = await this.db.query.usersTable.findFirst({
+      where: (users, { eq }) => eq(users.id, userId),
+    });
+
+    if (!user) throw new NotFoundException('User not found');
+
+    return await this.db.query.ratingsTable.findMany({
+      where: (ratings, { eq }) =>
+        role === 'client'
+          ? eq(ratings.jobPosterId, userId)
+          : eq(ratings.posterId, userId),
+      with: {
+        poster: {
+          columns: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            profilePicture: true,
+          },
+        },
+      },
+    });
   }
 }

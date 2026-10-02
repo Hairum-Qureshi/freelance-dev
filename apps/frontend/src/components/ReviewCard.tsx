@@ -1,17 +1,28 @@
 import type { RatingsPayload } from "@repo/shared-types";
 import type { JSX } from "react";
+import useRating from "../hooks/useRating";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 dayjs.extend(relativeTime);
 
 export default function ReviewCard({
 	rating,
-	renderShadedStars
+	renderShadedStars,
+	setEditReviewMode,
+	isOwner,
+	jobId
 }: {
 	rating: RatingsPayload;
 	renderShadedStars: (rating: number) => JSX.Element[];
+	setEditReviewMode: (mode: boolean) => void;
+	isOwner: boolean;
+	jobId: string;
 }) {
+	const { deleteRatingMutation } = useRating();
+
 	return (
 		<div className="border-b border-slate-200 py-5">
 			{/* Review Header */}
@@ -30,7 +41,51 @@ export default function ReviewCard({
 					</div>
 				</div>
 
-				<span className="text-xs text-slate-400">{dayjs(rating.createdAt).fromNow()}</span>
+				<span className="text-xs text-slate-400">
+					{dayjs(rating.createdAt).fromNow()}
+
+					{isOwner && (
+						<div className="flex w-full justify-end space-x-1 my-1">
+							<button
+								onClick={() => setEditReviewMode(true)}
+								className="
+							text-lg flex items-center justify-center
+							text-slate-400
+							bg-slate-50
+							border border-slate-300
+							rounded-md
+							px-2 py-0.5
+							transition-colors duration-150
+							hover:bg-slate-100
+							hover:text-slate-700
+							hover:border-slate-400
+							hover:cursor-pointer
+						"
+							>
+								<FaEdit />
+							</button>
+
+							<button
+								onClick={() => deleteRatingMutation.mutate({ jobId })}
+								className="
+								text-lg flex items-center justify-center
+								text-red-400
+								bg-red-50
+								border border-red-300
+								rounded-md
+								px-2 py-0.5
+								transition-colors duration-150
+								hover:bg-red-500
+								hover:text-white
+								hover:border-red-500
+								hover:cursor-pointer
+							"
+							>
+								<MdDelete />
+							</button>
+						</div>
+					)}
+				</span>
 			</div>
 
 			{/* Review Body */}

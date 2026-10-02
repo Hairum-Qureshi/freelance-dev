@@ -253,6 +253,13 @@
       "when": 1790900423537,
       "tag": "0035_exotic_alex_wilder",
       "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1790900666813,
+      "tag": "0036_dapper_puff_adder",
+      "breakpoints": true
     }
   ]
 }

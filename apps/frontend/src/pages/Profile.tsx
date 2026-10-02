@@ -24,7 +24,7 @@ export default function Profile() {
 	const isWorker = userProfileData?.role === "freelancer";
 	const role = isWorker
 		? "Freelance developer"
-		: (onboardingAnswers?.hirerTitle ?? "Hiring professional");
+		: (onboardingAnswers?.clientTitle ?? "Hiring professional");
 
 	const experienceInfo = onboardingAnswers?.experience
 		? (EXPERIENCE_MAP[onboardingAnswers.experience] ?? {
