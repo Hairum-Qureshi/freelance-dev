@@ -154,10 +154,46 @@ export default function useRating(): UseRatingHook {
 		}
 	});
 
+	const postFreelancerReviewMutation = useMutation({
+		mutationFn: async ({
+			jobId,
+			review
+		}: {
+			jobId: string;
+			review: string;
+		}): Promise<void> => {
+			if (!review.trim()) {
+				alert("Please enter a review before sending.");
+				return;
+			}
+
+			if (review.length > 600) {
+				alert("Review cannot exceed 600 characters.");
+				return;
+			}
+
+			await axios.post(
+				`${import.meta.env.VITE_BACKEND_URL}/api/job/${jobId}/review-freelancer`,
+				{
+					review
+				},
+				{
+					withCredentials: true
+				}
+			);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["ratings", jobID]
+			});
+		}
+	});
+
 	return {
 		postRatingMutation,
 		editRatingMutation,
 		deleteRatingMutation,
+		postFreelancerReviewMutation,
 		jobRatings
 	};
 }
