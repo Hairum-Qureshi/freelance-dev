@@ -4,6 +4,7 @@ import {
   HttpException,
   HttpStatus,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { Database } from 'src/providers/postgres-db';
 import SnowflakeId from 'snowflake-id';
@@ -292,6 +293,14 @@ export class JobService {
     });
 
     if (!job) throw new NotFoundException('Job not found');
+
+    if (!review.trim()) {
+      throw new BadRequestException('Please enter a review before sending.');
+    }
+
+    if (review.length > 600) {
+      throw new BadRequestException('Review cannot exceed 600 characters.');
+    }
 
     return await this.db.insert(ratingsTable).values({
       id: this.generateSnowflakeId(),
