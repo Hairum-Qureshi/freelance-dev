@@ -17,12 +17,14 @@ import { eq } from 'drizzle-orm/sql/expressions/conditions';
 export class JobService {
   constructor(@Inject('NeonDBProvider') private readonly db: Database) {}
 
-  async createJob(jobPosting: JobPostingDTO, posterId: string) {
-    const snowflake = new SnowflakeId({
+  private generateSnowflakeId(): string {
+    return new SnowflakeId({
       mid: 42,
       offset: (2019 - 1970) * 31536000 * 1000,
-    });
+    }).toString();
+  }
 
+  async createJob(jobPosting: JobPostingDTO, posterId: string) {
     const {
       jobTitle,
       businessName,
@@ -44,7 +46,7 @@ export class JobService {
     const [jobListing] = await this.db
       .insert(jobPostsTable)
       .values({
-        id: snowflake.generate().toString(),
+        id: this.generateSnowflakeId(),
         jobTitle,
         businessName,
         projectType,
@@ -90,11 +92,6 @@ export class JobService {
     proposal: string,
     posterId: string,
   ) {
-    const snowflake = new SnowflakeId({
-      mid: 42,
-      offset: (2019 - 1970) * 31536000 * 1000,
-    });
-
     if (!proposal.trim()) {
       throw new HttpException(
         'Proposal cannot be empty',
@@ -110,7 +107,7 @@ export class JobService {
     }
 
     await this.db.insert(applicationsTable).values({
-      id: snowflake.generate().toString(),
+      id: this.generateSnowflakeId(),
       jobId,
       applicantId: currUserId,
       posterId,
@@ -136,11 +133,6 @@ export class JobService {
   }
 
   async leaveReview(jobId: string, currUserId: string, reviewDTO: ReviewDTO) {
-    const snowflake = new SnowflakeId({
-      mid: 42,
-      offset: (2019 - 1970) * 31536000 * 1000,
-    });
-
     const { rating, title, review } = reviewDTO;
 
     const application = await this.db.query.applicationsTable.findFirst({
@@ -182,7 +174,7 @@ export class JobService {
     }
 
     await this.db.insert(ratingsTable).values({
-      id: snowflake.generate().toString(),
+      id: this.generateSnowflakeId(),
       jobId,
       posterId: currUserId,
       jobPosterId: job.posterId,
@@ -234,7 +226,7 @@ export class JobService {
     });
 
     if (!existingReview) {
-      throw new HttpException('Review not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Review not found');
     }
 
     const { rating, title, review } = reviewDTO;
@@ -259,7 +251,7 @@ export class JobService {
     });
 
     if (!existingReview) {
-      throw new HttpException('Review not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Review not found');
     }
 
     await this.db
@@ -269,28 +261,48 @@ export class JobService {
       );
   }
 
-  async reviewsAboutMe(userId: string, role: 'client' | 'freelancer') {
+  async reviewsAboutMe(userId: string) {
     const user = await this.db.query.usersTable.findFirst({
       where: (users, { eq }) => eq(users.id, userId),
     });
 
-    if (!user) throw new NotFoundException('User not found');
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
 
-    return await this.db.query.ratingsTable.findMany({
-      where: (ratings, { eq }) =>
-        role === 'client'
-          ? eq(ratings.jobPosterId, userId)
-          : eq(ratings.posterId, userId),
-      with: {
-        poster: {
-          columns: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            profilePicture: true,
-          },
-        },
+    const reviews = await this.db.query.ratingsTable.findMany({
+      where: (ratings, { eq }) => eq(ratings.jobPosterId, userId),
+      columns: {
+        id: true,
+        posterId: true,
+        jobPosterId: true,
+        title: true,
+        review: true,
+        createdAt: true,
+        updatedAt: true,
       },
+    });
+
+    return reviews;
+  }
+
+  async addClientReview(jobId: string, currUserId: string, review: string) {
+    const job = await this.db.query.jobPostsTable.findFirst({
+      where: (jobPosts, { eq }) => eq(jobPosts.id, jobId),
+    });
+
+    if (!job) throw new NotFoundException('Job not found');
+
+    return await this.db.insert(ratingsTable).values({
+      id: this.generateSnowflakeId(),
+      jobId,
+      posterId: currUserId,
+      jobPosterId: job.posterId,
+      rating: '0',
+      title: 'Client Review',
+      review,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
   }
 }
