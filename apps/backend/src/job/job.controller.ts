@@ -67,6 +67,16 @@ export class JobController {
     return this.jobService.leaveReview(jobId, currentUser.id, reviewDTO);
   }
 
+  @Post(':jobId/review-freelancer')
+  @UseGuards(AuthGuard())
+  async reviewClient(
+    @Param('jobId') jobId: string,
+    @CurrentUser() currentUser: UserPayload,
+    @Body('review') review: string,
+  ) {
+    return this.jobService.addClientReview(jobId, currentUser.id, review);
+  }
+
   @Get(':jobId/reviews')
   @UseGuards(AuthGuard())
   async getJobReviews(@Param('jobId') jobId: string) {
