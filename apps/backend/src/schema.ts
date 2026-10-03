@@ -197,6 +197,7 @@ export const ratingsTable = pgTable(
       .notNull()
       .references(() => usersTable.id),
     title: text('title').notNull(),
+    role: userRoleEnum('role').notNull(),
     review: text('review').notNull(),
     createdAt: timestamp('created_at').defaultNow(),
     updatedAt: timestamp('updated_at').defaultNow(),
