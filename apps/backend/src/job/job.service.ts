@@ -19,10 +19,12 @@ export class JobService {
   constructor(@Inject('NeonDBProvider') private readonly db: Database) {}
 
   private generateSnowflakeId(): string {
-    return new SnowflakeId({
+    const snowflake = new SnowflakeId({
       mid: 42,
       offset: (2019 - 1970) * 31536000 * 1000,
-    }).toString();
+    });
+
+    return snowflake.generate();
   }
 
   async createJob(jobPosting: JobPostingDTO, posterId: string) {
