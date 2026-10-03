@@ -209,23 +209,6 @@ export const ratingsTable = pgTable(
   }),
 );
 
-export const reviewsTable = pgTable(
-  'reviews',
-  {
-    id: text().primaryKey(),
-    role: userRoleEnum('role').notNull(),
-    reviewerId: text('reviewer_id')
-      .notNull()
-      .references(() => usersTable.id),
-    review: text('review').notNull(),
-    createdAt: timestamp('created_at').defaultNow(),
-    updatedAt: timestamp('updated_at').defaultNow(),
-  },
-  (table) => ({
-    uniqueReview: uniqueIndex('job_reviewer_unique').on(table.reviewerId),
-  }),
-);
-
 export const applicationStatus = pgEnum('status', [
   'accepted',
   'rejected',
@@ -399,13 +382,6 @@ export const notificationsRelations = relations(
 export const paymentsRelations = relations(paymentsTable, ({ one }) => ({
   payer: one(usersTable, {
     fields: [paymentsTable.payerId],
-    references: [usersTable.id],
-  }),
-}));
-
-export const reviewsRelations = relations(reviewsTable, ({ one }) => ({
-  reviewer: one(usersTable, {
-    fields: [reviewsTable.reviewerId],
     references: [usersTable.id],
   }),
 }));
