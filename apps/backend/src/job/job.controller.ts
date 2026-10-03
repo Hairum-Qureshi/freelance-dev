@@ -7,7 +7,6 @@ import {
   Param,
   Patch,
   Delete,
-  Query,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JobPostingDTO } from 'src/DTOs/job.dto';
@@ -76,11 +75,8 @@ export class JobController {
 
   @Get('/reviews/about/:userId')
   @UseGuards(AuthGuard())
-  async getReviewsAboutMe(
-    @Param('userId') userId: string,
-    @Query('role') role: 'client' | 'freelancer',
-  ) {
-    return this.jobService.reviewsAboutMe(userId, role);
+  async getReviewsAboutMe(@Param('userId') userId: string) {
+    return this.jobService.reviewsAboutMe(userId);
   }
 
   @Patch(':jobId/edit-review')
