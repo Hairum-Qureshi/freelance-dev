@@ -1,9 +1,14 @@
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { ChatPayload, Message, Participant } from "@repo/shared-types";
+import type {
+	ChatPayload,
+	Message,
+	Participant,
+	UseChatHook
+} from "@repo/shared-types";
 
-export default function useChat() {
+export default function useChat(): UseChatHook {
 	const queryClient = useQueryClient();
 	const { chatID } = useParams();
 	const [searchParams] = useSearchParams();

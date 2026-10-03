@@ -1,9 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import type { RatingsPayload } from "@repo/shared-types";
+import type { RatingsPayload, UseRatingHook } from "@repo/shared-types";
 import { useParams } from "react-router-dom";
 
-export default function useRating() {
+export default function useRating(): UseRatingHook {
 	const { jobID } = useParams();
 	const queryClient = useQueryClient();
 

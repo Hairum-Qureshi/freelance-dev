@@ -1,9 +1,9 @@
-import type { JobPayload } from "@repo/shared-types";
+import type { JobPayload, UseJobHook } from "@repo/shared-types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
-export default function useJob() {
+export default function useJob(): UseJobHook {
 	const navigate = useNavigate();
 	const { jobID } = useParams();
 	const queryClient = useQueryClient();

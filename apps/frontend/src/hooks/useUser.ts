@@ -99,11 +99,28 @@ export default function useUser(): UseUserHook {
 		}
 	});
 
+	const { data: userProfileReviews } = useQuery({
+		queryKey: ["reviews", userProfileData?.id],
+		enabled: Boolean(targetUserId),
+		queryFn: async () => {
+			if (!userProfileData) return null;
+
+			const response = await axios.get(
+				`${import.meta.env.VITE_BACKEND_URL}/api/job/reviews/about/${userProfileData.id}?role=${userProfileData.role}`,
+				{
+					withCredentials: true
+				}
+			);
+			return response.data;
+		}
+	});
+
 	return {
 		onboardingMutation,
 		attachResumeMutation,
 		removeResumeMutation,
 		userProfileData,
+		userProfileReviews,
 		isAddingResume: attachResumeMutation.isPending
 	};
 }

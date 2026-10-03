@@ -1,8 +1,11 @@
-import type { ApplicationPayload } from "@repo/shared-types";
+import type {
+	ApplicationPayload,
+	UseApplicationHook
+} from "@repo/shared-types";
 import axios from "axios";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-export default function useApplication() {
+export default function useApplication(): UseApplicationHook {
 	const queryClient = useQueryClient();
 
 	const allApplicationsQuery = useQuery({

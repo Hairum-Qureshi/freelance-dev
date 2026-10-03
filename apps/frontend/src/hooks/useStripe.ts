@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import type { UseStripeHook } from "@repo/shared-types";
 
-export default function useStripe() {
+export default function useStripe(): UseStripeHook {
 	const queryClient = useQueryClient();
 	const navigate = useNavigate();
 
@@ -21,7 +22,8 @@ export default function useStripe() {
 		onSuccess: url => {
 			queryClient.invalidateQueries({
 				queryKey: ["currentUser"]
-			});			navigate(url);
+			});
+			navigate(url);
 		}
 	});
 

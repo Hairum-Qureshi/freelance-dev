@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import type { UserPayload } from "@repo/shared-types";
+import type { UseCurrentUserHook, UserPayload } from "@repo/shared-types";
 
-export function useCurrentUser() {
+export function useCurrentUser(): UseCurrentUserHook {
 	return useQuery<UserPayload | null>({
 		queryKey: ["currentUser"],
 		queryFn: async () => {
