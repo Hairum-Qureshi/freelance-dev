@@ -20,5 +20,11 @@ export interface UseRatingHook {
 		{ jobId: string },
 		unknown
 	>;
+	postFreelancerReviewMutation: UseMutationResult<
+		void,
+		Error,
+		{ jobId: string; review: string },
+		unknown
+	>;
 	jobRatings: { average: number; ratings: RatingsPayload[] } | null | undefined;
 }
