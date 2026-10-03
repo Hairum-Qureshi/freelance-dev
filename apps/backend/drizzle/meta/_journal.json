@@ -260,6 +260,13 @@
       "when": 1790900666813,
       "tag": "0036_dapper_puff_adder",
       "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1790998599355,
+      "tag": "0037_unknown_ironclad",
+      "breakpoints": true
     }
   ]
 }
