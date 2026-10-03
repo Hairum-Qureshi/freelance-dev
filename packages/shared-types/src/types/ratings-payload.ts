@@ -1,4 +1,5 @@
 import type { MinimalUser } from "./minimal-user";
+import type { UserRole } from "./user-role";
 
 export type RatingsPayload = {
 	id: string;
@@ -7,6 +8,7 @@ export type RatingsPayload = {
 	rating: string;
 	title: string;
 	review: string;
+	role: UserRole;
 	poster: MinimalUser;
 	createdAt: string;
 	updatedAt: string;
