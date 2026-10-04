@@ -8,6 +8,7 @@ import {
   UploadedFiles,
   HttpException,
 } from '@nestjs/common';
+import { IsMemberGuard } from 'src/guards/isMember.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateChatDTO } from '../DTOs/chat.dto';
 import { ChatService } from './chat.service';
@@ -41,9 +42,8 @@ export class ChatController {
   }
 
   @Get(':chatId')
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard(), IsMemberGuard)
   getChatById(@Param('chatId') chatId: string) {
-    // TODO - will need to create a guard checking if the user is even in this chat
     return this.chatService.getChatMessagesById(chatId);
   }
 
@@ -54,7 +54,7 @@ export class ChatController {
   }
 
   @Post(':chatId/message')
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard(), IsMemberGuard)
   @UseInterceptors(FilesInterceptor('attachments', 5))
   addMessage(
     @CurrentUser() currentUser: UserPayload,
