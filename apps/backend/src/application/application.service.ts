@@ -6,6 +6,7 @@ import { jobPostsTable } from 'src/schema';
 import { eq } from 'drizzle-orm';
 import { NotFoundException } from '@nestjs/common';
 import { ApplicationPayload } from '@repo/shared-types';
+import type { UpdateApplicationStatusDTO } from 'src/DTOs/update-application-status.dto';
 
 @Injectable()
 export class ApplicationService {
@@ -36,11 +37,13 @@ export class ApplicationService {
 
   async updateApplicationStatus(
     applicationId: string,
-    status: 'accepted' | 'rejected' | 'pending',
-    applicantName: string,
-    applicantEmail: string,
-    jobTitle: string,
-    jobId: string,
+    {
+      status,
+      applicantName,
+      applicantEmail,
+      jobTitle,
+      jobId,
+    }: UpdateApplicationStatusDTO,
   ) {
     await this.db
       .update(applicationsTable)
