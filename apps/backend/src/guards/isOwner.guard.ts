@@ -7,7 +7,7 @@ import {
   mixin,
   NotFoundException,
 } from '@nestjs/common';
-import { ApplicationPayload } from '@repo/shared-types';
+import type { ApplicationPayload, UserPayload } from '@repo/shared-types';
 import { Database } from 'src/providers/postgres-db';
 
 export function IsOwnerGuard(freelancerAction: boolean) {
@@ -23,7 +23,7 @@ export function IsOwnerGuard(freelancerAction: boolean) {
       const applicationId = context.switchToHttp().getRequest()
         .params.applicationId;
       const jobId = context.switchToHttp().getRequest().params.jobId;
-      const user = context.switchToHttp().getRequest().user;
+      const user: UserPayload = context.switchToHttp().getRequest().user;
 
       if (applicationId) {
         const application = (await this.db.query.applicationsTable.findFirst({
@@ -39,11 +39,11 @@ export function IsOwnerGuard(freelancerAction: boolean) {
           throw new NotFoundException('Application not found');
         }
 
-        if (freelancerAction && application.applicant.id !== user._id) {
+        if (freelancerAction && application.applicant.id !== user.id) {
           throw new ForbiddenException('You do not own this application');
         }
 
-        if (application.job.posterId !== user._id) {
+        if (application.job.posterId !== user.id) {
           throw new ForbiddenException('You do not own this job');
         }
       }
@@ -57,11 +57,11 @@ export function IsOwnerGuard(freelancerAction: boolean) {
           throw new NotFoundException('Job not found');
         }
 
-        if (freelancerAction && job.posterId !== user._id) {
+        if (freelancerAction && job.posterId !== user.id) {
           throw new ForbiddenException('You do not own this job');
         }
 
-        if (job.posterId !== user._id) {
+        if (job.posterId !== user.id) {
           throw new ForbiddenException('You do not own this job');
         }
       }
