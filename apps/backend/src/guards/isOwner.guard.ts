@@ -19,9 +19,11 @@ export function IsOwnerGuard(freelancerAction: boolean) {
     ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
-      const applicationId = context.switchToHttp().getRequest()
-        .params.applicationId;
-      const jobId = context.switchToHttp().getRequest().params.jobId;
+      const applicationId: string | undefined = context
+        .switchToHttp()
+        .getRequest().params.applicationId;
+      const jobId: string | undefined = context.switchToHttp().getRequest()
+        .params.jobId;
       const user: UserPayload = context.switchToHttp().getRequest().user;
 
       if (applicationId) {
@@ -34,17 +36,13 @@ export function IsOwnerGuard(freelancerAction: boolean) {
           },
         })) as ApplicationPayload;
 
-        if (!application) {
-          throw new NotFoundException('Application not found');
-        }
+        if (!application) throw new NotFoundException('Application not found');
 
-        if (freelancerAction && application.applicant.id !== user.id) {
+        if (freelancerAction && application.applicant.id !== user.id)
           throw new ForbiddenException('You do not own this application');
-        }
 
-        if (!freelancerAction && application.job.posterId !== user.id) {
+        if (!freelancerAction && application.job.posterId !== user.id)
           throw new ForbiddenException('You do not own this job');
-        }
       }
 
       if (jobId) {
@@ -52,17 +50,21 @@ export function IsOwnerGuard(freelancerAction: boolean) {
           where: (jobPostsTable, { eq }) => eq(jobPostsTable.id, jobId),
         });
 
-        if (!job) {
-          throw new NotFoundException('Job not found');
+        if (!job) throw new NotFoundException('Job not found');
+
+        if (freelancerAction) {
+          const rating = await this.db.query.ratingsTable.findFirst({
+            where: (ratings, { eq }) => eq(ratings.jobId, jobId),
+          });
+
+          if (!rating) throw new NotFoundException('Rating not found');
+
+          if (rating.posterId !== user.id)
+            throw new ForbiddenException('You do not own this rating');
         }
 
-        if (freelancerAction && job.posterId !== user.id) {
+        if (!freelancerAction && job.posterId !== user.id)
           throw new ForbiddenException('You do not own this job');
-        }
-
-        if (!freelancerAction && job.posterId !== user.id) {
-          throw new ForbiddenException('You do not own this job');
-        }
       }
 
       return true;
