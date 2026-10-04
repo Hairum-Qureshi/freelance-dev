@@ -12,7 +12,7 @@ import { JobPostingDTO } from 'src/DTOs/job.dto';
 import { ReviewDTO } from 'src/DTOs/review.dto';
 import { jobPostsTable, ratingsTable } from 'src/schema';
 import { applicationsTable } from 'src/schema';
-import { eq } from 'drizzle-orm/sql/expressions/conditions';
+import { and, eq } from 'drizzle-orm/sql/expressions/conditions';
 import { UserRole } from '@repo/shared-types';
 
 @Injectable()
@@ -147,9 +147,13 @@ export class JobService {
 
     const application = await this.db.query.applicationsTable.findFirst({
       where: (applications, { eq }) =>
-        eq(applications.jobId, jobId) &&
-        eq(applications.applicantId, currUserId),
+        and(
+          eq(applications.jobId, jobId),
+          eq(applications.applicantId, currUserId),
+        ),
     });
+
+    console.log(application);
 
     if (!application) {
       throw new HttpException(
@@ -173,7 +177,7 @@ export class JobService {
 
     const hasReviewed = await this.db.query.ratingsTable.findFirst({
       where: (ratings, { eq }) =>
-        eq(ratings.jobId, jobId) && eq(ratings.posterId, currUserId),
+        and(eq(ratings.jobId, jobId), eq(ratings.posterId, currUserId)),
     });
 
     if (hasReviewed) {
@@ -233,7 +237,7 @@ export class JobService {
   ) {
     const existingReview = await this.db.query.ratingsTable.findFirst({
       where: (ratings, { eq }) =>
-        eq(ratings.jobId, jobId) && eq(ratings.posterId, currUserId),
+        and(eq(ratings.jobId, jobId), eq(ratings.posterId, currUserId)),
     });
 
     if (!existingReview) {
@@ -241,7 +245,6 @@ export class JobService {
     }
 
     const { rating, title, review } = reviewDTO;
-
     await this.db
       .update(ratingsTable)
       .set({
@@ -251,14 +254,17 @@ export class JobService {
         updatedAt: new Date(),
       })
       .where(
-        eq(ratingsTable.jobId, jobId) && eq(ratingsTable.posterId, currUserId),
+        and(
+          eq(ratingsTable.jobId, jobId),
+          eq(ratingsTable.posterId, currUserId),
+        ),
       );
   }
 
   async deleteReview(jobId: string, currUserId: string) {
     const existingReview = await this.db.query.ratingsTable.findFirst({
       where: (ratings, { eq }) =>
-        eq(ratings.jobId, jobId) && eq(ratings.posterId, currUserId),
+        and(eq(ratings.jobId, jobId), eq(ratings.posterId, currUserId)),
     });
 
     if (!existingReview) {
@@ -268,7 +274,10 @@ export class JobService {
     await this.db
       .delete(ratingsTable)
       .where(
-        eq(ratingsTable.jobId, jobId) && eq(ratingsTable.posterId, currUserId),
+        and(
+          eq(ratingsTable.jobId, jobId),
+          eq(ratingsTable.posterId, currUserId),
+        ),
       );
   }
 
