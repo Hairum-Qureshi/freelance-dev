@@ -19,7 +19,6 @@ export function IsOwnerGuard(freelancerAction: boolean) {
     ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
-      // here, you'd add your guard's logic
       const applicationId = context.switchToHttp().getRequest()
         .params.applicationId;
       const jobId = context.switchToHttp().getRequest().params.jobId;
@@ -66,7 +65,7 @@ export function IsOwnerGuard(freelancerAction: boolean) {
         }
       }
 
-      return true; // return a boolean for success
+      return true;
     }
   }
 
