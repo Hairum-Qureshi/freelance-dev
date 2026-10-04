@@ -299,7 +299,7 @@ export class JobService {
     return reviews;
   }
 
-  async addClientReview(jobId: string, currUserId: string, review: string) {
+  async addFreelancerReview(jobId: string, currUserId: string, review: string) {
     const job = await this.db.query.jobPostsTable.findFirst({
       where: (jobPosts, { eq }) => eq(jobPosts.id, jobId),
     });
