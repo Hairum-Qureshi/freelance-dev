@@ -14,18 +14,21 @@ import { ReviewDTO } from 'src/DTOs/review.dto';
 import { JobService } from './job.service';
 import { CurrentUser } from 'src/decorators/currentUser.decorator';
 import type { UserPayload } from '@repo/shared-types';
+import { HasRolePermissions } from 'src/guards/isAuthorized.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { IsOwnerGuard } from 'src/guards/isOwner.guard';
 
 @Controller('job')
 export class JobController {
   constructor(private readonly jobService: JobService) {}
 
   @Post('create')
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard(), HasRolePermissions)
+  @Roles(['client'])
   async createJob(
     @Body() jobPostingDTO: JobPostingDTO,
     @CurrentUser() currentUser: UserPayload,
   ) {
-    // TODO - add guard to prevent only users with a client role to create job postings
     return this.jobService.createJob(jobPostingDTO, currentUser.id);
   }
 
@@ -64,17 +67,23 @@ export class JobController {
     @CurrentUser() currentUser: UserPayload,
     @Body() reviewDTO: ReviewDTO,
   ) {
-    return this.jobService.leaveReview(jobId, currentUser.id, reviewDTO);
+    return this.jobService.leaveReview(
+      jobId,
+      currentUser.id,
+      reviewDTO,
+      currentUser.role as 'client' | 'freelancer',
+    );
   }
 
   @Post(':jobId/review-freelancer')
-  @UseGuards(AuthGuard())
-  async reviewClient(
+  @Roles(['client'])
+  @UseGuards(AuthGuard(), HasRolePermissions)
+  async reviewFreelancer(
     @Param('jobId') jobId: string,
     @CurrentUser() currentUser: UserPayload,
     @Body('review') review: string,
   ) {
-    return this.jobService.addClientReview(jobId, currentUser.id, review);
+    return this.jobService.addFreelancerReview(jobId, currentUser.id, review);
   }
 
   @Get(':jobId/reviews')
@@ -90,7 +99,8 @@ export class JobController {
   }
 
   @Patch(':jobId/edit-review')
-  @UseGuards(AuthGuard())
+  @Roles(['freelancer'])
+  @UseGuards(AuthGuard(), IsOwnerGuard(true), HasRolePermissions)
   async editReview(
     @Param('jobId') jobId: string,
     @CurrentUser() currentUser: UserPayload,
@@ -100,7 +110,8 @@ export class JobController {
   }
 
   @Delete(':jobId/delete-review')
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard(), IsOwnerGuard(true), HasRolePermissions)
+  @Roles(['freelancer'])
   async deleteReview(
     @Param('jobId') jobId: string,
     @CurrentUser() currentUser: UserPayload,
