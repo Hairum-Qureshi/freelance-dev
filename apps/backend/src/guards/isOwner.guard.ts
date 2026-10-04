@@ -44,7 +44,7 @@ export function IsOwnerGuard(freelancerAction: boolean) {
         }
 
         if (application.job.posterId !== user._id) {
-          throw new ForbiddenException('You do not own this application');
+          throw new ForbiddenException('You do not own this job');
         }
       }
 
