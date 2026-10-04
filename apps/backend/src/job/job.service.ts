@@ -153,8 +153,6 @@ export class JobService {
         ),
     });
 
-    console.log(application);
-
     if (!application) {
       throw new HttpException(
         'You can only leave a review for a job you were hired for',
