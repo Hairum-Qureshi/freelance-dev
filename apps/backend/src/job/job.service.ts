@@ -13,6 +13,7 @@ import { ReviewDTO } from 'src/DTOs/review.dto';
 import { jobPostsTable, ratingsTable } from 'src/schema';
 import { applicationsTable } from 'src/schema';
 import { eq } from 'drizzle-orm/sql/expressions/conditions';
+import { UserRole } from '@repo/shared-types';
 
 @Injectable()
 export class JobService {
@@ -86,6 +87,7 @@ export class JobService {
           },
         },
       },
+      orderBy: (jobPostsTable, { desc }) => desc(jobPostsTable.createdAt),
     });
   }
 
@@ -135,7 +137,12 @@ export class JobService {
     });
   }
 
-  async leaveReview(jobId: string, currUserId: string, reviewDTO: ReviewDTO) {
+  async leaveReview(
+    jobId: string,
+    currUserId: string,
+    reviewDTO: ReviewDTO,
+    currUserRole: 'client' | 'freelancer',
+  ) {
     const { rating, title, review } = reviewDTO;
 
     const application = await this.db.query.applicationsTable.findFirst({
@@ -182,6 +189,7 @@ export class JobService {
       posterId: currUserId,
       jobPosterId: job.posterId,
       rating: rating.toString(),
+      role: currUserRole,
       title: title.trim(),
       review,
       createdAt: new Date(),
@@ -273,8 +281,9 @@ export class JobService {
       throw new NotFoundException('User not found');
     }
 
+    // ! THIS METHOD DOES NOT WORK CORRECTLY
     const reviews = await this.db.query.ratingsTable.findMany({
-      where: (ratings, { eq }) => eq(ratings.jobPosterId, userId),
+      where: (ratings, { eq }) => eq(ratings.role, user.role as UserRole),
       columns: {
         id: true,
         posterId: true,
@@ -284,6 +293,7 @@ export class JobService {
         createdAt: true,
         updatedAt: true,
       },
+      orderBy: (ratings, { desc }) => desc(ratings.createdAt),
     });
 
     return reviews;
@@ -296,13 +306,11 @@ export class JobService {
 
     if (!job) throw new NotFoundException('Job not found');
 
-    if (!review.trim()) {
+    if (!review.trim())
       throw new BadRequestException('Please enter a review before sending.');
-    }
 
-    if (review.length > 600) {
+    if (review.length > 600)
       throw new BadRequestException('Review cannot exceed 600 characters.');
-    }
 
     return await this.db.insert(ratingsTable).values({
       id: this.generateSnowflakeId(),
@@ -311,9 +319,12 @@ export class JobService {
       jobPosterId: job.posterId,
       rating: '0',
       title: 'Client Review',
+      role: 'client',
       review,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
+
+    // TODO call email method here to notify freelancer
   }
 }
