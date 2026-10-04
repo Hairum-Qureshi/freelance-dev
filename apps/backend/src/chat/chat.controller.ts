@@ -29,7 +29,7 @@ export class ChatController {
     @UploadedFiles() attachments?: Express.Multer.File[],
   ) {
     if (createChatDTO.to === '1')
-      throw new HttpException('Cannot create chat with admin user', 400);
+      throw new HttpException('Cannot create chat with system user', 400);
 
     return this.chatService.createChat(createChatDTO, currentUser, attachments);
   }
