@@ -61,7 +61,8 @@ export class JobController {
   }
 
   @Post(':jobId/add-review')
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard(), HasRolePermissions)
+  @Roles(['freelancer'])
   async leaveReview(
     @Param('jobId') jobId: string,
     @CurrentUser() currentUser: UserPayload,
