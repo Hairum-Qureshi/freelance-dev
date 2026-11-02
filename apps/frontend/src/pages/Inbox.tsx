@@ -1,5 +1,5 @@
 import ChatFooter from "../components/chat/ChatFooter";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import ChatHeader from "../components/chat/ChatHeader";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import MainChatContainer from "../components/chat/MainChatContainer";
@@ -8,7 +8,6 @@ import useChat from "../hooks/useChat";
 import { useEffect, useState } from "react";
 import InboxUserCard from "../components/chat/InboxUserCard";
 import { useCurrentUser } from "../hooks/useCurrentUser";
-import type { ChatPayload } from "@repo/shared-types";
 
 export default function Inbox() {
 	const { userProfileData } = useUser();
