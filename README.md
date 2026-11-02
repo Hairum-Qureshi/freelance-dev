@@ -383,6 +383,14 @@ npx drizzle-kit migrate --config src/config/drizzle.config.ts
 
 **Important:** `db:generate` creates the migration files but does not update NeonDB. `db:migrate` applies the generated migrations and pushes the schema changes to NeonDB. Repeat both steps whenever you make a schema change or update.
 
+## Database ERD
+
+The entity relationship diagram below shows the application's database tables and relationships.
+
+![Freelance Dev database entity relationship diagram](assets/Freelance%20Dev%20ERD%20Diagram.png)
+
+To edit or recreate the diagram in [Eraser.io](https://app.eraser.io/), open a new diagram, select **ERD** as the diagram type, and paste in the contents of [`assets/freelance-dev-erd.eraserdiagram`](assets/freelance-dev-erd.eraserdiagram).
+
 ---
 
 ## 5. Verify the Database Connection
