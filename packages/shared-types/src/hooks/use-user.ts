@@ -1,9 +1,9 @@
 import type { UseMutationResult } from "@tanstack/react-query";
 import type { OnboardingData } from "../types/onboarding-data.js";
 import type { UserPayload } from "../types/user.js";
-import { ReviewPayload } from "../types/review-payload.js";
+import type { ReviewPayload } from "../types/review-payload.js";
 
-export interface UseUserHook {
+export type UseUserHook = {
 	onboardingMutation: UseMutationResult<
 		void,
 		Error,
@@ -15,4 +15,4 @@ export interface UseUserHook {
 	removeResumeMutation: UseMutationResult<void, Error, void, unknown>;
 	userProfileReviews: ReviewPayload[];
 	isAddingResume: boolean;
-}
+};

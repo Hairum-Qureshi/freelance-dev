@@ -12,7 +12,7 @@ export default function InboxUserCard({
 }: {
 	selected: boolean;
 	chatId: string;
-	participants: { user: Participant }[];
+	participants: Participant[];
 	setSelectedChat: (chat: {
 		id: string;
 		firstName: string;
@@ -26,7 +26,7 @@ export default function InboxUserCard({
 	const { chatID } = useParams();
 
 	const participant = participants.find(
-		p => p.user.id !== currUser?.id && p.user.id !== "1"
+		p => p.user?.id !== currUser?.id && p.user?.id !== "1"
 	)?.user;
 
 	useEffect(() => {

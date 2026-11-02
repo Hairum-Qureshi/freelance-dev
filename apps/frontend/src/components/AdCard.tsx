@@ -20,7 +20,7 @@ export default function AdCard({ job }: { job: JobPayload }) {
 	const hasChatWithPoster =
 		currUserChats?.filter((chat: ChatPayload) =>
 			chat.participants.some(
-				participant => participant.user.id === job?.posterId
+				participant => participant.user?.id === job?.posterId
 			)
 		) ?? [];
 

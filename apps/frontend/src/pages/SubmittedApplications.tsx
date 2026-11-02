@@ -40,7 +40,7 @@ export default function SubmittedApplications() {
 		const hasChatWithPoster =
 			currUserChats?.filter((chat: ChatPayload) =>
 				chat.participants.some(
-					participant => participant.user.id === jobPosterId
+					participant => participant.user?.id === jobPosterId
 				)
 			) ?? [];
 		return hasChatWithPoster;
