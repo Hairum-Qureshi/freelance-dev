@@ -1,0 +1,139 @@
+users [icon: user, color: blue] {
+  id text pk
+  firstName text
+  lastName text
+  email varchar(50)
+  profilePicture text
+  role enum
+  completedOnboarding boolean
+  onboardingAnswers jsonb
+  resumeId text
+  location text
+  deleted boolean
+  stripeAccountId text
+  stripeAccountConnected boolean
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+chats [icon: message-square, color: green] {
+  id text pk
+  latestMessageId text fk
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+participants [icon: users, color: yellow] {
+  id text pk
+  chatId text fk
+  userId text fk
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+ratings [icon: star, color: orange] {
+  id text pk
+  jobId text fk
+  posterId text fk
+  jobPosterId text fk
+  rating decimal
+  title text
+  role enum
+  comment text
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+payments [icon: credit-card, color: purple] {
+  id text pk
+  jobId text fk
+  amountCents integer
+  status enum
+  payerId text fk
+  paidToId text fk
+  stripePaymentIntentId text
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+jobs [icon: briefcase, color: red] {
+  id text pk
+  jobTitle text
+  businessName text
+  projectType enum
+  lookingFor enum
+  experienceLevel enum
+  jobType enum
+  paymentType enum
+  workLocation enum
+  region enum
+  timeline enum
+  projectDetails text
+  deliverables text
+  agreedPaymentRateCents integer
+  budgetMin integer
+  budgetMax integer
+  skills text[]
+  posterId text fk
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+applications [icon: clipboard, color: teal] {
+  id text pk
+  jobId text fk
+  applicantId text fk
+  proposal text
+  status enum
+  posterId text fk
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+messages [icon: message-square-text, color: cyan] {
+  id text pk
+  chatId text fk
+  senderId text fk
+  message text
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+attachments [icon: file, color: gray] {
+  id text pk
+  messageId text fk
+  fileName text
+  fileType enum
+  url text
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+notifications [icon: bell, color: pink] {
+  id text pk
+  receiverId text fk
+  content text
+  senderId text fk
+  read boolean
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+users.id < participants.userId
+chats.id < participants.chatId
+chats.id < messages.chatId
+users.id < messages.senderId
+messages.id < attachments.messageId
+chats.latestMessageId > messages.id
+users.id < jobs.posterId
+ratings.jobId > jobs.id
+ratings.posterId > users.id
+users.id < ratings.jobPosterId
+applications.jobId > jobs.id
+applications.applicantId > users.id
+users.id < applications.posterId
+users.id < notifications.receiverId
+users.id < notifications.senderId
+users.id < payments.payerId
+jobs.id < payments.jobId
+users.id < payments.paidToId
