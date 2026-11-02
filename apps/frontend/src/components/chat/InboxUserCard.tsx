@@ -1,4 +1,4 @@
-import type { Participant } from "@repo/shared-types";
+import type { ChatParticipant } from "@repo/shared-types";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -12,7 +12,7 @@ export default function InboxUserCard({
 }: {
 	selected: boolean;
 	chatId: string;
-	participants: Participant[];
+	participants: ChatParticipant[];
 	setSelectedChat: (chat: {
 		id: string;
 		firstName: string;

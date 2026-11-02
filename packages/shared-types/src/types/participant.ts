@@ -3,11 +3,13 @@ import type { MinimalUser } from "./minimal-user.js";
 
 export type Participant = {
 	id: string;
-	profilePicture: string;
-	firstName: string;
-	lastName: string;
-	onboardingAnswers: OnboardingAnswers;
-	user?: MinimalUser & {
+	chatId: string;
+	userId: string;
+	createdAt: Date | null;
+	updatedAt: Date | null;
+	user: MinimalUser & {
 		onboardingAnswers: OnboardingAnswers;
 	};
 };
+
+export type ChatParticipant = Pick<Participant, "user">;

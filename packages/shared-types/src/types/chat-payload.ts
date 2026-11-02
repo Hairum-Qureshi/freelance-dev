@@ -1,4 +1,4 @@
-import type { Participant } from "./participant.js";
+import type { ChatParticipant } from "./participant.js";
 
 export type ChatPayload = {
 	id: string;
@@ -8,5 +8,5 @@ export type ChatPayload = {
 		createdAt: Date;
 		updatedAt: Date;
 	};
-	participants: { user: Participant }[];
+	participants: ChatParticipant[];
 };
